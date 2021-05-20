@@ -392,9 +392,9 @@ button:focus{
 
 
 .qt-background{
-	background: url(../images/food.jpg) no-repeat;
-	background-size: contain;
-	padding: 250px 0;
+	background: url(../images/img-04.jpg) no-repeat;
+	background-size: cover;
+	padding: 250px 0;  
 	background-attachment: fixed;
 	background-position: center center;
 	position: relative;
