@@ -1,4 +1,4 @@
-package g302.tqs.ua.mainapp;
+package logisticsmashall.tqs.ua.mainapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
