@@ -3,7 +3,7 @@ WORKDIR /workdir/server
 COPY mainApp/pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
 
-COPY src /workdir/server/src
+COPY mainApp/src /workdir/server/src
 RUN mvn install
 RUN mkdir  -p target/dependency
 WORKDIR /workdir/server/target/dependency
