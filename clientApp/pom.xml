@@ -16,7 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <testcontainers.version>1.15.3</testcontainers.version>
-        <sonar.projectKey>buckaroo69_TQSPROJECT</sonar.projectKey>
+        <sonar.projectKey>tqs-side-client</sonar.projectKey>
         <sonar.organization>buckaroo69</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
