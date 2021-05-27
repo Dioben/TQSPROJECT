@@ -12,9 +12,19 @@ import java.sql.Timestamp;
 @Table(name = "order")
 public class Order {
 
+    public enum Priority {
+        HIGHPRIORITY,
+        REGULARPRIORITY,
+        LOWPRIORITY;
+    }
+
     @Id //logistics_id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "logistics_id", nullable = false)
+    private Long logisticsId;
+
 
     @Column(name = "order_timestamp", nullable = false)
     @CreationTimestamp
@@ -29,9 +39,10 @@ public class Order {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "priority", nullable = false)
-    private Boolean priority;
 
+    @Column(name = "priority", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

@@ -11,6 +11,12 @@ import java.util.Set;
 @Entity
 @Table(name = "driver")
 public class Driver {
+    public enum Vehicle {
+        BICLYCLE,
+        CAR,
+        MOTOCYCLE,
+        ONFOOT;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +38,8 @@ public class Driver {
     private Boolean Boolean;
 
     @Column(name = "vehicle", nullable = false)
-    private Integer vehicle;
+    @Enumerated(EnumType.STRING)
+    private Vehicle vehicle;
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
