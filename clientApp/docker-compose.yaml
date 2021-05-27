@@ -1,24 +1,25 @@
 version: "3.8"
 services:
   backend:
-    image: dioben/tqs-client-server
+    image: dioben/tqs-client-server:dev
     ports:
       - 8000:8000
     depends_on:
       db:
         condition: service_healthy
-
   db:
-    image: mysql:8.0
+    image: postgres:13
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
-      interval: 3s
+      test: ["CMD-SHELL", "pg_isready -U root -h localhost -d postgres"]
+      interval: 5s
+      timeout: 5s
       retries: 5
-      start_period: 30s
     volumes:
-      - /client-db-data:/var/lib/mysql  
+      - ./client-db-data:/var/lib/postgresql/data
     ports:
-      - 3300:3306
+      - 5433:5432
     environment:
-      - MYSQL_ROOT_PASSWORD= mysqlpassword
-      - MYSQL_DATABASE= delivery_service
+      - POSTGRES_USER=root 
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=postgres
+
