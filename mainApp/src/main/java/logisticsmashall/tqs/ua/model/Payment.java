@@ -31,7 +31,5 @@ public class Payment {
     private Order order;
 
 
-    public Payment() {
-
-    }
+ 
 }

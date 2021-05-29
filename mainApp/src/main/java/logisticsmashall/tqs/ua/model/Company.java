@@ -42,7 +42,5 @@ public class Company {
     private Set<Order> order;
 
 
-    public Company() {
 
-    }
 }

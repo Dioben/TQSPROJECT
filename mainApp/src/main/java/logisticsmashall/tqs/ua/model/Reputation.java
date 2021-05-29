@@ -26,8 +26,4 @@ public class Reputation {
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driver;
 
-
-    public Reputation() {
-
-    }
 }

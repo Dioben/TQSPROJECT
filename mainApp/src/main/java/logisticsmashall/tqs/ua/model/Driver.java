@@ -12,10 +12,7 @@ import java.util.Set;
 @Table(name = "driver")
 public class Driver {
     public enum Vehicle {
-        BICLYCLE,
-        CAR,
-        MOTOCYCLE,
-        ONFOOT;
+        BICLYCLE, CAR, MOTOCYCLE, ONFOOT;
     }
 
     @Id
@@ -35,7 +32,7 @@ public class Driver {
     private Integer phoneNumber;
 
     @Column(name = "status", nullable = false)
-    private Boolean Boolean;
+    private Boolean status;
 
     @Column(name = "vehicle", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -52,7 +49,4 @@ public class Driver {
     private Set<Reputation> reputation;
 
 
-    public Driver() {
-
-    }
 }
