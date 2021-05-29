@@ -65,7 +65,4 @@ public class Order {
     private Order order;
 
 
-    public Order() {
-
-    }
 }

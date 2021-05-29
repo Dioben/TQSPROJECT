@@ -27,7 +27,5 @@ public class Reputation {
     private Driver driver;
 
 
-    public Reputation() {
 
-    }
 }
