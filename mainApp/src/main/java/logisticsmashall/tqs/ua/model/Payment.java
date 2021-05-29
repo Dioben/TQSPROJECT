@@ -19,17 +19,13 @@ public class Payment {
     @Column(name = "price", nullable = false)
     private Double price;
 
-
     @Column(name = "payment_timestamp", nullable = false)
     @CreationTimestamp
     private Timestamp paymentTimestamp;
-
 
     @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Order order;
-
-
 
 }
