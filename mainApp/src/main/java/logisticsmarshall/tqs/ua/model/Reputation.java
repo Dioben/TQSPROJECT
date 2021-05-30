@@ -1,4 +1,4 @@
-package logisticsmashall.tqs.ua.model;
+package logisticsmarshall.tqs.ua.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

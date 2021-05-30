@@ -1,4 +1,4 @@
-package logisticsmashall.tqs.ua;
+package logisticsmarshall.tqs.ua;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

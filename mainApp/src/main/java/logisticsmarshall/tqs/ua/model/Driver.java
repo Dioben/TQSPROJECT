@@ -1,4 +1,4 @@
-package logisticsmashall.tqs.ua.model;
+package logisticsmarshall.tqs.ua.model;
 
 import lombok.Data;
 import javax.persistence.*;
