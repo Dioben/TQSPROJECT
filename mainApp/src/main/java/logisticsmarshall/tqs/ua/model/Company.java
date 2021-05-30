@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class Company {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Order> order;
+    private Set<OrderEntity> orderEntity;
 
 
 
