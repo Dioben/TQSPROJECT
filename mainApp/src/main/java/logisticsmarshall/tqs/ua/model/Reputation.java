@@ -14,13 +14,17 @@ public class Reputation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "rating", nullable = false)
+    private Integer rating;
+
     @Column(name = "description", nullable = false)
     private String description;
+
 
     @OneToOne(mappedBy = "reputation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    private Order order;
+    private OrderEntity orderEntity;
 
     @ManyToOne
     @JoinColumn(name = "driver_id", nullable = false)

@@ -38,9 +38,10 @@ public class Driver {
     @Enumerated(EnumType.STRING)
     private Vehicle vehicle;
 
-    @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @OneToMany(mappedBy = "driver")
+    private Set<OrderEntity> orderEntity;
+
+
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
