@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "order_entity")
+public class OrderEntity {
 
     public enum Priority {
         HIGHPRIORITY,
@@ -44,10 +44,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private Driver driver;
 
 
     @OneToOne
@@ -56,13 +52,17 @@ public class Order {
 
 
     @OneToOne
-    @JoinColumn(name = "payment_id", nullable = false)
+    @JoinColumn(name = "payment_id", nullable = true)
     private Payment payment;
 
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "driver_id", nullable = false)
+    private Driver driver;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
 
 }
