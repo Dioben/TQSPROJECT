@@ -1,10 +1,11 @@
-package logisticsmashall.tqs.ua.model;
+package marchingfood.tqs.ua.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
@@ -17,8 +18,7 @@ public class Payment {
     private long id;
 
     @Column(name = "price", nullable = false)
-    private Double price;
-
+    private double price;
 
     @Column(name = "payment_timestamp", nullable = false)
     @CreationTimestamp
@@ -29,9 +29,4 @@ public class Payment {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Order order;
-
-
-    public Payment() {
-
-    }
 }

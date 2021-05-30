@@ -1,4 +1,4 @@
-package logisticsmashall.tqs.ua.model;
+package marchingfood.tqs.ua.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -10,8 +10,8 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "company")
-public class Company {
+@Table(name = "client")
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,29 +20,28 @@ public class Company {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
-    private String address;
-
-    @Column(name = "phoneNumber", nullable = false)
-    private Integer phoneNumber;
-
     @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "orderType", nullable = false)
-    private String orderType;
+    @Column(name = "address", nullable = false)
+    private String address;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "status", nullable = false)
+    private Boolean status;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Order> order;
 
 
-    public Company() {
+
+
+    public Client() {
 
     }
 }
