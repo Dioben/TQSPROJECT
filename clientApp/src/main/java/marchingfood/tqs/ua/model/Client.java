@@ -36,10 +36,7 @@ public class Client {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Order> order;
-
-
-
+    private Set<OrderEntity> orderEntity;
 
     public Client() {
 

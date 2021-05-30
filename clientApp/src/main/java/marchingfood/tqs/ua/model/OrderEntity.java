@@ -1,8 +1,6 @@
 package marchingfood.tqs.ua.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,18 +9,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "order_entity")
+public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "logistics_id", nullable = false)
-    private Long logisticsID;
-
-    @Column(name = "client_id", nullable = false)
-    private Long clientID;
 
     @Column(name = "order_timestamp", nullable = false)
     @CreationTimestamp
@@ -38,18 +29,18 @@ public class Order {
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @OneToOne
-    @JoinColumn(name = "payment_id", nullable = false)
+    @JoinColumn(name = "payment_id", nullable = true)
     private Payment payment;
 
     @ManyToMany
     private List<Menu> menus;
 
 
-    public Order() {
-
+    public OrderEntity() {
+        //Lombook Requires it
     }
 }
