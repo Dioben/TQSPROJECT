@@ -1,30 +1,28 @@
-package logisticsmashall.tqs.ua.model;
+package marchingfood.tqs.ua.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "order")
 public class Order {
 
-    public enum Priority {
-        HIGHPRIORITY,
-        REGULARPRIORITY,
-        LOWPRIORITY;
-    }
-
-    @Id //logistics_id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "logistics_id", nullable = false)
-    private Long logisticsId;
+    private Long logisticsID;
 
+    @Column(name = "client_id", nullable = false)
+    private Long clientID;
 
     @Column(name = "order_timestamp", nullable = false)
     @CreationTimestamp
@@ -39,30 +37,16 @@ public class Order {
     @Column(name = "address", nullable = false)
     private String address;
 
-
-    @Column(name = "priority", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Priority priority;
-
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private Driver driver;
-
-
-    @OneToOne
-    @JoinColumn(name = "reputation_id", nullable = false)
-    private Reputation reputation;
-
+    @ManyToOne
+    @JoinColumn(name = "driver_id", nullable = false)
+    private Client client;
 
     @OneToOne
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
-
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @ManyToMany
+    private List<Menu> menus;
 
 
     public Order() {
