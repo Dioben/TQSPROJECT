@@ -61,8 +61,8 @@ public class Order {
 
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
 
 }
