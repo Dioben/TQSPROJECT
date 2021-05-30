@@ -1,8 +1,6 @@
 package marchingfood.tqs.ua.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -43,6 +41,6 @@ public class OrderEntity {
 
 
     public OrderEntity() {
-
+        //Lombook Requires it
     }
 }
