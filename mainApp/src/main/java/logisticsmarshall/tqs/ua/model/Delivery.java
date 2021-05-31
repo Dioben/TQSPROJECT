@@ -3,6 +3,7 @@ package logisticsmarshall.tqs.ua.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "order_entity")
-public class OrderEntity {
+public class Delivery {
 
     public enum Priority {
         HIGHPRIORITY,
@@ -24,7 +25,6 @@ public class OrderEntity {
 
     @Column(name = "logistics_id", nullable = false)
     private Long logisticsId;
-
 
     @Column(name = "order_timestamp", nullable = false)
     @CreationTimestamp
@@ -43,8 +43,6 @@ public class OrderEntity {
     @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;
-
-
 
     @OneToOne
     @JoinColumn(name = "reputation_id", nullable = false)

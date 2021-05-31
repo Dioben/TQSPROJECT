@@ -39,7 +39,7 @@ public class Driver {
     private Vehicle vehicle;
 
     @OneToMany(mappedBy = "driver")
-    private Set<OrderEntity> orderEntity;
+    private Set<Delivery> delivery;
 
 
 

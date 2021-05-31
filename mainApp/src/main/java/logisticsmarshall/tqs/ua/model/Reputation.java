@@ -24,7 +24,7 @@ public class Reputation {
     @OneToOne(mappedBy = "reputation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    private OrderEntity orderEntity;
+    private Delivery delivery;
 
     @ManyToOne
     @JoinColumn(name = "driver_id", nullable = false)

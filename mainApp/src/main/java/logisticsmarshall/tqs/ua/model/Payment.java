@@ -26,6 +26,6 @@ public class Payment {
     @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    private OrderEntity orderEntity;
+    private Delivery delivery;
 
 }

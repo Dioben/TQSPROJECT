@@ -38,7 +38,7 @@ public class Company {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<OrderEntity> orderEntity;
+    private Set<Delivery> delivery;
 
 
 
