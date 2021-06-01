@@ -72,6 +72,22 @@ input, select, textarea {
 	appearance: none;
 }
 
+input[type="radio"]{
+  position: relative;
+  display: block;
+  width: 11px;
+  height: 11px;
+  border: 1px solid #808080;  }
+
+  input[type="radio"]:checked {
+	box-shadow: 0 0 0 3px rgb(7, 20, 95);
+	position: relative;
+	display: block;
+	width: 11px;
+	height: 11px;
+	border: 1px solid rgb(7, 20, 95);
+  }
+
 /* Basic */
 
 	html {
