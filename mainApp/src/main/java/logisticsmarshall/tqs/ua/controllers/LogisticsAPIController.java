@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/")
 public class LogisticsAPIController {
     
-    @PostMapping(path="/delivery/post",consumes = "application/json")
+    @PostMapping(path="/delivery/",consumes = "application/json")
     void postDelivery(
                     //TODO:Maybe include vehicle
                     @RequestParam(name="address") String address,
@@ -16,14 +16,14 @@ public class LogisticsAPIController {
         //Placeholder
     }
 
-    @GetMapping(path="/delivery/get")
+    @GetMapping(path="/delivery/")
     void getDeliveries(@RequestParam(name="APIKey") String apikey) {
         //Placeholder
     }
 
-    @GetMapping(path="/deliveries/get")
+    @GetMapping(path="/delivery/{id}")
     void getDelivery(
-            @RequestParam(name="id") String delivery_id,
+            @PathVariable(name="id") String delivery_id,
             @RequestParam(name="APIKey") String apikey) {
         //Placeholder
     }

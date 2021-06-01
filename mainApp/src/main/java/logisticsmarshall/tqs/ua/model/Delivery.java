@@ -3,9 +3,15 @@ package logisticsmarshall.tqs.ua.model;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
+@Data
 @Table(name = "delivery")
 public class Delivery {
+
 
     public enum Priority {
         HIGHPRIORITY,
@@ -16,9 +22,6 @@ public class Delivery {
     @Id //logistics_id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(name = "logistics_id", nullable = false)
-    private Long logisticsId;
 
     @Column(name = "order_timestamp", nullable = false)
     @CreationTimestamp
