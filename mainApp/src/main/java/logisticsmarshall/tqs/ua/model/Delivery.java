@@ -1,14 +1,8 @@
 package logisticsmarshall.tqs.ua.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import javax.persistence.*;
-import java.sql.Timestamp;
-
-@Data
 @Entity
 @Table(name = "delivery")
 public class Delivery {
