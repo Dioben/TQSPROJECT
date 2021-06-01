@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "order_entity")
+@Table(name = "delivery")
 public class Delivery {
 
     public enum Priority {
