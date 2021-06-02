@@ -33,7 +33,7 @@ class LogisticsAPIControllerTest {
     ObjectMapper jsonParser = new ObjectMapper();
 
     @Test
-    void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() throws Exception {
+     void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() throws Exception {
         Delivery del = new Delivery();
         String apiKey = "12SDF341G6";
         del.setId(1050L);
