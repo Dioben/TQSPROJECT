@@ -16,17 +16,10 @@ public class Driver {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private  User user;
 
-    @Column(name = "name", nullable = false)
-    private String name;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
 
     @Column(name = "phoneNumber", nullable = false)
     private Integer phoneNumber;
