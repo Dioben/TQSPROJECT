@@ -1,13 +1,27 @@
 package logisticsmarshall.tqs.ua.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import logisticsmarshall.tqs.ua.services.UserService;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 class LogisticsWebControllerTest {
+    @Autowired
+    MockMvc mvc;
+
+    @MockBean
+    UserService userMock;
+
+    ObjectMapper jsonParser = new ObjectMapper();
+
+
     @Test
     void whenRegisterAsDriver_EmptyParameters_returnError() throws Exception {
-        //TODO
+
+
+
     }
 
     @Test

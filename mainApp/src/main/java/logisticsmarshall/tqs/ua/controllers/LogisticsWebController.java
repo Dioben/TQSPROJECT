@@ -14,7 +14,7 @@ public class LogisticsWebController {
 
     @GetMapping(path="/register")
     String getRegisterForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new User("x","y","d", "ADMIN"));
         return "signup_form";
     }
 

@@ -13,11 +13,8 @@ import java.util.Set;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private  User user;
 
     @Column(name = "address", nullable = false)
     private String address;
@@ -25,14 +22,8 @@ public class Company {
     @Column(name = "phoneNumber", nullable = false)
     private Integer phoneNumber;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "orderType", nullable = false)
-    private String orderType;
+    @Column(name = "deliveryType", nullable = false)
+    private String deliveryType;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
