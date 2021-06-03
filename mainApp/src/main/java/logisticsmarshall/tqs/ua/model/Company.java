@@ -13,6 +13,8 @@ import java.util.Set;
 public class Company {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private  User user;
 
