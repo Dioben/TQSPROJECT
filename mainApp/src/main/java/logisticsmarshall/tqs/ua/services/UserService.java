@@ -40,7 +40,6 @@ public class UserService {
     }
 
     public boolean checkIfValidAPIKey(String anyString) {
-        String sonarQubeSmellRemover = anyString;
         return false;
     }
 
