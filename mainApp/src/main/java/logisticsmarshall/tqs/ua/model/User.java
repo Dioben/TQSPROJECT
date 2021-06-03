@@ -27,6 +27,10 @@ public class User {
     @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
+    @OneToOne
+    @JoinColumn(name = "company_id", nullable = true)
+    private Company company;
+
     public User(String name, String email, String password, String role){
         this.name=name;
         this.email=email;

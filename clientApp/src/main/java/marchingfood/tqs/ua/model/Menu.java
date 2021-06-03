@@ -25,7 +25,7 @@ public class Menu {
     private String description;
 
     @ManyToMany(mappedBy = "menus")
-    private List<OrderEntity> orderEntities;
+    private List<Delivery> orderEntities;
 
 
 

@@ -9,8 +9,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "order_entity")
-public class OrderEntity {
+@Table(name = "delivery")
+public class Delivery {
 
     @Id
     private long id;
@@ -40,7 +40,7 @@ public class OrderEntity {
     private List<Menu> menus;
 
 
-    public OrderEntity() {
+    public Delivery() {
         //Lombook Requires it
     }
 }
