@@ -1,9 +1,11 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.model.Delivery;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DeliveryService {
 
     //TODO
