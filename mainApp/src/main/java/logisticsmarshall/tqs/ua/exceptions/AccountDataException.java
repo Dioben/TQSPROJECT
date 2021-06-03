@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class ExceptionDetails extends Exception {
+public class AccountDataException extends Exception {
 
-    public ExceptionDetails(String message) {
+    public AccountDataException(String message) {
         super(message);
     }
 }

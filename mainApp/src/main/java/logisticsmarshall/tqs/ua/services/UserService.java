@@ -1,16 +1,13 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.UserRegistration;
-import logisticsmarshall.tqs.ua.exceptions.ExceptionDetails;
+import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Configuration
-@ComponentScan("logisticsmarshall.tqs.ua.services")
+
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -22,9 +19,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User save(UserRegistration registration) throws ExceptionDetails {
+    public User save(UserRegistration registration) throws AccountDataException {
         if (userRepository.findByEmail(registration.getEmail()) != null) {
-            throw new ExceptionDetails("There is already a user with that email");
+            throw new AccountDataException("Email is already in use");
         }
         User user = new User("x", "y", "password","ADMIN");
 
