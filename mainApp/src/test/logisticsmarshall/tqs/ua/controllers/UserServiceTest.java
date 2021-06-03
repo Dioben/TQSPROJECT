@@ -40,7 +40,7 @@ public class UserServiceTest {
 
     @Test
     void whenUserNameExists_receiveCorrectUserName() {
-        given(userRepository.findByUsername("john")).willReturn(user);
+        given(userRepository.findByName("john")).willReturn(user);
         assertEquals(user, userService.getUserByName("john"));
     }
 
