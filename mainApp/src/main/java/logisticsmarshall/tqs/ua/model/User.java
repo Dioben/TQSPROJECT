@@ -1,9 +1,7 @@
 package logisticsmarshall.tqs.ua.model;
 
 import javax.persistence.*;
-import java.util.Collection;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "user")

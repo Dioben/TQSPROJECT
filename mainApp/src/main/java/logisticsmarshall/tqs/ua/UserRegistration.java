@@ -19,7 +19,7 @@ public class UserRegistration {
     private String confirmPassword;
     private String email;
     private String confirmEmail;
-    public String role;
+    private String role;
 
     public UserRegistration(String name,  String password, String confirmPassword, String email, String confirmEmail, String role) {
         this.name = name;
