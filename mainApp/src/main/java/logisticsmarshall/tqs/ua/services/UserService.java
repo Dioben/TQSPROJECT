@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public User getUserByName(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByName(username);
     }
 
     public User getUserByEmail(String email) {
