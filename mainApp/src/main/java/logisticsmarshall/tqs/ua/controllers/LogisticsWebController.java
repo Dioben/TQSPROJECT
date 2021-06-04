@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping("/website/")
+@RequestMapping("")
 public class LogisticsWebController {
 
     @GetMapping(path="/register")
@@ -19,9 +19,7 @@ public class LogisticsWebController {
     }
 
     @PostMapping(path="/register",consumes = "application/json")
-    void processRegisterForm(
-            @RequestParam(name="APIKey") String apikey,
-            User user) {
+    void processRegisterForm(User user) {
         //Placeholder
     }
     @PostMapping(path="/login",consumes = "application/json")
