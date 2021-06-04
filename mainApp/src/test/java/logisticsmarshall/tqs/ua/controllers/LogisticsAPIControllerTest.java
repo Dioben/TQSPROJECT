@@ -39,9 +39,8 @@ class LogisticsAPIControllerTest {
         comp.setApiKey(apiKey);
         del.setId(1050L);
         del.setCompany(comp);
-        Mockito.when(serviceMock.checkIfValidAPIKey(Mockito.anyString())).thenReturn(true);
+        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(comp);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(del);
-
         mvc.perform(get("/api/delivery/1050")
                 .param("APIKey", apiKey)
                 .content(jsonParser.writeValueAsString(del))
@@ -71,8 +70,7 @@ class LogisticsAPIControllerTest {
         del2.setId(1051L);
 
         String apiKey = "12SDF341G6";
-
-        Mockito.when(serviceMock.checkIfValidAPIKey(Mockito.anyString())).thenReturn(true);
+        Mockito.when(serviceMock.checkIfValidAPIKey(Mockito.anyString())).thenReturn();
         Mockito.when(serviceMock.getDeliveries()).thenReturn(delLst);
 
         delLst.add(del);
