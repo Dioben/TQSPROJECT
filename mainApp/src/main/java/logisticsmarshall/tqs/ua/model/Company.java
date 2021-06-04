@@ -13,7 +13,11 @@ import java.util.Set;
 public class Company {
 
     @Id
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    private long id;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
     private  User user;
 
     @Column(name = "address", nullable = false)
@@ -24,6 +28,9 @@ public class Company {
 
     @Column(name = "deliveryType", nullable = false)
     private String deliveryType;
+
+    @Column(name = "apiKey", nullable = true)
+    private String apiKey;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
