@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/")
 public class LogisticsAPIController {
-    
     @PostMapping(path="/delivery/",consumes = "application/json")
     void postDelivery(
                     //TODO:Maybe include vehicle
