@@ -1,6 +1,7 @@
 package logisticsmarshall.tqs.ua.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,11 @@ class LogisticsAPIControllerTest {
     @Test
      void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() throws Exception {
         Delivery del = new Delivery();
+        Company comp = new Company();
         String apiKey = "12SDF341G6";
+        comp.setApiKey(apiKey);
         del.setId(1050L);
+        del.setCompany(comp);
         Mockito.when(serviceMock.checkIfValidAPIKey(Mockito.anyString())).thenReturn(true);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(del);
 
