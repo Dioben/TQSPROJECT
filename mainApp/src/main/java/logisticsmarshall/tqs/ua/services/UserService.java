@@ -2,7 +2,9 @@ package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.UserRegistration;
 import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
+import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.repository.CompanyRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -37,8 +42,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public boolean checkIfValidAPIKey(String anyString) {
-        return false;
+    public Company getApiKeyHolder(String apiKey) {
+        return companyRepository.findCompanyByApiKey(apiKey);
     }
 
 
