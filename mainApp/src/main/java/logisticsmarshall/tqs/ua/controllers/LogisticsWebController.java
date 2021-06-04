@@ -22,6 +22,21 @@ public class LogisticsWebController {
     void processRegisterForm(User user) {
         //Placeholder
     }
+    @GetMapping(path="/update")
+    String getUpdateForm(Model model) {
+        model.addAttribute("user", new User("x","y","d", "ADMIN"));
+        return "signup_form";
+    }
+    @PostMapping(path="/update/company")
+    String updateCompany(Model model) {
+        model.addAttribute("user", new User("x","y","d", "ADMIN"));
+        return "signup_form";
+    }
+    @PostMapping(path="/update/driver")
+    String updateDriver(Model model) {
+        model.addAttribute("user", new User("x","y","d", "ADMIN"));
+        return "signup_form";
+    }
     @PostMapping(path="/login",consumes = "application/json")
     void processLogin(
             @RequestParam(name="type") String type) {
