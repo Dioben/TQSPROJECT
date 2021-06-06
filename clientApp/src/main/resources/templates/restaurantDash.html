@@ -58,59 +58,16 @@
 		</nav>
 	</header>
 	<!-- End header -->
-	
 
-
-	
-
-
-
-	<!-- RESTAURANT DATA-->
-	<div class="blog-box">
-		<div class="container" >
-            <br><br>
-            <h3>McDonald's Aveiro</h3>
-            <br><br><br>
-            <h2 style="margin-left:170px;" >Restaurant data</h2>
-            <table style="width: 800px; margin-left:auto;margin-right:auto;" class="styled-table">
-
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Country</th>
-                        <th>City</th>
-                        <th>Address</th>
-                        <th>Postal code </th>
-                        <th>Edit </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>MacDonalds</td>
-                        <td>Portugal</td>
-                        <td>Aveiro</td>
-                        <td>Rua da cidade</td>
-                        <td>3451-123</td>
-                        <td > <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>		
-        </div>
-    </div>
-
-
-
-
+<br><br>
     <!-- Restaurant MENUS  -->
 		<div class="container">
-            <h2 style="margin-left:170px;">Menus </h2>
-            <h4 style="margin-left:170px; "><a href=""> <i class="far fa-plus-square"></i>  new menu</a> </h4>
+            <h2 style="margin-left:170px;"> Restaurant Menus </h2>
+            <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
 
             <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name </th>
                         <th>Description </th>
                         <th>Price</th>
@@ -119,7 +76,6 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>12345 </td>
                         <td>Big Mac </td>
                         <td>.........</td>
                         <td>5€</td>
@@ -131,7 +87,17 @@
                 </tbody>
             </table>		
         </div>
-
+        <div id="adder_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
+            <h4>New Menu:</h4>
+            <form method="post" action="/admin/menu">
+                <input type="text" name="name" placeholder="name">
+                <input type="number" name="price" placeholder="price in €" step="0.01">
+                <br>
+                <textarea name="description" placeholder="description"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
 
 
 
@@ -139,35 +105,7 @@
         <br><br>
 
 
-    <!-- Restaurant ITEMS  -->
-    <div class="container">
-        <h2 style="margin-left:170px;">ITEMS </h2>
-        <h4 style="margin-left:170px; "><a href=""> <i class="far fa-plus-square"></i>  new item</a> </h4>
 
-        <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name </th>
-                    <th>Description </th>
-                    <th>Price</th>
-                    <th> Actions </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1234 </td>
-                    <td>Hamburguer </td>
-                    <td>.........</td>
-                    <td>5€</td>
-                    <td>           
-                        <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                      <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                     </td>
-                </tr>
-            </tbody>
-        </table>		
-    </div>
 
 
     <br><br>
@@ -181,7 +119,7 @@
                         <th>ID</th>
                         <th>Name </th>
                         <th>Delivery man ID </th>
-                        <th>Delivery man name </th>
+
                         <th>Status</th>
 
                     </tr>
@@ -191,7 +129,6 @@
                         <td>1234 </td>
                         <td>Hamburguer </td>
                         <td>1111</td>
-                        <td>José</td>
                         <td>Delivered</td>
 
                     </tr>
@@ -230,14 +167,18 @@
 
 	
 <script>
+
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
+    function displayAdder() {
+        document.getElementById("adder_div").style.display = "block";
+    }
     function drawChart() {
 
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Time of Day');
-      data.addColumn('number', 'Sells');
+      data.addColumn('number', 'Sales');
 
       data.addRows([
         [new Date(2021, 0, 1), 5],  [new Date(2021, 0, 2), 7],  [new Date(2021, 0, 3), 3],

@@ -17,10 +17,10 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -29,8 +29,8 @@ public class Client {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "status", nullable = false)
-    private Boolean status;
+    @Column(name = "isadmin", nullable = false)
+    private boolean admin;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
