@@ -32,6 +32,7 @@ public class UserService {
         User user = new User("x", "y", "password","ADMIN");
 
         return userRepository.save(user);
+
     }
 
     public User getUserByName(String username) {

@@ -38,6 +38,14 @@ public class Company {
     @EqualsAndHashCode.Exclude
     private Set<Delivery> delivery;
 
+    public Company(long id, User user, String address, Integer phoneNumber, String deliveryType, String apiKey) {
+        this.id = id;
+        this.user = user;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.deliveryType = deliveryType;
+        this.apiKey = apiKey;
+    }
 
-
+    public Company(){};
 }

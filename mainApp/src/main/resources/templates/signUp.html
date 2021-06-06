@@ -1,38 +1,59 @@
 <!DOCTYPE HTML>
+<html xmlns:th="http://www.thymleaf.org">
+
+
 <html>
 	<head>
-		<title>Left Sidebar - Arcana by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href="/css/main.css" rel="stylesheet" />
+
 	</head>
 	<body >
-		<div style="width:300px; margin:0 auto; margin-top:100px" >
-				<h3>SignUp</h3>
-				<form>
+		<div style="width:300px; margin:0 auto; margin-top:30px" >
 
+			<div th:if="${param.success}">
+				<div class="alert alert-info">You've successfully registered
+					to our awesome app!</div>
+			</div>
+
+
+
+
+
+			<h3>SignUp</h3>
+					<form action="#" th:action="@{/register}" th:object="${user}" method="post">
 
 						<div class="col-12">
-							<input type="text" name="name" id="name" placeholder="Name" />
+							<input type="text"  placeholder="Name" th:field="*{name}" />
 						</div>
-						
+
 
 						<br>
 						<div class="col-12">
-							<input type="text" name="email" id="email" placeholder="Email" />
+							<input type="text" placeholder="Email" th:field="*{email}" />
 						</div>
-						
-						
+
 						<br>
 						<div class="col-12">
-							<input type="password" name="password" id="password" placeholder="Password" />
+							<input type="password"  placeholder="Password" th:field="*{password}" />
 						</div>
-						
-						
+
 						<br>
-						<div class="col-12">
-							<input type="password" name="repeatPassword" id="password" placeholder="Repeat password" />
+						<div class="col-12 ">
+							<select th:field="*{role}" style=" border-radius: 5px; width: 200px">
+								<option th:value="'ADMINISTRATOR'" th:text="Administrator"></option>
+								<option th:value="'DRIVER'" th:text="Driver"></option>
+								<option th:value="'COMPANYOWNER'" th:text="CompanyOwner"></option>
+
+							</select>
+
 						</div>
+
+
+
+
 						<br>						
 						<div class="col-3">
 							<button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>	
@@ -44,19 +65,17 @@
 
 		</div>
 
-		<div>
-			<br><br>
-			<img src="/images/foodDriver.png"  alt="Smiley face" style=" float: right; width: 20%; height: 20%; margin-right:100px;margin-top:-150px; " >
 
-		</div>
 
 		<!-- Scripts -->
-			<script src="/assets/js/jquery.min.js"></script>
-			<script src="/assets/js/jquery.dropotron.min.js"></script>
+			<script src="/js/jquery.min.js"></script>
+
+			<script src="/js/jquery.dropotron.min.js"></script>
 			<script src="/assets/js/browser.min.js"></script>
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
+
 
 	</body>
 </html>
