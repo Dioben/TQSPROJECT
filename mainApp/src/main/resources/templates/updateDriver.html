@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymleaf.org">
 
 
@@ -6,11 +6,67 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
-</head>
-<body>
 
-DRIVER
+    <link href="/css/main.css" rel="stylesheet" />
+
+</head>
+<body >
+<div style="width:300px; margin:0 auto; margin-top:30px" >
+
+    <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully registered
+            to our awesome app!</div>
+    </div>
+
+
+
+
+
+    <h3>Driver Form</h3>
+    <form action="#" th:action="@{/update/driver}" th:object="${driver}" method="post">
+
+        <div class="col-12">
+            <input type="text"  placeholder="Name" th:field="*{name}" />
+        </div>
+
+
+        <br>
+        <div class="col-12">
+            <input type="text" placeholder="Email" th:field="*{email}" />
+        </div>
+
+        <br>
+        <div class="col-12">
+            <input type="password"  placeholder="Password" th:field="*{password}" />
+        </div>
+
+
+
+
+
+
+        <br>
+        <div class="col-3">
+            <button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+
+<!-- Scripts -->
+<script src="/js/jquery.min.js"></script>
+
+<script src="/js/jquery.dropotron.min.js"></script>
+<script src="/assets/js/browser.min.js"></script>
+<script src="/assets/js/breakpoints.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+
 
 </body>
 </html>

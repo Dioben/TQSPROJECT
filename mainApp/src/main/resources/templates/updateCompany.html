@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 
 
 <html>
@@ -12,9 +13,9 @@
 </head>
 <body >
 <div style="width:300px; margin:0 auto; margin-top:30px" >
-        <form action="#" th:action="@{/update/company}" th:object="${company}" method="post">
+        <form  th:action="@{/update/company}" modelAttribute="company" th:object="${company}" method="post">
         <div class="col-12">
-            <input type="text"  id="address" name="address" placeholder="Address" th:field="*{apiKey}" />
+            <input type="text"  id="address" name="address" placeholder="Address" th:field="*{address}" />
         </div>
           <br>
       <div class="col-3">

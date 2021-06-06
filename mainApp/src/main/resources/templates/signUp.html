@@ -23,29 +23,29 @@
 
 
 			<h3>SignUp</h3>
-					<form action="#" th:action="@{/register}" th:object="${user}" method="post">
+					<form  th:action="@{/register}" th:object="${user}" method="post">
 
 						<div class="col-12">
-							<input type="text"  placeholder="Name" th:field="*{name}" />
+							<input type="text"  placeholder="Name" th:value="*{name}" />
 						</div>
 
 
 						<br>
 						<div class="col-12">
-							<input type="text" placeholder="Email" th:field="*{email}" />
+							<input type="text" placeholder="Email" th:value="*{email}" />
 						</div>
 
 						<br>
 						<div class="col-12">
-							<input type="password"  placeholder="Password" th:field="*{password}" />
+							<input type="password"  placeholder="Password" th:value="*{password}" />
 						</div>
 
 						<br>
 						<div class="col-12 ">
-							<select th:field="*{role}" style=" border-radius: 5px; width: 200px">
+							<select th:value="*{role}" style=" border-radius: 5px; width: 200px">
 								<option th:value="'ADMINISTRATOR'" th:text="Administrator"></option>
 								<option th:value="'DRIVER'" th:text="Driver"></option>
-								<option th:value="'COMPANYOWNER'" th:text="CompanyOwner"></option>
+								<option th:value="'COMPANY'" th:text="Company"></option>
 
 							</select>
 

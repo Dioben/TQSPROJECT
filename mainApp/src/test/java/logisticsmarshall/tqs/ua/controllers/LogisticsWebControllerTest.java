@@ -3,6 +3,7 @@ package logisticsmarshall.tqs.ua.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.services.UserService;
+import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -24,7 +25,7 @@ class LogisticsWebControllerTest {
     MockMvc mvc;
 
     @MockBean
-    UserService userMock;
+    UserServiceImpl userMock;
 
     ObjectMapper jsonParser = new ObjectMapper();
 

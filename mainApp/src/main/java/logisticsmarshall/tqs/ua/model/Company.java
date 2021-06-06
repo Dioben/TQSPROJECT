@@ -13,7 +13,6 @@ import java.util.Set;
 public class Company {
 
     @Id
-
     private long id;
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,4 +47,8 @@ public class Company {
     }
 
     public Company(){};
+    public Company(User user){
+        this.user=user;
+    };
+
 }
