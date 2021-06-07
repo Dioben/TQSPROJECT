@@ -78,12 +78,21 @@
                 </thead>
                 <tbody>
 
+
                 <tr th:each="menu : ${menus}">
                     <td><span th:text="${menu}"> Name </span></td>
                     <td><span th:text="${menu.price}"> Price </span></td>
                     <td><span th:text="${menu.description}"> Description </span></td>
+                    <td>           
+                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                            <!-- remove 1, replace with ID using thymeleaf-->
+                            <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
+                                <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                            </form>
 
+                         </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>

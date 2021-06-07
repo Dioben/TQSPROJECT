@@ -3,6 +3,7 @@ package marchingfood.tqs.ua.service;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +17,10 @@ public class MenuService {
         menuRepository.save(menu);
     }
     public List<Menu> getMenus(){return menuRepository.findAll();}
+    public void tryDelete(long id) {
+        Menu menu = menuRepository.findById(id);
+        if (menu==null){ throw new ResourceNotFoundException("Menu with id "+id+ " was not found");}
+        menuRepository.delete(menu);
+    }
+
 }

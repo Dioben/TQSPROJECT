@@ -8,9 +8,12 @@ import lombok.SneakyThrows;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.service.MenuService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -81,6 +85,21 @@ public class MenuCRUDTest {
                         new BasicNameValuePair("name", "test"),
                         new BasicNameValuePair("description", "test")
                 ))))).andExpect(status().is(302));
+    }
+
+    @SneakyThrows
+    @Test
+    void deleteNXTest(){
+        Mockito.doThrow(ResourceNotFoundException.class).when(serviceMock).tryDelete(Mockito.anyLong());
+        mvc.perform(get("/admin/menu/delete/1"))
+                .andExpect(status().is(404));
+    }
+    @SneakyThrows
+    @Test
+    void deleteOKTest(){
+        Mockito.reset(serviceMock);
+        mvc.perform(get("/admin/menu/delete/1"))
+                .andExpect(status().is(302));
     }
 
 
