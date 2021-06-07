@@ -81,7 +81,11 @@
                         <td>5€</td>
                         <td>           
                             <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                          <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                            <!-- remove 1, replace with ID using thymeleaf-->
+                            <form action="/admin/menu/delete/1" method="get">
+                                <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                            </form>
+
                          </td>
                     </tr>
                 </tbody>
