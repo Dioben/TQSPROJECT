@@ -5,6 +5,7 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.Ur
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
 import lombok.SneakyThrows;
+import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.service.MenuService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,10 +17,21 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @WebMvcTest(AdminController.class)
 public class MenuCRUDTest {
@@ -89,6 +101,23 @@ public class MenuCRUDTest {
         mvc.perform(get("/admin/menu/delete/1"))
                 .andExpect(status().is(302));
     }
+
+
+    //see menus
+    @SneakyThrows
+    @Test
+    void whenSeeMenus_thenReturnAllMenuData() {
+        Menu menu = new Menu("menu1", 10.5,"tasty");
+        given(serviceMock.getMenus()).willReturn(Arrays.asList(menu));
+        mvc.perform(get("/admin/menus")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(menu.getName())))
+                .andExpect(content().string(containsString(String.valueOf(menu.getPrice()))))
+                .andExpect(content().string(containsString(menu.getDescription())));
+    }
+
+
 
 
 }
