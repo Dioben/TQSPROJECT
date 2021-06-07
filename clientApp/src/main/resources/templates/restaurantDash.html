@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><!-- Basic -->
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">   
@@ -65,27 +67,25 @@
             <h2 style="margin-left:170px;"> Restaurant Menus </h2>
             <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
 
-            <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
+            <table>
                 <thead>
-                    <tr>
-                        <th>Name </th>
-                        <th>Description </th>
-                        <th>Price</th>
-                        <th> Actions </th>
-                    </tr>
+                <tr>
+                    <th> Name </th>
+                    <th> Price </th>
+                    <th> Description </th>
+
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Big Mac </td>
-                        <td>.........</td>
-                        <td>5€</td>
-                        <td>           
-                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                          <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                         </td>
-                    </tr>
+
+                <tr th:each="menu : ${menus}">
+                    <td><span th:text="${menu}"> Name </span></td>
+                    <td><span th:text="${menu.price}"> Price </span></td>
+                    <td><span th:text="${menu.description}"> Description </span></td>
+
+                </tr>
                 </tbody>
-            </table>		
+            </table>
         </div>
         <div id="adder_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
             <h4>New Menu:</h4>

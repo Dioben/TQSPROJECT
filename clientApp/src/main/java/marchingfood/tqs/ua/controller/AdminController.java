@@ -39,4 +39,11 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
+    @GetMapping("/menus")
+    String getMenus(Model model){
+        model.addAttribute("menus", menuService.getMenus());
+        return "restaurantDash";
+    }
+
+
 }
