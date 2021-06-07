@@ -36,7 +36,7 @@ public class AdminController {
         menuService.save(menu);
         return "redirect:/admin/dashboard";
     }
-    @DeleteMapping(path = "/menu/{id}" , consumes = {"application/x-www-form-urlencoded"})
+    @GetMapping(path = "/menu/delete/{id}")
     String deleteMenu(@PathVariable long id){
         menuService.tryDelete(id);
         return "redirect:/admin/dashboard";

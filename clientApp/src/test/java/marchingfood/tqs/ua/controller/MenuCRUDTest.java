@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminController.class)
@@ -80,16 +79,14 @@ public class MenuCRUDTest {
     @Test
     void deleteNXTest(){
         Mockito.doThrow(ResourceNotFoundException.class).when(serviceMock).tryDelete(Mockito.anyLong());
-        mvc.perform(delete("/admin/menu/1")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        mvc.perform(get("/admin/menu/delete/1"))
                 .andExpect(status().is(404));
     }
     @SneakyThrows
     @Test
     void deleteOKTest(){
         Mockito.reset(serviceMock);
-        mvc.perform(delete("/admin/menu/1")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        mvc.perform(get("/admin/menu/delete/1"))
                 .andExpect(status().is(302));
     }
 
