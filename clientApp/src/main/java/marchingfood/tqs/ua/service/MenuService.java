@@ -23,4 +23,12 @@ public class MenuService {
         menuRepository.delete(menu);
     }
 
+    public void edit(long id, Menu menu) {
+        Menu preExisting = menuRepository.findById(id);
+        if (preExisting==null){throw new ResourceNotFoundException("Menu with id "+id+ " was not found");}
+        preExisting.setDescription(menu.getDescription());
+        preExisting.setName(menu.getName());
+        preExisting.setPrice(menu.getPrice());
+        menuRepository.save(preExisting);
+    }
 }

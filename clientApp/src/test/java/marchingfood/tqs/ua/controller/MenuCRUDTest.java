@@ -102,6 +102,44 @@ public class MenuCRUDTest {
                 .andExpect(status().is(302));
     }
 
+    @SneakyThrows
+    @Test
+    void editBadIdTest(){
+        Mockito.doThrow(ResourceNotFoundException.class).when(serviceMock).edit(Mockito.anyLong(),Mockito.any());
+        mvc.perform(post("/admin/menu/12334")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("price", "1.00"),
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("description", "test")
+                ))))).andExpect(status().is(404));
+    }
+
+    @SneakyThrows
+    @Test
+    void editBadDataTest(){
+        Mockito.reset(serviceMock);
+        mvc.perform(post("/admin/menu/1")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("price", "0.00"),
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("description", "test")
+                ))))).andExpect(status().is(400));
+    }
+
+    @SneakyThrows
+    @Test
+    void editOKTest(){
+        Mockito.reset(serviceMock);
+        mvc.perform(post("/admin/menu/1")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("price", "6.48"),
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("description", "test")
+                ))))).andExpect(status().is(302));
+    }
 
     //see menus
     @SneakyThrows
