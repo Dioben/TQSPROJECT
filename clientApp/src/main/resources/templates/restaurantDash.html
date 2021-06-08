@@ -195,8 +195,11 @@
         document.getElementById("adder_div").style.display = "block";
     }
     function displayEdit(x) {
-        console.log(x);
         document.getElementById("edit_div").style.display = "block";
+        document.getElementById("edit-name").value = document.getElementById("menuName"+x).innerText;
+        document.getElementById("edit-desc").value = document.getElementById("menuDesc"+x).innerText;
+        document.getElementById("edit-price").value = document.getElementById("menuPrice"+x).innerText;
+        document.getElementById("edit_form").action = "/admin/menu/"+x;
     }
     function drawChart() {
 
