@@ -50,5 +50,8 @@ public class Menu {
         if (description.isBlank()){
             throw new BadParameterException("Menu description must not be empty");
         }
+        if(imageurl!=null && imageurl.length()>255){
+            throw new BadParameterException("Menu Image URL must be shorter than 255 chars");
+        }
     }
 }
