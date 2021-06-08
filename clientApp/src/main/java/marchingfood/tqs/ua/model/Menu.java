@@ -25,6 +25,9 @@ public class Menu {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "imageurl", nullable = true)
+    private String imageurl;
+
     @ManyToMany(mappedBy = "menus")
     private List<Delivery> orderEntities;
 

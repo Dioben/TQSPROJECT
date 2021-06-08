@@ -29,6 +29,7 @@ public class MenuService {
         preExisting.setDescription(menu.getDescription());
         preExisting.setName(menu.getName());
         preExisting.setPrice(menu.getPrice());
+        preExisting.setImageurl(menu.getImageurl());
         menuRepository.save(preExisting);
     }
 }

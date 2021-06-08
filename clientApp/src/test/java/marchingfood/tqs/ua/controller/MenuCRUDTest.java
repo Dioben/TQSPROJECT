@@ -86,7 +86,18 @@ public class MenuCRUDTest {
                         new BasicNameValuePair("description", "test")
                 ))))).andExpect(status().is(302));
     }
-
+    @SneakyThrows
+    @Test
+    void GoodMenuDataNewMenuWithPictureTest(){
+        mvc.perform(post("/admin/menu")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("price", "6.48"),
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("description", "test"),
+                        new BasicNameValuePair("imageurl", "test")
+                ))))).andExpect(status().is(302));
+    }
     @SneakyThrows
     @Test
     void deleteNXTest(){
@@ -138,6 +149,20 @@ public class MenuCRUDTest {
                         new BasicNameValuePair("price", "6.48"),
                         new BasicNameValuePair("name", "test"),
                         new BasicNameValuePair("description", "test")
+                ))))).andExpect(status().is(302));
+    }
+
+    @SneakyThrows
+    @Test
+    void editOKWithURlTest(){
+        Mockito.reset(serviceMock);
+        mvc.perform(post("/admin/menu/1")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("price", "6.48"),
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("description", "test"),
+                        new BasicNameValuePair("imageurl", "myurl")
                 ))))).andExpect(status().is(302));
     }
 
