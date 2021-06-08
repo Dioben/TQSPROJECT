@@ -18,17 +18,19 @@ public class DeliveryService {
     @Autowired
     DeliveryRepository deliveryRepository;
 
-    //TODO
     public Delivery getDeliveryById(long id) {
         return deliveryRepository.findDeliveryById(id);
     }
 
+    public void postDelivery(Delivery delivery){
+        deliveryRepository.save(delivery);
+    }
     //TODO
     public List<Delivery> getDeliveriesByDriver() {
         return null;
     }
-    public List<Delivery> getDeliveriesByCompany() {
-        return null;
+    public List<Delivery> getDeliveriesByCompany(Company company) {
+        return deliveryRepository.findAllDeliveriesByCompany_id(company.getId());
     }
     public Company getApiKeyHolder(String apiKey) {
         return companyRepository.findCompanyByApiKey(apiKey);

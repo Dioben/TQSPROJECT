@@ -9,6 +9,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasSize;
 
 @WebMvcTest(LogisticsAPIController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class LogisticsAPIControllerTest {
 
     @Autowired
@@ -43,13 +45,13 @@ class LogisticsAPIControllerTest {
         del.setId(1050L);
         del.setCompany(comp);
         Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(true);
-        Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(del);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
         mvc.perform(get("/api/delivery/1050")
                 .param("APIKey", apiKey)
                 .content(jsonParser.writeValueAsString(del))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$.logisticsId",is(del.getId())));
+                .andExpect(jsonPath("$.id",is(Integer.valueOf(String.valueOf(del.getId())))));
     }
 
     @Test
@@ -65,7 +67,7 @@ class LogisticsAPIControllerTest {
     }
 
     @Test
-    void whenGetDeliveries_validAPIKeyAndDeliveryId_returnListDeliveries() throws Exception {
+    void whenGetDeliveries_validAPIKey_returnListDeliveries() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
         Delivery del = new Delivery();
         del.setId(1050L);
@@ -76,8 +78,10 @@ class LogisticsAPIControllerTest {
         delLst.add(del2);
 
         String apiKey = "12SDF341G6";
-        Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(false);
-        Mockito.when(serviceMock.getDeliveriesByCompany()).thenReturn(delLst);
+        Company com = new Company();
+        com.setApiKey(apiKey);
+        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getDeliveriesByCompany(Mockito.any())).thenReturn(delLst);
 
 
         mvc.perform(get("/api/delivery/")
@@ -107,12 +111,12 @@ class LogisticsAPIControllerTest {
         Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(company);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"priority\":\"HIGH\"," +
-                        "\"address\": "+ address + "\""+
+                .content("{\"priority\":\"HIGHPRIORITY\"," +
+                        "\"address\": "+ address + ","+
                         "\"APIKey\":\""+ apiKey +
                         "\"}")
         ).andExpect(status().is(200))
-                .andExpect(jsonPath("address", Matchers.equalToIgnoringCase(address)));
+                .andExpect(jsonPath("address", Matchers.equalToIgnoringCase(address.replaceAll("\"",""))));
 
     }
 
@@ -134,8 +138,8 @@ class LogisticsAPIControllerTest {
         Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(null);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"priority\":\"HIGH\"," +
-                        "\"address\": "+ address + "\""+
+                .content("{\"priority\":\"HIGHPRIORITY\"," +
+                        "\"address\": "+ address + ","+
                         "\"APIKey\":\""+ apiKey +
                         "\"}")
         ).andExpect(status().is(403));
