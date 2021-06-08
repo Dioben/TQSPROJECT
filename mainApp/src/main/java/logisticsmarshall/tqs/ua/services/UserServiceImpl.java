@@ -11,22 +11,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    /*
-        public User save(UserRegistration registration) throws AccountDataException {
-        if (userRepository.findByEmail(registration.getEmail()) != null) {
-            throw new AccountDataException("Email is already in use");
-        }
-        User user = new User("x", "y", "password","ADMIN");
 
-        return userRepository.save(user);
-
-    }
-     */
     @Autowired
     private UserRepository userRepository;
 
@@ -51,10 +42,12 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+                getUserRoles(user));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> getUserRoles(User user){
+        ArrayList<GrantedAuthority> authorityArrayList = new ArrayList<>();
+        authorityArrayList.add(new SimpleGrantedAuthority(user.getRole()));
+        return  authorityArrayList;
     }
 }
