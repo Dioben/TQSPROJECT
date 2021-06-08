@@ -38,6 +38,7 @@
 
 
     	<!-- Start header -->
+        <div>
 	<header class="top-navbar">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container">
@@ -59,11 +60,10 @@
 			</div>
 		</nav>
 	</header>
+        </div>
 	<!-- End header -->
-
-<br><br>
     <!-- Restaurant MENUS  -->
-		<div class="container">
+		<div class="container" style="padding-top: 100px;">
             <h2 style="margin-left:170px;"> Restaurant Menus </h2>
             <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
 
@@ -80,11 +80,11 @@
 
 
                 <tr th:each="menu : ${menus}">
-                    <td><span th:text="${menu.name}"> Name </span></td>
-                    <td><span th:text="${menu.price}"> Price </span></td>
-                    <td><span th:text="${menu.description}"> Description </span></td>
-                    <td>           
-                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                    <td><span th:text="${menu.name}" th:id="'menuName' + ${menu.id}"> Name </span></td>
+                    <td><span th:text="${menu.price}" th:id="'menuPrice' + ${menu.id}"> Price </span></td>
+                    <td><span th:text="${menu.description}" th:id="'menuDesc' + ${menu.id}"> Description </span></td>
+                    <td>
+                            <button type="button" class="btn btn-success" th:onclick="'javascript:displayEdit(' + ${menu.id} + ');'"><i class="fas fa-edit"></i></button>
                         <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
                             <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                         </form>
@@ -103,6 +103,17 @@
                 <input type="number" name="price" placeholder="price in €" step="0.01">
                 <br>
                 <textarea name="description" placeholder="description"></textarea>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div id="edit_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
+            <h4>Edit Menu:</h4>
+            <form method="post" id="edit_form" action="/admin/menu">
+                <input type="text" name="name" placeholder="name" id="edit-name">
+                <input type="number" name="price" placeholder="price in €" step="0.01" id="edit-price">
+                <br>
+                <textarea name="description" placeholder="description" id="edit-desc"></textarea>
                 <br>
                 <input type="submit" value="Submit">
             </form>
@@ -182,6 +193,10 @@
 
     function displayAdder() {
         document.getElementById("adder_div").style.display = "block";
+    }
+    function displayEdit(x) {
+        console.log(x);
+        document.getElementById("edit_div").style.display = "block";
     }
     function drawChart() {
 
