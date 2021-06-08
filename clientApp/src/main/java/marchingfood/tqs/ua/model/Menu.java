@@ -25,6 +25,9 @@ public class Menu {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "imageurl", nullable = true)
+    private String imageurl;
+
     @ManyToMany(mappedBy = "menus")
     private List<Delivery> orderEntities;
 
@@ -46,6 +49,9 @@ public class Menu {
         }
         if (description.isBlank()){
             throw new BadParameterException("Menu description must not be empty");
+        }
+        if(imageurl!=null && imageurl.length()>255){
+            throw new BadParameterException("Menu Image URL must be shorter than 255 chars");
         }
     }
 }
