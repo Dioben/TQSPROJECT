@@ -67,28 +67,28 @@
             <h2 style="margin-left:170px;"> Restaurant Menus </h2>
             <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
 
-            <table>
+            <table th:if="${not #lists.isEmpty(menus)}" style=" margin-left:auto;margin-right:auto;" class="styled-table">
                 <thead>
                 <tr>
                     <th> Name </th>
                     <th> Price </th>
                     <th> Description </th>
-
+                    <th> Actions </th>
                 </tr>
                 </thead>
                 <tbody>
 
 
                 <tr th:each="menu : ${menus}">
-                    <td><span th:text="${menu}"> Name </span></td>
+                    <td><span th:text="${menu.name}"> Name </span></td>
                     <td><span th:text="${menu.price}"> Price </span></td>
                     <td><span th:text="${menu.description}"> Description </span></td>
                     <td>           
                             <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                            <!-- remove 1, replace with ID using thymeleaf-->
-                            <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
-                                <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                            </form>
+                        <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
+                            <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                        </form>
+
 
                          </td>
                 </tr>

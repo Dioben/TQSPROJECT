@@ -19,7 +19,7 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     String adminDashboard(Model model){
-
+        model.addAttribute("menus",menuService.getMenus());
         return "restaurantDash";
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})

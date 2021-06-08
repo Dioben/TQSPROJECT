@@ -33,5 +33,7 @@ public class Menu {
         this.price=price;
         this.description=description;
     }
-
+    public Menu(){
+        //framework required
+    }
 }
