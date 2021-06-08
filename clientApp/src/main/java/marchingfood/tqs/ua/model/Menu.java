@@ -2,6 +2,7 @@ package marchingfood.tqs.ua.model;
 
 
 import lombok.Data;
+import marchingfood.tqs.ua.exceptions.BadParameterException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,5 +36,16 @@ public class Menu {
     }
     public Menu(){
         //framework required
+    }
+    public void validate() throws BadParameterException {
+        if (price<=0){
+            throw new BadParameterException("Price must be larger than 0");
+        }
+        if (name.isBlank()){
+            throw new BadParameterException("Menu name must not be empty");
+        }
+        if (description.isBlank()){
+            throw new BadParameterException("Menu description must not be empty");
+        }
     }
 }

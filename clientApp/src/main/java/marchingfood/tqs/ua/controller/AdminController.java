@@ -24,16 +24,14 @@ public class AdminController {
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})
     String postMenu(Menu menu) throws BadParameterException {
-        if (menu.getPrice()<=0){
-           throw new BadParameterException("Price must be larger than 0");
-        }
-        if (menu.getName().isBlank()){
-            throw new BadParameterException("Menu name must not be empty");
-        }
-        if (menu.getDescription().isBlank()){
-            throw new BadParameterException("Menu description must not be empty");
-        }
+        menu.validate();
         menuService.save(menu);
+        return "redirect:/admin/dashboard";
+    }
+    @PostMapping(path="/menu/{id}", consumes = {"application/x-www-form-urlencoded"})
+    String editMenu(Menu menu, @PathVariable long id) throws BadParameterException {
+        menu.validate();
+        menuService.edit(id,menu);
         return "redirect:/admin/dashboard";
     }
     @GetMapping(path = "/menu/delete/{id}")
