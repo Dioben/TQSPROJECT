@@ -20,16 +20,16 @@
 								<li class="current"><a href="index.html">Home</a></li>
 	
 								<li><a href="no-sidebar.html">Login</a></li>
+
 								<li>
 									<div sec:authorize="isAuthenticated()">
 										<form id="logoutForm" method="POST" th:action="@{/logout}">
 											<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 										</form>
-										<!--ALERT ICON-->
-
-										<h2> <a  class="header-right" onclick="document.forms['logoutForm'].submit()"><i class="fa fa-sign-out fa-2x"></i></a></h2>
+										<h2> <a  class="header-right" onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
 									</div>
 								</li>
+
 							</ul>
 						</nav>
 

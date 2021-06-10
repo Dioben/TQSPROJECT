@@ -3,8 +3,6 @@ package logisticsmarshall.tqs.ua.model;
 import javax.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
-
 @Data
 @Entity
 @Table(name = "logistics_user")

@@ -19,7 +19,7 @@ public class Driver {
     private long id;
 
     @PrimaryKeyJoinColumn
-    @OneToOne(mappedBy = "driver", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
     private  User user;
 
 

@@ -35,6 +35,11 @@ public class UserConfigs extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // added
+                .antMatcher("/admin*")
+                .authorizeRequests()
+                .anyRequest()
+                .hasRole("ADMIN")
+                .and()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/register").permitAll()
                 .anyRequest().authenticated()
@@ -46,7 +51,7 @@ public class UserConfigs extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
 
-        ;//.and()
+        ;
 
     }
 
@@ -58,6 +63,13 @@ public class UserConfigs extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("admin")
+                .password(bCryptPasswordEncoder().encode("admin"))
+                .roles("ADMIN");
     }
 
 }

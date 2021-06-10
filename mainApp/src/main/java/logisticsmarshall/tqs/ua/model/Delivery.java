@@ -1,7 +1,6 @@
 package logisticsmarshall.tqs.ua.model;
 
 import lombok.Data;
-import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
