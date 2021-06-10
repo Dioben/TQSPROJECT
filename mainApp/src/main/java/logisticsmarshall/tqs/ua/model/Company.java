@@ -31,7 +31,7 @@ public class Company {
     @Column(name = "apiKey", nullable = true, unique = true)
     private String apiKey;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

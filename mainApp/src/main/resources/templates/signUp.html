@@ -6,76 +6,114 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-		<link href="/css/main.css" rel="stylesheet" />
+		<style>
+			.center {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+		</style>
 
 	</head>
+	<link rel="stylesheet"
+		  href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<body >
-		<div style="width:300px; margin:0 auto; margin-top:30px" >
-
-			<div th:if="${param.success}">
-				<div class="alert alert-info">You've successfully registered
-					to our awesome app!</div>
-			</div>
-
-
-
-
-
+		<div class="center" >
 			<h3>SignUp</h3>
 					<form  th:action="@{/register}" th:object="${user}" method="post">
-
 						<div class="col-12">
-							<input type="text"  placeholder="Name" th:value="*{name}" />
+							<input type="text"  placeholder="Name" name="name" th:value="*{name}" />
 						</div>
-
-
 						<br>
 						<div class="col-12">
-							<input type="text" placeholder="Email" th:value="*{email}" />
+							<input type="text" placeholder="Email" name="email" th:value="*{email}" />
 						</div>
-
 						<br>
 						<div class="col-12">
-							<input type="password"  placeholder="Password" th:value="*{password}" />
+							<input type="password"  placeholder="Password" name="password" th:value="*{password}" />
 						</div>
-
 						<br>
 						<div class="col-12 ">
-							<select th:value="*{role}" style=" border-radius: 5px; width: 200px">
-								<option th:value="'ADMINISTRATOR'" th:text="Administrator"></option>
-								<option th:value="'DRIVER'" th:text="Driver"></option>
-								<option th:value="'COMPANY'" th:text="Company"></option>
+							<!--
+							<select name="role" th:value="*{role}" style=" border-radius: 5px; width: 200px">
+								<option th:value="'DRIVER'" th:text="Driver" onselect="showCompanyForm();"></option>
+								<option th:value="'COMPANY'" th:text="Company" onselect="showDriverForm();"></option>
 
 							</select>
 
+							<select onchange="displayDivDemo('hideValuesOnSelect', this)" name="role" th:value="*{role}" style=" border-radius: 5px; width: 200px">
+								<option>Choose Color</option>
+								<option th:value="'DRIVER'" th:text="Driver" value="0">Driver</option>
+								<option th:value="'COMPANY'" th:text="Company" value="1">Company</option>
+							</select>
+									-->
+
+							<input type="radio" name="role" th:value="*{role}" onclick="showCompanyForm();" />
+							Company
+							<input type="radio" name="role" th:value="*{role}" onclick="showDriverForm();" />
+							Driver
 						</div>
-
-
-
-
 						<br>						
-						<div class="col-3">
-							<button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>	
+
+
+				<!--COMPANY-->
+				<div id="div1"   style="display: none;" >
+						<div class="col-12">
+							<input type="text"  id="address" name="address" placeholder="Address" th:field="*{company.address}" />
+						</div>
+						<br>
+						<div class="col-12">
+							<input type="text"  id="phoneNumber" name="phoneNumber" placeholder="Phone number" th:field="*{company.phoneNumber}" />
 						</div>
 
+				</div>
 
-				</form>
 
 
+				<!--DRIVER-->
+				<div id="div2"  style="display: none;">
+						<div class="col-12">
+							<input type="text"  name="phoneNumber" placeholder="Phone number" th:field="*{driver.phoneNumber}" />
+						</div>
+						<br>
+						<div class="col-12 ">
+							<select name="role" th:value="*{driver.vehicle}" style=" border-radius: 5px; width: 200px">
+								<option th:value="BICYCLE" th:text="bicycle"></option>
+								<option th:value="CAR" th:text="Car"></option>
+								<option th:value="MOTORCYCLE" th:text="Motorcycle"></option>
+								<option th:value="ONFOOT" th:text="Onfoot"></option>
+							</select>
+						</div>
+				</div>
+
+				<div class="col-3">
+					<button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>
+				</div>
+		</form>
 		</div>
 
 
 
-		<!-- Scripts -->
-			<script src="/js/jquery.min.js"></script>
 
-			<script src="/js/jquery.dropotron.min.js"></script>
-			<script src="/assets/js/browser.min.js"></script>
-			<script src="/assets/js/breakpoints.min.js"></script>
-			<script src="/assets/js/util.js"></script>
-			<script src="/assets/js/main.js"></script>
+
+
 
 
 	</body>
+	<script>
+		function showCompanyForm(){
+			document.getElementById('div2').style.display ='none';
+			document.getElementById('div1').style.display ='block';
+
+		}
+		function showDriverForm(){
+			document.getElementById('div2').style.display = 'block';
+			document.getElementById('div1').style.display = 'none';
+		}
+	</script>
 </html>
