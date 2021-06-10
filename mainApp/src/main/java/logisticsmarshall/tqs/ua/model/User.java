@@ -26,11 +26,11 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 

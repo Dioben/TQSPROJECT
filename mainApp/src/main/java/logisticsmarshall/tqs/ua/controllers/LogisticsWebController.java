@@ -69,9 +69,9 @@ public class LogisticsWebController {
             return "redirect:/";
         }
         User user = new User();
+        user.setCompany(new Company());
+        user.setDriver(new Driver());
         model.addAttribute("user", user);
-        model.addAttribute("company", new Company());
-        model.addAttribute("driver", new Driver());
 
         return "signUp";
     }
@@ -79,9 +79,7 @@ public class LogisticsWebController {
     @PostMapping("/register")
     public String registration(@ModelAttribute("user") User user, BindingResult bindingResult,  Model model) throws AccountDataException {
         System.out.println(user.toString());
-        if (bindingResult.hasErrors()) {
-            return "signUp";
-        }
+
         if (user == null){ throw new AccountDataException("Invalid username or password."); }
         if (isAuthenticated()) {return "redirect:/"; }
         //autoLogin(user.getName(), user.getPassword());

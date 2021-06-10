@@ -15,7 +15,7 @@ public class Company {
     @Id
     private long id;
 
-    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "company", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private  User user;
 
