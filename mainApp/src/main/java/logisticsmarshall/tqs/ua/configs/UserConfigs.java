@@ -22,9 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Service
 public class UserConfigs extends WebSecurityConfigurerAdapter {
 
-    @Qualifier("userServiceImpl")
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserServiceImpl userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
