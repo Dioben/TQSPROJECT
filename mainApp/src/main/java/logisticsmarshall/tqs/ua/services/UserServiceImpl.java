@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserDetailsService {
         return authentication.isAuthenticated();
     }
 
-    public void encryptPassword(User user) {
+    public void encryptPasswordAndStoreUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }

@@ -29,12 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(LogisticsWebController.class)
 class LogisticsWebControllerTest {
 
-    @TestConfiguration
-    class TestConfs{
-        @Bean
-        UserConfigs userConfigs(){return new UserConfigs();
-        }
-    }
+
 
     @Autowired
     MockMvc mvc;

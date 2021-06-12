@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@Service
 public class UserConfigs extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -34,11 +33,6 @@ public class UserConfigs extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable() // added
-                .antMatcher("/admin*")
-                .authorizeRequests()
-                .anyRequest()
-                .hasRole("ADMIN")
-                .and()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/register").permitAll()
                 .anyRequest().authenticated()

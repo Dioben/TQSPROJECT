@@ -33,11 +33,15 @@ public class LogisticsWebController {
     }
 
     @PostMapping("/register")
-    public String registration(@ModelAttribute("user") User user, BindingResult bindingResult,  Model model) throws AccountDataException {
+    public String registration(@ModelAttribute("user") User user,@ModelAttribute("company") Company company,@ModelAttribute("driver") Driver driver , BindingResult bindingResult,  Model model) throws AccountDataException {
         if (user == null){ throw new AccountDataException("Invalid username or password."); }
         if (userServiceImpl.isAuthenticated()) {return "redirect:/"; }
-        //autoLogin(user.getName(), user.getPassword());
-        userServiceImpl.encryptPassword(user);
+        switch (user.getRole()){
+            case "COMPANY": user.setCompany(company);break;
+            case "DRIVER": user.setDriver(driver);break;
+        }
+        userServiceImpl.encryptPasswordAndStoreUser(user);
+        System.out.println(user);
         return "redirect:/";
     }
 
@@ -47,7 +51,7 @@ public class LogisticsWebController {
             return "redirect:/";
         }
         if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
+            model.addAttribute("error", error);
         if (logout != null)
             model.addAttribute("message", "You have been logged out successfully.");
         return "login";
