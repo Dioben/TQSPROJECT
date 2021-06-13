@@ -1,11 +1,8 @@
 package logisticsmarshall.tqs.ua.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-import javax.persistence.*;
+import lombok.Data;
+
 import java.util.Set;
 
 @Data

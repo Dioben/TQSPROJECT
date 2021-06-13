@@ -10,4 +10,9 @@ public class AccountDataException extends Exception {
     public AccountDataException(String message) {
         super(message);
     }
+
+    public AccountDataException() {
+        super("Invalid account data");
+    }
+
 }
