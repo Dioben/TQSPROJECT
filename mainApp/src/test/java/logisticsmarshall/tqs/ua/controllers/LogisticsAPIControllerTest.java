@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(LogisticsAPIController.class)
 class LogisticsAPIControllerTest {
-*/
+/*
     @Autowired
     MockMvc mvc;
 
