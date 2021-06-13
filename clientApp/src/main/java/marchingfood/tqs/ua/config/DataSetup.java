@@ -21,6 +21,17 @@ public class DataSetup {
             admin.setPassword("admin");
             admin.setAddress("ADMIN");
             clientRepository.save(admin);
+            System.out.println(clientRepository.findAll());
+
+            //TODO: REPLACE THIS FOR AN ACTUAL USER AFTER SS IS DONE
+            Client user1 = new Client();
+            user1.setEmail("user1@ua.pt");
+            user1.setName("user1");
+            user1.setAddress("Userhouse");
+            //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
+            user1.setPassword("12345");
+            user1.setAddress("somewhere");
+            clientRepository.save(user1);
 
             Menu menu1 = new Menu();
             menu1.setPrice(7.55);

@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"><!-- Basic -->
-<html xmlns:th="http://www.thymeleaf.org">
-
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">   
@@ -10,17 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
  
     <!-- Site Icons -->
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="css/bootstrap.min.css">    
 	<!-- Site CSS -->
-    <link rel="stylesheet" href="/css/style.css">    
+    <link rel="stylesheet" href="css/style.css">    
     <!-- Responsive CSS -->
-    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="css/custom.css">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
@@ -38,7 +36,6 @@
 
 
     	<!-- Start header -->
-        <div>
 	<header class="top-navbar">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container">
@@ -60,68 +57,80 @@
 			</div>
 		</nav>
 	</header>
-        </div>
 	<!-- End header -->
-    <!-- Restaurant MENUS  -->
-		<div class="container" style="padding-top: 100px;">
-            <h2 style="margin-left:170px;"> Restaurant Menus </h2>
-            <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
+	
 
-            <table th:if="${not #lists.isEmpty(menus)}" style=" margin-left:auto;margin-right:auto;" class="styled-table">
+
+	
+
+
+
+	<!-- RESTAURANT DATA-->
+	<div class="blog-box">
+		<div class="container" >
+            <br><br>
+            <br><br><br>
+            <h2 style="margin-left:170px;" >Profile</h2>
+            <table style="width: 800px; margin-left:auto;margin-right:auto;" class="styled-table">
+
                 <thead>
-                <tr>
-                    <th> Name </th>
-                    <th> Price </th>
-                    <th> Description </th>
-                    <th> Actions </th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>City</th>
+                        <th>Address</th>
+                        <th>Postal code </th>
+                        <th>Edit </th>
+                    </tr>
                 </thead>
                 <tbody>
-
-
-                <tr th:each="menu : ${menus}">
-                    <td><span th:text="${menu.name}" th:id="'menuName' + ${menu.id}"> Name </span></td>
-                    <td><span th:text="${menu.price}" th:id="'menuPrice' + ${menu.id}"> Price </span></td>
-                    <td><span th:text="${menu.description}" th:id="'menuDesc' + ${menu.id}"> Description </span></td>
-
-                    <td>
-                        <span style="display: none" th:id="'menuURL' + ${menu.id}" th:text="${menu.imageurl}"></span>
-                            <button type="button" class="btn btn-success" th:onclick="'javascript:displayEdit(' + ${menu.id} + ');'"><i class="fas fa-edit"></i></button>
-                        <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
-                            <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                        </form>
-
-
-                         </td>
-                </tr>
-
+                    <tr>
+                        <td>MacDonalds</td>
+                        <td>Portugal</td>
+                        <td>Aveiro</td>
+                        <td>Rua da cidade</td>
+                        <td>3451-123</td>
+                        <td > <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
                 </tbody>
-            </table>
+            </table>		
         </div>
-        <div id="adder_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
-            <h4>New Menu:</h4>
-            <form method="post" action="/admin/menu">
-                <input type="text" name="name" placeholder="name">
-                <input type="number" name="price" placeholder="price in €" step="0.01">
-                <input type="text" name="imageurl" placeholder="image url">
-                <br>
-                <textarea name="description" placeholder="description"></textarea>
-                <br>
-                <input type="submit" value="Submit">
-            </form>
+    </div>
+
+
+
+
+    <!-- Restaurant MENUS  -->
+		<div class="container">
+            <h2 style="margin-left:170px;">Menus </h2>
+            <h4 style="margin-left:170px; "><a href=""> <i class="far fa-plus-square"></i>  new menu</a> </h4>
+
+            <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name </th>
+                        <th>Description </th>
+                        <th>Price</th>
+                        <th> Actions </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12345 </td>
+                        <td>Big Mac </td>
+                        <td>.........</td>
+                        <td>5€</td>
+                        <td>           
+                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+                          <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                         </td>
+                    </tr>
+                </tbody>
+            </table>		
         </div>
-        <div id="edit_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
-            <h4>Edit Menu:</h4>
-            <form method="post" id="edit_form" action="/admin/menu">
-                <input type="text" name="name" placeholder="name" id="edit-name">
-                <input type="number" name="price" placeholder="price in €" step="0.01" id="edit-price">
-                <input type="text" name="imageurl" placeholder="image url" id="edit-url">
-                <br>
-                <textarea name="description" placeholder="description" id="edit-desc"></textarea>
-                <br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+
 
 
 
@@ -129,37 +138,11 @@
         <br><br>
 
 
-
-
-
-    <br><br>
-        <!-- Restaurant <> Delivery Mand  -->
-        <div class="container">
-            <h2 style="margin-left:170px;">Deliveries Man Info </h2>
     
-            <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name </th>
-                        <th>Delivery man ID </th>
+    </div>
 
-                        <th>Status</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1234 </td>
-                        <td>Hamburguer </td>
-                        <td>1111</td>
-                        <td>Delivered</td>
-
-                    </tr>
-                </tbody>
-            </table>		
-        </div>
-    
+   
 
 
 
@@ -191,26 +174,14 @@
 
 	
 <script>
-
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
-    function displayAdder() {
-        document.getElementById("adder_div").style.display = "block";
-    }
-    function displayEdit(x) {
-        document.getElementById("edit_div").style.display = "block";
-        document.getElementById("edit-name").value = document.getElementById("menuName"+x).innerText;
-        document.getElementById("edit-desc").value = document.getElementById("menuDesc"+x).innerText;
-        document.getElementById("edit-price").value = document.getElementById("menuPrice"+x).innerText;
-        document.getElementById("edit-url").value = document.getElementById("menuURL"+x).innerText;
-        document.getElementById("edit_form").action = "/admin/menu/"+x;
-    }
     function drawChart() {
 
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Time of Day');
-      data.addColumn('number', 'Sales');
+      data.addColumn('number', 'Sells');
 
       data.addRows([
         [new Date(2021, 0, 1), 5],  [new Date(2021, 0, 2), 7],  [new Date(2021, 0, 3), 3],
