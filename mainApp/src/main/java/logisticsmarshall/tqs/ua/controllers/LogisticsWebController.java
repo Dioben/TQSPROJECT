@@ -77,11 +77,11 @@ public class LogisticsWebController {
     }
 
     private boolean validateNewUser(User user, Driver driver, Company company) {
-        // https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
-        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        // https://github.com/Baeldung/spring-security-registration/blob/master/src/main/java/com/baeldung/validation/EmailValidator.java
+        String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern emailPattern = Pattern.compile(emailRegex);
-        // https://regexr.com/38pvb
-        String phoneRegex = "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$";
+        // https://regexr.com/2to9u
+        String phoneRegex = "([+(\\d]{1})(([\\d() \\-.]){0,11})(\\d{5,})";
         Pattern phonePattern = Pattern.compile(phoneRegex);
 
         return user.getName() != null
