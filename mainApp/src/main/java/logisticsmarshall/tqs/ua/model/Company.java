@@ -23,7 +23,7 @@ public class Company {
     private String address;
 
     @Column(name = "phoneNumber", nullable = false)
-    private Integer phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "deliveryType", nullable = false)
     private String deliveryType;
@@ -37,7 +37,7 @@ public class Company {
     @EqualsAndHashCode.Exclude
     private Set<Delivery> delivery;
 
-    public Company(long id, User user, String address, Integer phoneNumber, String deliveryType, String apiKey) {
+    public Company(long id, User user, String address, String phoneNumber, String deliveryType, String apiKey) {
         this.id = id;
         this.user = user;
         this.address = address;

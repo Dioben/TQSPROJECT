@@ -25,7 +25,7 @@ public class Driver {
 
 
     @Column(name = "phoneNumber", nullable = false)
-    private Integer phoneNo;
+    private String phoneNo;
 
     @Column(name = "status", nullable = false)
     private Boolean status = false;

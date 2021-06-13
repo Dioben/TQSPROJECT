@@ -1,79 +1,134 @@
 package logisticsmarshall.tqs.ua.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import logisticsmarshall.tqs.ua.configs.UserConfigs;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
+import logisticsmarshall.tqs.ua.model.Company;
+import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
-import logisticsmarshall.tqs.ua.services.UserService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
-import org.apache.catalina.startup.UserConfig;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.Column;
+import java.util.Arrays;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc(addFilters = false)
+//@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(LogisticsWebController.class)
 class LogisticsWebControllerTest {
-
-
 
     @Autowired
     MockMvc mvc;
 
-
     @MockBean
-    UserServiceImpl userMock;
-
-
-    ObjectMapper jsonParser = new ObjectMapper();
+    UserServiceImpl service;
 
     @Test
     void whenRegisterEmptyParametersReturnError() throws Exception {
-        mvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content("{}"))
-                .andExpect(status().is(400));
-
-
+        mvc.perform(post("/register").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name",""),
+                        new BasicNameValuePair("email",""),
+                        new BasicNameValuePair("password",""),
+                        new BasicNameValuePair("role",""),
+                        new BasicNameValuePair("deliveryType",""),
+                        new BasicNameValuePair("address",""),
+                        new BasicNameValuePair("phoneNumber",""),
+                        new BasicNameValuePair("phoneNo",""),
+                        new BasicNameValuePair("vehicle","")
+                ))))).
+                andExpect(status().is(400));
     }
 
     @Test
     void whenRegisterBadEmailReturnError() throws Exception {
-        mvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON)
-                .content("{" +"\"role\": \"DRIVER\","+
-                            "\"name\": \"testcompanyname\","+
-                            "\"email\": \"istonaotemarrobatextopontoextensao\","+
-                            "\"password\": \"fakesafepassword\""+
-
-
-                        "}"))
-                .andExpect(status().is(400));
+        mvc.perform(post("/register").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name","name"),
+                        new BasicNameValuePair("email","invalidemailformat"),
+                        new BasicNameValuePair("password","randompass"),
+                        new BasicNameValuePair("role","DRIVER"),
+                        new BasicNameValuePair("deliveryType",""),
+                        new BasicNameValuePair("address",""),
+                        new BasicNameValuePair("phoneNumber",""),
+                        new BasicNameValuePair("phoneNo","933333333"),
+                        new BasicNameValuePair("vehicle","ONFOOT")
+                ))))).
+                andExpect(status().is(400));
     }
 
     @Test
-    void whenRegisterCorrectParametersReturnOk() throws Exception {
-        String email = "goodemail@ua.pt";
-        mvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON)
-                .content("{" +"\"role\": \"DRIVER\","+
-                        "\"name\": \"testcompanyname\","+
-                        "\"email\": \""+email+"\","+
-                        "\"password\": \"fakesafepassword\""+
+    void whenDriverRegisterCorrectParametersReturnOk() throws Exception {
+        Driver d1 = new Driver();
+        d1.setPhoneNo("933333333");
+        d1.setVehicle(Driver.Vehicle.ONFOOT);
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "DRIVER",
+                d1,
+                null
+        );
 
+        when(service.save(u1)).thenReturn(u1);
 
-                        "}"))
-                .andExpect(status().is(200)).andExpect(content().string(email));
+        mvc.perform(post("/register").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name", u1.getName()),
+                        new BasicNameValuePair("email", u1.getEmail()),
+                        new BasicNameValuePair("password", u1.getPassword()),
+                        new BasicNameValuePair("role", u1.getRole()),
+                        new BasicNameValuePair("deliveryType", ""),
+                        new BasicNameValuePair("address", ""),
+                        new BasicNameValuePair("phoneNumber", ""),
+                        new BasicNameValuePair("phoneNo", u1.getDriver().getPhoneNo().toString()),
+                        new BasicNameValuePair("vehicle", u1.getDriver().getVehicle().toString())
+                ))))).
+                andExpect(status().is(302));
+    }
+
+    @Test
+    void whenCompanyRegisterCorrectParametersReturnOk() throws Exception {
+        Company c1 = new Company();
+        c1.setDeliveryType("food");
+        c1.setAddress("here");
+        c1.setPhoneNumber("933333333");
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "COMPANY",
+                null,
+                c1
+        );
+
+        when(service.save(u1)).thenReturn(u1);
+
+        mvc.perform(post("/register").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name", u1.getName()),
+                        new BasicNameValuePair("email", u1.getEmail()),
+                        new BasicNameValuePair("password", u1.getPassword()),
+                        new BasicNameValuePair("role", u1.getRole()),
+                        new BasicNameValuePair("deliveryType", u1.getCompany().getDeliveryType()),
+                        new BasicNameValuePair("address", u1.getCompany().getAddress()),
+                        new BasicNameValuePair("phoneNumber", u1.getCompany().getPhoneNumber().toString()),
+                        new BasicNameValuePair("phoneNo", ""),
+                        new BasicNameValuePair("vehicle", "")
+                ))))).
+                andExpect(status().is(302));
     }
 /*
     @Test
