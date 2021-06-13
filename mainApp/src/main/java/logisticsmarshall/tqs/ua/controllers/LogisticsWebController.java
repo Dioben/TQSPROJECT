@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.regex.Pattern;
@@ -42,7 +40,7 @@ public class LogisticsWebController {
         Driver driver = convertDriverDTOtoDriver(driverDTO);
 
         if (!validateNewUser(user, driver, company))
-            throw new AccountDataException("Invalid account data");
+            throw new AccountDataException();
         if (userServiceImpl.isAuthenticated())
             return redirectRoot;
 
@@ -51,12 +49,12 @@ public class LogisticsWebController {
         else if (user.getRole().equals("DRIVER"))
             user.setDriver(driver);
         else
-            throw new AccountDataException("Invalid account data");
+            throw new AccountDataException();
 
         try {
             userServiceImpl.encryptPasswordAndStoreUser(user);
         } catch (DataIntegrityViolationException e) {
-            throw new AccountDataException("Invalid account data");
+            throw new AccountDataException();
         }
         return redirectRoot;
     }
