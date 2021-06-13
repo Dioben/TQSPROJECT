@@ -9,3 +9,5 @@ Pedro Laranjinha [93179] : Team Lead\
 Pedro Silva [93011] : QA Engineer \
 
 [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2499427)
+[mainApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=buckaroo69_TQSPROJECT)
+[clientApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=tqs-side-client)
