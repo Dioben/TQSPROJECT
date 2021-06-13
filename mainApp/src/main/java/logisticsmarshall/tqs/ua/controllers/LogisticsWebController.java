@@ -81,7 +81,7 @@ public class LogisticsWebController {
         String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern emailPattern = Pattern.compile(emailRegex);
         // https://regexr.com/2to9u
-        String phoneRegex = "([+(\\d]{1})(([\\d+() -.]){5,16})([+(\\d]{1})";
+        String phoneRegex = "([+(\\d]{1})(([\\d() \\-.]){0,11})(\\d{5,})";
         Pattern phonePattern = Pattern.compile(phoneRegex);
 
         return user.getName() != null
