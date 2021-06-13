@@ -172,7 +172,7 @@ class MenuCRUDTest {
     void whenSeeMenus_thenReturnAllMenuData() {
         Menu menu = new Menu("menu1", 10.5,"tasty");
         given(serviceMock.getMenus()).willReturn(Arrays.asList(menu));
-        mvc.perform(get("/admin/menus")
+        mvc.perform(get("/admin/dashboard")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(menu.getName())))
