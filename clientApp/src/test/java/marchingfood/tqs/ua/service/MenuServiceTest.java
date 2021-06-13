@@ -13,7 +13,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class MenuServiceTest {
+class MenuServiceTest {
     @Mock(lenient = true)
     MenuRepository menuRepository;
     @InjectMocks
@@ -26,6 +26,7 @@ public class MenuServiceTest {
     @Test
     void editNXErrorTest(){
         Mockito.when(menuRepository.findById(Mockito.anyLong())).thenReturn(null);
-        assertThrows(ResourceNotFoundException.class,()-> service.edit(1,new Menu("test",1,"test")) );
+        Menu menu = new Menu("test",1,"test");
+        assertThrows(ResourceNotFoundException.class,()-> service.edit(1, menu));
     }
 }

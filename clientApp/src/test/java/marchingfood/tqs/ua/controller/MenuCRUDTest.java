@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(AdminController.class)
-public class MenuCRUDTest {
+class MenuCRUDTest {
 
     @Autowired
     MockMvc mvc;

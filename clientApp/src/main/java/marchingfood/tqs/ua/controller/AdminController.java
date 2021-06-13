@@ -17,34 +17,29 @@ public class AdminController {
     @Autowired
     MenuService menuService;
 
+    String redirectAdmin = "redirect:/admin/dashboard";
+
     @GetMapping("/dashboard")
-    String adminDashboard(Model model){
+    public String adminDashboard(Model model){
         model.addAttribute("menus",menuService.getMenus());
         return "restaurantDash";
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})
-    String postMenu(Menu menu) throws BadParameterException {
+    public String postMenu(@ModelAttribute("menu") Menu menu) throws BadParameterException {
         menu.validate();
         menuService.save(menu);
-        return "redirect:/admin/dashboard";
+        return redirectAdmin;
     }
     @PostMapping(path="/menu/{id}", consumes = {"application/x-www-form-urlencoded"})
-    String editMenu(Menu menu, @PathVariable long id) throws BadParameterException {
+    public String editMenu(@ModelAttribute("menu") Menu menu, @PathVariable long id) throws BadParameterException {
         menu.validate();
         menuService.edit(id,menu);
-        return "redirect:/admin/dashboard";
+        return redirectAdmin;
     }
     @GetMapping(path = "/menu/delete/{id}")
-    String deleteMenu(@PathVariable long id){
+    public String deleteMenu(@PathVariable long id){
         menuService.tryDelete(id);
-        return "redirect:/admin/dashboard";
+        return redirectAdmin;
     }
-
-    @GetMapping("/menus")
-    String getMenus(Model model){
-        model.addAttribute("menus", menuService.getMenus());
-        return "restaurantDash";
-    }
-
 
 }
