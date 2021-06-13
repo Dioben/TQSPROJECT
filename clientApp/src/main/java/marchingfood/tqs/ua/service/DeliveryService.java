@@ -4,6 +4,8 @@ package marchingfood.tqs.ua.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import marchingfood.tqs.ua.model.Delivery;
+import marchingfood.tqs.ua.repository.ClientRepository;
+import marchingfood.tqs.ua.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,10 @@ public class DeliveryService {
     @Autowired
     private final WebClient localApiClient;
 
+    @Autowired
+    DeliveryRepository deliveryRepository;
+
+
     //TODO:REPLACE THIS FOR A VALUE IN LM DATABASE, SET IT UP
     private static final String LOGISTICS_MARSHALL_APIKEY = "12312312SDAFSD";
 
@@ -31,6 +37,10 @@ public class DeliveryService {
 
     public DeliveryService(WebClient localApiClient) {
         this.localApiClient = localApiClient;
+    }
+
+    public void saveDelivery(Delivery delivery){
+        deliveryRepository.save(delivery);
     }
 
     public Delivery postToLogisticsClient(Delivery delivery) {

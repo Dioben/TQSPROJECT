@@ -8,14 +8,13 @@ import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
 import marchingfood.tqs.ua.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/restaurant")
-    public void restaurantMenuAddToCart(@RequestBody int menu_id) {
+    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menu_id) {
         //Add post to cart map
         System.out.println("post to cart");
         System.out.println(menu_id);
@@ -52,10 +51,12 @@ public class DeliveryController {
         Menu gotten = menuService.getMenuById(menu_id);
         //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
         Client client = userService.getClientById(2);
+        if(client == null)return ResponseEntity.status(404).build();
         System.out.println(client);
         System.out.println(gotten);
         cartService.addMenu(gotten,client);
         System.out.println("Added to cart");
+        return null;
     }
 
 
@@ -74,7 +75,10 @@ public class DeliveryController {
     @PostMapping("/cart")
     public void deliveryFromCartPost() {
         //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
+        System.out.println(userService.getAllClients());
         Client client = userService.getClientById(2);
+        if(client == null)return;
+        System.out.println(client);
 
         List<Menu> menuCart = cartService.getClientCart(client);
         double total = 0;
@@ -85,7 +89,11 @@ public class DeliveryController {
         deliveryMade.setMenus(menusInDelivery);
         deliveryMade.setAddress(client.getAddress());
         deliveryMade.setClient(client);
+        deliveryMade.setDelivered(false);
+        deliveryMade.setPaid(false);
         deliveryService.postToLogisticsClient(deliveryMade);
+        deliveryService.saveDelivery(deliveryMade);
+        System.out.println("Delivery After post");
         cartService.cleanClientCart(client);
     }
 

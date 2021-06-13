@@ -8,7 +8,9 @@ import lombok.SneakyThrows;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.service.CartService;
+import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
+import marchingfood.tqs.ua.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasSize;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,6 +42,12 @@ class DeliveryCRUDTest {
 
     @MockBean
     CartService cartService;
+
+    @MockBean
+    UserService userService;
+
+    @MockBean
+    DeliveryService deliveryService;
 
     ObjectMapper jsonParser = new ObjectMapper();
 
@@ -64,10 +73,8 @@ class DeliveryCRUDTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(menu1.getName())))
                 .andExpect(content().string(containsString(String.valueOf(menu1.getPrice()))))
-                .andExpect(content().string(containsString(menu1.getDescription())))
                 .andExpect(content().string(containsString(menu2.getName())))
-                .andExpect(content().string(containsString(String.valueOf(menu2.getPrice()))))
-                .andExpect(content().string(containsString(menu2.getDescription())));
+                .andExpect(content().string(containsString(String.valueOf(menu2.getPrice()))));
     }
 
     @SneakyThrows
@@ -92,11 +99,20 @@ class DeliveryCRUDTest {
 
         Mockito.when(menuService.getMenuById(1)).thenReturn(menu1);
 
+        Client user1 = new Client();
+        user1.setEmail("user1@ua.pt");
+        user1.setName("user1");
+        user1.setAddress("Userhouse");
+        //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
+        user1.setPassword("12345");
+        user1.setAddress("somewhere");
+
+        Mockito.when(userService.getClientById(2)).thenReturn(user1);
+
         mvc.perform(post("/restaurant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonParser.writeValueAsString(1)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",is(1)));
+                .andExpect(status().isOk());
     }
 
     @SneakyThrows
@@ -115,25 +131,30 @@ class DeliveryCRUDTest {
         menu2.setImageurl("https://previews.123rf.com/images/yatomo/yatomo1304/yatomo130400133/18975972-sushi-and-rolls-in-bento-box.jpg");
         List<Menu> menusInserted = Arrays.asList(menu1,menu2);
 
-        //TODO: REPLACE THIS FOR A MOCK OF SOME WAY OF GETTING CURRENT USER
-        Client client = new Client();
+        Client user1 = new Client();
+        user1.setEmail("user1@ua.pt");
+        user1.setName("user1");
+        user1.setAddress("Userhouse");
+        //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
+        user1.setPassword("12345");
+        user1.setAddress("somewhere");
 
-        Mockito.when(cartService.getClientCart(client)).thenReturn(menusInserted);
+        Mockito.when(userService.getClientById(2)).thenReturn(user1);
+
+        Mockito.when(cartService.getClientCart(user1)).thenReturn(menusInserted);
 
         mvc.perform(get("/cart")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(menu1.getName())))
                 .andExpect(content().string(containsString(String.valueOf(menu1.getPrice()))))
-                .andExpect(content().string(containsString(menu1.getDescription())))
                 .andExpect(content().string(containsString(menu2.getName())))
-                .andExpect(content().string(containsString(String.valueOf(menu2.getPrice()))))
-                .andExpect(content().string(containsString(menu2.getDescription())));
+                .andExpect(content().string(containsString(String.valueOf(menu2.getPrice()))));
     }
 
     @SneakyThrows
     @Test
-    void postCart_whenCartEmpty_thenResourceNotFound(){
+    void postCart_whenCartEmpty_thenEmptyPage(){
         Menu menu1 = new Menu();
         menu1.setPrice(7.55);
         menu1.setName("Big MEC");
@@ -155,7 +176,8 @@ class DeliveryCRUDTest {
         mvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(""))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString(menu1.getName()))));
     }
 
     @SneakyThrows
