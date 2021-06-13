@@ -1,7 +1,6 @@
 package logisticsmarshall.tqs.ua.model;
 
 import lombok.Data;
-import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -52,11 +51,11 @@ public class Delivery {
 
 
     @ManyToOne
-    @JoinColumn(name = "driver_id", nullable = false)
+    @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
 

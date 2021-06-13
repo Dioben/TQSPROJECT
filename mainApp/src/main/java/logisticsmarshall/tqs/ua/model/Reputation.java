@@ -21,7 +21,7 @@ public class Reputation {
     private String description;
 
 
-    @OneToOne(mappedBy = "reputation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "reputation", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Delivery delivery;

@@ -2,6 +2,7 @@ package logisticsmarshall.tqs.ua.model;
 
 import javax.persistence.*;
 import lombok.Data;
+
 @Data
 @Entity
 @Table(name = "logistics_user")
@@ -14,7 +15,7 @@ public class User {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -23,11 +24,11 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
@@ -38,6 +39,19 @@ public class User {
         this.password=password;
         this.role=role;
     }
+
+    public User(String name, String email, String password, String role, Driver driver,Company company){
+        this.name=name;
+        this.email=email;
+        //encrypt first
+        this.password=password;
+        this.role=role;
+        this.driver=driver;
+        this.company=company;
+    }
+
+
+
 
 
     public User() {

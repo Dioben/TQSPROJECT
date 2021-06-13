@@ -25,21 +25,21 @@ public class Driver {
 
 
     @Column(name = "phoneNumber", nullable = false)
-    private Integer phoneNumber;
+    private String phoneNo;
 
     @Column(name = "status", nullable = false)
-    private Boolean status;
+    private Boolean status = false;
 
     @Column(name = "vehicle", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Vehicle vehicle;
+    private Vehicle vehicle = Vehicle.MOTORCYCLE;
 
     @OneToMany(mappedBy = "driver")
     private Set<Delivery> delivery;
 
 
 
-    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -23,7 +23,7 @@ public class Payment {
     @CreationTimestamp
     private Timestamp paymentTimestamp;
 
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Delivery delivery;

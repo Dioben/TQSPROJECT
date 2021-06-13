@@ -13,10 +13,9 @@ import java.util.Set;
 public class Company {
 
     @Id
-
     private long id;
 
-    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "company", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private  User user;
 
@@ -24,7 +23,7 @@ public class Company {
     private String address;
 
     @Column(name = "phoneNumber", nullable = false)
-    private Integer phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "deliveryType", nullable = false)
     private String deliveryType;
@@ -38,6 +37,18 @@ public class Company {
     @EqualsAndHashCode.Exclude
     private Set<Delivery> delivery;
 
+    public Company(long id, User user, String address, String phoneNumber, String deliveryType, String apiKey) {
+        this.id = id;
+        this.user = user;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.deliveryType = deliveryType;
+        this.apiKey = apiKey;
+    }
 
+    public Company(){};
+    public Company(User user){
+        this.user=user;
+    };
 
 }

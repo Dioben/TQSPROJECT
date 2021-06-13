@@ -1,54 +1,71 @@
 <!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
 <html>
 	<head>
-		<title>Left Sidebar - Arcana by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css" />
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/main.css" />
 	</head>
 	<body >
+		<div th:if="${param.error}">
+			wrong user or password
+		</div>
+
+		<div th:if="${param.logout}">
+			You are logged out
+		</div>
+
+
 		<div style="width:300px; margin:0 auto; margin-top:100px" >
 				<h3>Login</h3>
-				<form>
-
-
-						<div class="col-12">
-							<input type="text" name="name" id="name" placeholder="Name" />
-						</div>
-						
-
-						<br>
-						<div class="col-12">
-							<input type="password" name="password" id="password" placeholder="Password" />
-						</div>
-						
-						<br>
-
-						<div class="col-3">
-							<button style=" height: 40px;float:left; display: inline; " class="alt" type="submit">Login</button>
-							
-						</div>
-
-
-				</form>
-				<div class="col-4">
- 				<a  style=" height: 40px;float:right; display: inline;" href="signUp.html" class="button alt">SignUp</a>
+			<h1>Login page</h1>
+			<form th:action="@{/login}" method="post">
+				<div th:if="${param.error}">
+					<div class="alert alert-danger">Invalid username or
+						password.</div>
 				</div>
+				<div th:if="${param.logout}">
+					<div class="alert alert-info">You have been logged out.</div>
+				</div>
+				<div class="form-group">
+					<input type="text"
+					   id="username" name="username" class="form-control"
+					   autofocus="autofocus" placeholder="Username" />
+				</div>
+				<br/>
+				<div class="form-group">
+					<input type="password"
+					   id="password" name="password" class="form-control"
+					   placeholder="Password" />
+				</div>
+				<br/><br/>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6 col-sm-offset-3">
+							<input type="submit" name="login-submit" id="login-submit"
+								   class="form-control btn btn-primary" value="Log In" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+						<span>New user? <a href="/" th:href="@{/register}">Register
+								here</a></span>
+				</div>
+			</form>
+
 
 		</div>
 
-		<div>
-			<img src="/images/foodDriver.png"  alt="Smiley face" style=" float: right; width: 20%; height: 20%; margin-right:100px; " >
 
-		</div>
 
 		<!-- Scripts -->
-			<script src="/assets/js/jquery.min.js"></script>
-			<script src="/assets/js/jquery.dropotron.min.js"></script>
-			<script src="/assets/js/browser.min.js"></script>
-			<script src="/assets/js/breakpoints.min.js"></script>
-			<script src="/assets/js/util.js"></script>
-			<script src="/assets/js/main.js"></script>
+			<script src="/js/jquery.min.js"></script>
+			<script src="/js/jquery.dropotron.min.js"></script>
+			<script src="/js/browser.min.js"></script>
+			<script src="/js/breakpoints.min.js"></script>
+			<script src="/js/util.js"></script>
+			<script src="/js/main.js"></script>
 
 	</body>
 </html>
