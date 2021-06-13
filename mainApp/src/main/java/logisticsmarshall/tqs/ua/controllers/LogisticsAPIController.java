@@ -23,7 +23,7 @@ public class LogisticsAPIController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping(path="/delivery",consumes = "application/json")
-    ResponseEntity<Delivery> postDelivery(
+    public ResponseEntity<Delivery> postDelivery(
                     @RequestBody String content
                     //TODO:Maybe include vehicle
     ) {
@@ -31,7 +31,6 @@ public class LogisticsAPIController {
         try {
             contentMap = objectMapper.readValue(content, new TypeReference<Map<String,String>>(){});
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
             return ResponseEntity.status(400).build();
         }
         String address = contentMap.get("address");
@@ -54,7 +53,7 @@ public class LogisticsAPIController {
     }
 
     @GetMapping(path="/delivery")
-    ResponseEntity<List<Delivery>> getDeliveries(@RequestParam(name="APIKey") String apikey) {
+    public ResponseEntity<List<Delivery>> getDeliveries(@RequestParam(name="APIKey") String apikey) {
         Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
         if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
         List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromAPIKey);
@@ -62,10 +61,9 @@ public class LogisticsAPIController {
     }
 
     @GetMapping(path="/delivery/{id}")
-    ResponseEntity<Delivery> getDelivery(
-            @PathVariable(name="id") String delivery_id,
+    public ResponseEntity<Delivery> getDelivery(
+            @PathVariable(name="id") long deliveryId,
             @RequestParam(name="APIKey") String apikey) {
-        long deliveryId = Long.parseLong(delivery_id);
         if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
         return ResponseEntity.ok(del);
