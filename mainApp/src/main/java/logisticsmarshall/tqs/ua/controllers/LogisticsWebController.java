@@ -80,8 +80,8 @@ public class LogisticsWebController {
         // https://github.com/Baeldung/spring-security-registration/blob/master/src/main/java/com/baeldung/validation/EmailValidator.java
         String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern emailPattern = Pattern.compile(emailRegex);
-        // https://regexr.com/3entt
-        String phoneRegex = "(([2-9]\\d{2}-\\d{3}-\\d{4})|(\\([2-9]\\d{2}\\)-\\d{3}-\\d{4})|([2-9]\\d{2}\\.\\d{3}\\.\\d{4}))([xX]\\d{1,4})?";
+        // https://regexr.com/2to9u
+        String phoneRegex = "([+(\\d]{1})(([\\d+() -.]){5,16})([+(\\d]{1})";
         Pattern phonePattern = Pattern.compile(phoneRegex);
 
         return user.getName() != null
