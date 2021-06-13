@@ -78,7 +78,7 @@ public class LogisticsWebController {
 
     private boolean validateNewUser(User user, Driver driver, Company company) {
         // https://github.com/Baeldung/spring-security-registration/blob/master/src/main/java/com/baeldung/validation/EmailValidator.java
-        String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]{2,})*?(\\.[A-Za-z]{2,})$";
+        String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*+@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]{2,})*+$";
         Pattern emailPattern = Pattern.compile(emailRegex);
         // https://regexr.com/2to9u
         String phoneRegex = "([+(\\d]{1})(([\\d() \\-.]){0,11})(\\d{5,})";
