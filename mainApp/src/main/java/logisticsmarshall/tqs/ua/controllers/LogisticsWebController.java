@@ -1,9 +1,7 @@
 package logisticsmarshall.tqs.ua.controllers;
 
 import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
-import logisticsmarshall.tqs.ua.model.Company;
-import logisticsmarshall.tqs.ua.model.Driver;
-import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,10 +20,12 @@ public class LogisticsWebController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
+    String redirectRoot = "redirect:/";
+
     @GetMapping("/register")
     public String registration(Model model) {
         if (userServiceImpl.isAuthenticated()) {
-            return "redirect:/";
+            return redirectRoot;
         }
         User user = new User();
         user.setCompany(new Company());
@@ -36,27 +36,35 @@ public class LogisticsWebController {
     }
 
     @PostMapping("/register")
-    public String registration(@ModelAttribute("user") User user,@ModelAttribute("company") Company company,@ModelAttribute("driver") Driver driver , BindingResult bindingResult,  Model model) throws AccountDataException {
+    public String registration(UserDTO userDTO, CompanyDTO companyDTO, DriverDTO driverDTO) throws AccountDataException {
+        User user = convertUserDTOtoUser(userDTO);
+        Company company = convertCompanyDTOtoCompany(companyDTO);
+        Driver driver = convertDriverDTOtoDriver(driverDTO);
+
         if (!validateNewUser(user, driver, company))
-            throw new AccountDataException("Invalid username or password.");
+            throw new AccountDataException("Invalid account data");
         if (userServiceImpl.isAuthenticated())
-            return "redirect:/";
-        switch (user.getRole()){
-            case "COMPANY": user.setCompany(company);break;
-            case "DRIVER": user.setDriver(driver);break;
-        }
+            return redirectRoot;
+
+        if (user.getRole().equals("COMPANY"))
+            user.setCompany(company);
+        else if (user.getRole().equals("DRIVER"))
+            user.setDriver(driver);
+        else
+            throw new AccountDataException("Invalid account data");
+
         try {
             userServiceImpl.encryptPasswordAndStoreUser(user);
         } catch (DataIntegrityViolationException e) {
-            throw new AccountDataException("Invalid username or password");
+            throw new AccountDataException("Invalid account data");
         }
-        return "redirect:/";
+        return redirectRoot;
     }
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
         if (userServiceImpl.isAuthenticated()) {
-            return "redirect:/";
+            return redirectRoot;
         }
         if (error != null)
             model.addAttribute("error", error);
@@ -66,11 +74,11 @@ public class LogisticsWebController {
     }
 
     @GetMapping(path="/")
-    String index() {
+    public String index() {
         return "index";
     }
 
-    public boolean validateNewUser(User user, Driver driver, Company company) {
+    private boolean validateNewUser(User user, Driver driver, Company company) {
         // https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
         String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern emailPattern = Pattern.compile(emailRegex);
@@ -92,5 +100,38 @@ public class LogisticsWebController {
                         && company.getAddress() != null
                         && company.getDeliveryType() != null
                         && phonePattern.matcher(company.getPhoneNumber()).matches()));
+    }
+
+    private User convertUserDTOtoUser(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        user.setDriver(userDTO.getDriver());
+        user.setCompany(userDTO.getCompany());
+        return user;
+    }
+
+    private Driver convertDriverDTOtoDriver(DriverDTO driverDTO) {
+        Driver driver = new Driver();
+        driver.setUser(driverDTO.getUser());
+        driver.setPhoneNo(driverDTO.getPhoneNo());
+        driver.setStatus(driverDTO.getStatus());
+        driver.setVehicle(driverDTO.getVehicle());
+        driver.setDelivery(driverDTO.getDelivery());
+        driver.setReputation(driverDTO.getReputation());
+        return driver;
+    }
+
+    private Company convertCompanyDTOtoCompany(CompanyDTO companyDTO) {
+        Company company = new Company();
+        company.setUser(companyDTO.getUser());
+        company.setAddress(companyDTO.getAddress());
+        company.setPhoneNumber(companyDTO.getPhoneNumber());
+        company.setDeliveryType(companyDTO.getDeliveryType());
+        company.setApiKey(companyDTO.getApiKey());
+        company.setDelivery(companyDTO.getDelivery());
+        return company;
     }
 }

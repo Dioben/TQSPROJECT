@@ -46,9 +46,10 @@ public class Company {
         this.apiKey = apiKey;
     }
 
-    public Company(){};
     public Company(User user){
         this.user=user;
-    };
+    }
+
+    public Company(){}
 
 }

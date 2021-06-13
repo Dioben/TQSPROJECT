@@ -27,24 +27,14 @@ public class AdminController {
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})
     public String postMenu(MenuDTO menuDTO) throws BadParameterException {
-        Menu menu = new Menu();
-        menu.setName(menuDTO.getName());
-        menu.setPrice(menuDTO.getPrice());
-        menu.setDescription(menuDTO.getDescription());
-        menu.setImageurl(menuDTO.getImageurl());
-        menu.setOrderEntities(menuDTO.getOrderEntities());
+        Menu menu = convertMenuDTOtoMenu(menuDTO);
         menu.validate();
         menuService.save(menu);
         return redirectAdmin;
     }
     @PostMapping(path="/menu/{id}", consumes = {"application/x-www-form-urlencoded"})
     public String editMenu(MenuDTO menuDTO, @PathVariable long id) throws BadParameterException {
-        Menu menu = new Menu();
-        menu.setName(menuDTO.getName());
-        menu.setPrice(menuDTO.getPrice());
-        menu.setDescription(menuDTO.getDescription());
-        menu.setImageurl(menuDTO.getImageurl());
-        menu.setOrderEntities(menuDTO.getOrderEntities());
+        Menu menu = convertMenuDTOtoMenu(menuDTO);
         menu.validate();
         menuService.edit(id,menu);
         return redirectAdmin;
@@ -53,6 +43,16 @@ public class AdminController {
     public String deleteMenu(@PathVariable long id){
         menuService.tryDelete(id);
         return redirectAdmin;
+    }
+
+    private Menu convertMenuDTOtoMenu(MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        menu.setName(menuDTO.getName());
+        menu.setPrice(menuDTO.getPrice());
+        menu.setDescription(menuDTO.getDescription());
+        menu.setImageurl(menuDTO.getImageurl());
+        menu.setOrderEntities(menuDTO.getOrderEntities());
+        return menu;
     }
 
 }
