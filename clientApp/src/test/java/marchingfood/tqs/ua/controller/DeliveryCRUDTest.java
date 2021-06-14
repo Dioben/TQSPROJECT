@@ -1,19 +1,17 @@
 package marchingfood.tqs.ua.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
-import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
-import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
 import lombok.SneakyThrows;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.service.CartService;
 import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
-import marchingfood.tqs.ua.service.UserService;
+import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -21,17 +19,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.hasSize;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(DeliveryController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(value = DeliveryController.class)
 class DeliveryCRUDTest {
 
     @Autowired
@@ -44,7 +41,7 @@ class DeliveryCRUDTest {
     CartService cartService;
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userService;
 
     @MockBean
     DeliveryService deliveryService;
@@ -103,11 +100,10 @@ class DeliveryCRUDTest {
         user1.setEmail("user1@ua.pt");
         user1.setName("user1");
         user1.setAddress("Userhouse");
-        //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
         user1.setPassword("12345");
         user1.setAddress("somewhere");
 
-        Mockito.when(userService.getClientById(2)).thenReturn(user1);
+        Mockito.when(userService.getUserFromAuthOrException()).thenReturn(user1);
 
         mvc.perform(post("/restaurant")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,11 +131,10 @@ class DeliveryCRUDTest {
         user1.setEmail("user1@ua.pt");
         user1.setName("user1");
         user1.setAddress("Userhouse");
-        //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
         user1.setPassword("12345");
         user1.setAddress("somewhere");
 
-        Mockito.when(userService.getClientById(2)).thenReturn(user1);
+        Mockito.when(userService.getUserFromAuthOrException()).thenReturn(user1);
 
         Mockito.when(cartService.getClientCart(user1)).thenReturn(menusInserted);
 
@@ -161,17 +156,12 @@ class DeliveryCRUDTest {
         menu1.setDescription("We've got your number");
         menu1.setImageurl("https://super.abril.com.br/wp-content/uploads/2017/03/bigmac.png");
 
-        Menu menu2 = new Menu();
-        menu2.setPrice(10.55);
-        menu2.setName("Sushi");
-        menu2.setDescription("Literally everyone sells this now");
-        menu2.setImageurl("https://previews.123rf.com/images/yatomo/yatomo1304/yatomo130400133/18975972-sushi-and-rolls-in-bento-box.jpg");
-        List<Menu> menusInserted = Arrays.asList(menu1,menu2);
 
-        //TODO: REPLACE THIS FOR A MOCK OF SOME WAY OF GETTING CURRENT USER
+        List<Menu> menusInserted = Arrays.asList();
+
         Client client = new Client();
-
-        Mockito.when(cartService.getClientCart(client)).thenReturn(null);
+        Mockito.when(userService.getUserFromAuthOrException()).thenReturn(client);
+        Mockito.when(cartService.getClientCart(Mockito.any())).thenReturn(menusInserted);
 
         mvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -196,9 +186,8 @@ class DeliveryCRUDTest {
         menu2.setImageurl("https://previews.123rf.com/images/yatomo/yatomo1304/yatomo130400133/18975972-sushi-and-rolls-in-bento-box.jpg");
         List<Menu> menusInserted = Arrays.asList(menu1,menu2);
 
-        //TODO: REPLACE THIS FOR A MOCK OF SOME WAY OF GETTING CURRENT USER
         Client client = new Client();
-
+        Mockito.when(userService.getUserFromAuthOrException()).thenReturn(client);
         Mockito.when(cartService.getClientCart(client)).thenReturn(menusInserted);
 
         mvc.perform(post("/cart")

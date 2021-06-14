@@ -1,19 +1,22 @@
 package marchingfood.tqs.ua.controller;
 
+import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
+import marchingfood.tqs.ua.exceptions.AccountDataException;
 import marchingfood.tqs.ua.model.Client;
+import marchingfood.tqs.ua.model.ClientDTO;
 import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.model.Menu;
-import marchingfood.tqs.ua.service.CartService;
-import marchingfood.tqs.ua.service.DeliveryService;
-import marchingfood.tqs.ua.service.MenuService;
-import marchingfood.tqs.ua.service.UserService;
+import marchingfood.tqs.ua.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +31,39 @@ public class DeliveryController {
     CartService cartService;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
     DeliveryService deliveryService;
 
+    String redirectRoot = "redirect:/restaurant";
+
+    @GetMapping("/register")
+    public String registration(Model model) {
+        if (userService.isAuthenticated()) {
+            return redirectRoot;
+        }
+        Client user = new Client();
+        model.addAttribute("user", user);
+
+        return "signUp";
+    }
+
+    @PostMapping("/register")
+    public String registration(ClientDTO userDTO) throws AccountDataException {
+        Client user = Client.fromDTO(userDTO);
+
+        if (!Client.validateNewUser(user))
+            throw new AccountDataException();
+        if (userService.isAuthenticated())
+            return redirectRoot;
+        try {
+            userService.encryptPasswordAndStoreUser(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new AccountDataException();
+        }
+        return redirectRoot;
+    }
 
     @GetMapping("/restaurant")
     public String restaurantMenuGet(Model model) {
@@ -40,30 +71,42 @@ public class DeliveryController {
         //Make list with thymeleaf from those
         model.addAttribute("menus",menuService.getMenus());
         return "restaurant";
+
+    }
+
+    @GetMapping("/login")
+    public String login(Model model, String error, String logout) {
+        if (userService.isAuthenticated()) {
+            return redirectRoot;
+        }
+        if (error != null)
+            model.addAttribute("error", error);
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+        return "login";
+    }
+
+    @GetMapping(path="/")
+    public String index() {
+        return redirectRoot;
     }
 
     @PostMapping("/restaurant")
-    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menu_id) {
+    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menu_id) throws AccessForbiddenException {
         //Add post to cart map
-        System.out.println("post to cart");
-        System.out.println(menu_id);
-
         Menu gotten = menuService.getMenuById(menu_id);
-        //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
-        Client client = userService.getClientById(2);
+        Client client = userService.getUserFromAuthOrException();
         if(client == null)return ResponseEntity.status(404).build();
         System.out.println(client);
         System.out.println(gotten);
         cartService.addMenu(gotten,client);
-        System.out.println("Added to cart");
         return null;
     }
 
 
     @GetMapping("/cart")
-    public String deliveryFromCartGet(Model model) {
-        //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
-        Client client = userService.getClientById(2);
+    public String deliveryFromCartGet(Model model) throws AccessForbiddenException {
+        Client client = userService.getUserFromAuthOrException();
         List<Menu> menuCart = cartService.getClientCart(client);
         if(menuCart.isEmpty()){
             model.addAttribute("empty_cart",true);
@@ -78,17 +121,12 @@ public class DeliveryController {
     }
 
     @PostMapping("/cart")
-    public void deliveryFromCartPost() {
-        //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
-        System.out.println(userService.getAllClients());
-        Client client = userService.getClientById(2);
-        if(client == null)return;
-        System.out.println(client);
-
+    @ResponseStatus(HttpStatus.OK)
+    public void deliveryFromCartPost() throws AccessForbiddenException {
+        Client client = userService.getUserFromAuthOrException();
         List<Menu> menuCart = cartService.getClientCart(client);
         double total = 0;
         for(Menu menu : menuCart)total+=menu.getPrice();
-        System.out.println("Delivery from menu items");
         Delivery deliveryMade = new Delivery();
         List<Menu> menusInDelivery = new ArrayList<Menu>(menuCart);
         deliveryMade.setMenus(menusInDelivery);
@@ -98,7 +136,6 @@ public class DeliveryController {
         deliveryMade.setPaid(false);
         deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
-        System.out.println("Delivery After post");
         cartService.cleanClientCart(client);
     }
 

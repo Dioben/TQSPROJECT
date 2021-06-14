@@ -4,6 +4,7 @@ import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.model.MenuDTO;
 import marchingfood.tqs.ua.service.MenuService;
+import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,8 @@ public class AdminController {
 
     @Autowired
     MenuService menuService;
-
+    @Autowired
+    UserServiceImpl userService;
     String redirectAdmin = "redirect:/admin/dashboard";
 
     @GetMapping("/dashboard")
