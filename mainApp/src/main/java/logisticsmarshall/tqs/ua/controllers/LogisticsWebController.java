@@ -5,9 +5,11 @@ import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.regex.Pattern;
@@ -74,6 +76,21 @@ public class LogisticsWebController {
     @GetMapping(path="/")
     public String index() {
         return "index";
+    }
+
+    @PreAuthorize("hasRole('DRIVER')")
+    @PostMapping(path="/delivery/{id}/accept")
+    public String acceptDelivery(
+            @PathVariable(name="id") long deliveryId,
+            Model model) {
+        if (!userServiceImpl.isAuthenticated())
+            return redirectRoot;
+        try {
+            userServiceImpl.acceptDelivery(deliveryId);
+        } catch (Exception e) {
+            return redirectRoot;
+        }
+        return "mainDash";
     }
 
     private boolean validateNewUser(User user, Driver driver, Company company) {

@@ -1,11 +1,14 @@
 package logisticsmarshall.tqs.ua.services;
 
+import logisticsmarshall.tqs.ua.exceptions.AccountCantDeliverException;
+import logisticsmarshall.tqs.ua.exceptions.DeliveryAlreadyHasDriverException;
+import logisticsmarshall.tqs.ua.model.Delivery;
+import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.repository.DeliveryRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    DeliveryRepository deliveryRepository;
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -84,4 +90,25 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
+
+    @Transactional
+    public void acceptDelivery(long deliveryId) throws DeliveryAlreadyHasDriverException, AccountCantDeliverException {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        if (delivery.getDriver() == null || delivery.getPaid())
+            throw new DeliveryAlreadyHasDriverException();
+        if (!isAuthenticated())
+            throw new AuthenticationCredentialsNotFoundException("User is not logged in");
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Driver driver = user.getDriver();
+        if (driver == null
+                || driver.getPhoneNo() == null
+                || driver.getPhoneNo().isEmpty()
+                || driver.getVehicle() == null
+                || !driver.getStatus())
+            throw new AccountCantDeliverException();
+        delivery.setDriver(driver);
+        deliveryRepository.save(delivery);
+    }
+
 }
