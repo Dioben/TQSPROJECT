@@ -20,6 +20,7 @@ public class CartService {
     }
 
     public List<Menu> getClientCart(Client client){
+        if(!cart.containsKey(client)) return new ArrayList<>();
         return cart.get(client);
     }
 
