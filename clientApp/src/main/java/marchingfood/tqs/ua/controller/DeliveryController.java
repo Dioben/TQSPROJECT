@@ -36,12 +36,12 @@ public class DeliveryController {
     @Autowired
     DeliveryService deliveryService;
 
-    String redirectRoot = "redirect:/restaurant";
+    String redirectRestaurant = "redirect:/restaurant";
 
     @GetMapping("/register")
     public String registration(Model model) {
         if (userService.isAuthenticated()) {
-            return redirectRoot;
+            return redirectRestaurant;
         }
         Client user = new Client();
         model.addAttribute("user", user);
@@ -52,17 +52,16 @@ public class DeliveryController {
     @PostMapping("/register")
     public String registration(ClientDTO userDTO) throws AccountDataException {
         Client user = Client.fromDTO(userDTO);
-
         if (!Client.validateNewUser(user))
             throw new AccountDataException();
         if (userService.isAuthenticated())
-            return redirectRoot;
+            return redirectRestaurant;
         try {
             userService.encryptPasswordAndStoreUser(user);
         } catch (DataIntegrityViolationException e) {
             throw new AccountDataException();
         }
-        return redirectRoot;
+        return "login";
     }
 
     @GetMapping("/restaurant")
@@ -77,7 +76,7 @@ public class DeliveryController {
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
         if (userService.isAuthenticated()) {
-            return redirectRoot;
+            return redirectRestaurant;
         }
         if (error != null)
             model.addAttribute("error", error);
@@ -86,9 +85,9 @@ public class DeliveryController {
         return "login";
     }
 
-    @GetMapping(path="/")
-    public String index() {
-        return redirectRoot;
+    @GetMapping(path = "/")
+    public String index(){
+    return "index";
     }
 
     @PostMapping("/restaurant")
@@ -97,8 +96,6 @@ public class DeliveryController {
         Menu gotten = menuService.getMenuById(menu_id);
         Client client = userService.getUserFromAuthOrException();
         if(client == null)return ResponseEntity.status(404).build();
-        System.out.println(client);
-        System.out.println(gotten);
         cartService.addMenu(gotten,client);
         return null;
     }
