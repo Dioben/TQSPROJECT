@@ -27,7 +27,7 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<body >
-		<div class="center" style="width: 400px" >
+		<div class="container aln-center" style="width: 400px" >
 			<h3>SignUp</h3>
 					<form  th:action="@{/register}" th:object="${user}" method="post">
 						<div class="col-12">
@@ -88,7 +88,7 @@
 							</select>
 						</div>
 				</div>
-				<br><br>
+				<br>
 				<div class="col-3">
 					<button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>
 				</div>

@@ -1,8 +1,10 @@
 package logisticsmarshall.tqs.ua.controllers;
 
+import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.regex.Pattern;
 
 @Controller
 public class LogisticsWebController {
@@ -74,42 +74,56 @@ public class LogisticsWebController {
 
     @GetMapping(path="/")
     public String index() {
-        return "index";
+        User user = userServiceImpl.getUserFromAuth();
+        if (user==null){return "redirect:/info";}
+        if (user.getRole().equals("COMPANY")){return "redirect:/companyDash";}
+        if (user.getRole().equals("DRIVER")){return "redirect:/driverDash";}
+        if (user.getRole().equals("ADMIN")){return "redirect:/adminDash";}
+        return "redirect:/info";
+    }
+
+    @GetMapping(path="/info")
+    public String info() {
+        return "info";
     }
 
 
-    @PreAuthorize("hasRole('COMPANY')")
     @GetMapping(path="/companyDash")
-    public String companyDash(Model model){
+    public String companyDash(Model model) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("COMPANY");
         return "mainDash";
     }
 
-    @PreAuthorize("hasRole('DRIVER')")
+
     @GetMapping(path="/driverDash")
-    public String workerDash(Model model){
+    public String workerDash(Model model) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("DRIVER");
         return "mainDash";
     }
 
-    @PreAuthorize("hasRole('COMPANY')")
+
     @GetMapping(path="/companyProfile")
-    public String companyProfile(Model model){
+    public String companyProfile(Model model) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("COMPANY");
         return "businessOwnerProfile";
     }
 
-    @PreAuthorize("hasRole('DRIVER')")
+
     @GetMapping(path="/driverProfile")
-    public String driverProfile(Model model){
+    public String driverProfile(Model model) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("DRIVER");
         return "workerProfile";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping(path="/adminDashboard")
-    public String adminDashboard(Model model){
+    @GetMapping(path="/adminDash")
+    public String adminDashboard(Model model) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("ADMIN");
         return "adminDash";
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     @PostMapping(path="/grantApiAccess")
-    public String adminDashboard(){
+    public String adminDashboard() throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("ADMIN");
         return "redirect:/adminDash";
     }
 

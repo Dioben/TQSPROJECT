@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "driver")
 public class Driver {
     public enum Vehicle {
-        BICLYCLE, CAR, MOTORCYCLE, ONFOOT;
+        BICYCLE, CAR, MOTORCYCLE, ONFOOT;
     }
 
     @Id

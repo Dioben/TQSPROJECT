@@ -1,6 +1,8 @@
 package logisticsmarshall.tqs.ua.model;
 
 import javax.persistence.*;
+
+import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import lombok.Data;
 
 import java.util.regex.Pattern;
