@@ -25,7 +25,6 @@ public class ClientConfigs extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 anonymous().and().authorizeRequests().antMatchers("/restaurant").permitAll().and()
-
                 .csrf().disable() // added
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/register").permitAll()

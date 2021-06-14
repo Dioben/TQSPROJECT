@@ -49,6 +49,7 @@ public class Client {
         client.setName(userDTO.getName());
         client.setPassword(userDTO.getPassword());
         client.setEmail(userDTO.getEmail());
+        client.setAdmin(false);
         return client;
     }
 

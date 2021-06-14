@@ -22,7 +22,8 @@ public class UserConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.
+                anonymous().and().authorizeRequests().antMatchers("/api/**").permitAll().and()
                 .csrf().disable() // added
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/register").permitAll()

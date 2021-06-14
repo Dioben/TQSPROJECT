@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en" xmlns:th="http://www.thymleaf.org"><!-- Basic -->
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">   
@@ -34,16 +34,19 @@
                             <br><br>
 							<h3>SignUp </h3>
 							<div class="comment-respond-form">
-								<form id="commentrespondform" class="comment-form-respond row" method="post">
+								<form id="commentrespondform" class="comment-form-respond row" th:action="@{/register}" th:object="${user}" method="post">
 									<div class=" col-md-6 col-md-offset-5 ">
                                         <div class="form-group">
-											<input id="name_com" class="form-control" name="name" placeholder="Name" type="name">
+											<input id="name_com" class="form-control" name="name" placeholder="Name" type="name" th:value="*{name}">
 										</div>
 										<div class="form-group">
-											<input id="email_com" class="form-control" name="name" placeholder="Email" type="email">
+											<input id="email_com" class="form-control" name="name" placeholder="Email" type="email" th:value="*{email}" >
 										</div>
 										<div class="form-group">
-											<input id="password" class="form-control" name="password" placeholder="Your Password" type="password">
+											<input id="address_com" class="form-control" name="address" placeholder="Address" type="name" th:value="*{address}">
+										</div>
+										<div class="form-group">
+											<input id="password" class="form-control" name="password" placeholder="Your Password" type="password" th:value="*{password}">
 										</div>
                                         <div>
 
@@ -51,7 +54,7 @@
                                         </div>
 
                                         <div  style="display: inline; margin-left: 420px">
-                                            <a class="btn btn-submit" href="login.html">SignUp</a>
+                                            <button class="btn btn-submit" type="submit">Sign Up</button>
                                         </div>
 									</div>
 
