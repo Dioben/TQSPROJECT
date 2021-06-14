@@ -1,7 +1,6 @@
 package logisticsmarshall.tqs.ua.controllers;
 
-import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
-import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
+import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,17 +128,32 @@ public class LogisticsWebController {
         return "redirect:/adminDash";
     }
 
-    @PreAuthorize("hasRole('DRIVER')")
-    @PostMapping(path="/delivery/{id}/accept")
-    public String acceptDelivery(
-            @PathVariable(name="id") long deliveryId,
-            Model model) {
-        if (!userServiceImpl.isAuthenticated())
-            return redirectRoot;
+    @PostMapping(path="/driverDash")
+    public String changeDelivery(Model model, String action, long deliveryId) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         try {
-            userServiceImpl.acceptDelivery(deliveryId);
+            switch (action) {
+                case "accept":
+                    userServiceImpl.acceptDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully accepted");
+                    break;
+                case "pickup":
+                    userServiceImpl.pickUpDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully picked up");
+                    break;
+                case "finish":
+                    userServiceImpl.finishDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully finished");
+                    break;
+                case "cancel":
+                    userServiceImpl.cancelDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully canceled");
+                    break;
+                default:
+                    throw new InvalidDeliveryActionException();
+            }
         } catch (Exception e) {
-            return redirectRoot;
+            model.addAttribute("error", e.getMessage());
         }
         return "mainDash";
     }

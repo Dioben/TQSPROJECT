@@ -46,8 +46,7 @@ public class LogisticsAPIController {
         delivery.setAddress(address);
         delivery.setPriority(priorityEnum);
         delivery.setCompany(companyFromAPIKey);
-        delivery.setDelivered(false);
-        delivery.setPaid(false);
+        delivery.setStage(Delivery.Stage.REQUESTED);
         deliveryService.postDelivery(delivery);
         return ResponseEntity.ok(delivery);
     }

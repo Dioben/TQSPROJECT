@@ -1,10 +1,8 @@
 package logisticsmarshall.tqs.ua.services;
 
-import logisticsmarshall.tqs.ua.exceptions.AccountCantDeliverException;
-import logisticsmarshall.tqs.ua.exceptions.DeliveryAlreadyHasDriverException;
+import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.model.Driver;
-import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.repository.DeliveryRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
@@ -101,15 +99,52 @@ public class UserServiceImpl implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void acceptDelivery(User user, long deliveryId) throws DeliveryAlreadyHasDriverException, AccountCantDeliverException, DeliveryDoesntHaveSameDriverException, DeliveryHasNoDriverException {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        Driver driver = validateDeliveryChange(user, delivery, false);
+        delivery.setDriver(driver);
+        delivery.setStage(Delivery.Stage.ACCEPTED);
+        deliveryRepository.save(delivery);
+    }
 
     @Transactional
-    public void acceptDelivery(long deliveryId) throws DeliveryAlreadyHasDriverException, AccountCantDeliverException {
+    public void cancelDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
-        if (delivery.getDriver() == null || delivery.getPaid())
-            throw new DeliveryAlreadyHasDriverException();
+        Driver driver = validateDeliveryChange(user, delivery, true);
+        delivery.setDriver(null);
+        delivery.setStage(Delivery.Stage.CANCELED);
+        deliveryRepository.save(delivery);
+    }
+
+    @Transactional
+    public void pickUpDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        Driver driver = validateDeliveryChange(user, delivery, true);
+        delivery.setStage(Delivery.Stage.PICKEDUP);
+        deliveryRepository.save(delivery);
+    }
+
+    @Transactional
+    public void finishDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        Driver driver = validateDeliveryChange(user, delivery, true);
+        delivery.setStage(Delivery.Stage.DELIVERED);
+        deliveryRepository.save(delivery);
+    }
+
+    private Driver validateDeliveryChange(User user, Delivery delivery, boolean shouldHaveDriver) throws DeliveryAlreadyHasDriverException, AccountCantDeliverException, DeliveryDoesntHaveSameDriverException, DeliveryHasNoDriverException {
         if (!isAuthenticated())
             throw new AuthenticationCredentialsNotFoundException("User is not logged in");
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (shouldHaveDriver) {
+            if (delivery.getDriver() == null)
+                throw new DeliveryHasNoDriverException();
+            if (delivery.getDriver() != user.getDriver())
+                throw new DeliveryDoesntHaveSameDriverException();
+        } else {
+            if (delivery.getDriver() != null)
+                throw new DeliveryAlreadyHasDriverException();
+        }
         Driver driver = user.getDriver();
         if (driver == null
                 || driver.getPhoneNo() == null
@@ -117,8 +152,7 @@ public class UserServiceImpl implements UserDetailsService {
                 || driver.getVehicle() == null
                 || !driver.getStatus())
             throw new AccountCantDeliverException();
-        delivery.setDriver(driver);
-        deliveryRepository.save(delivery);
+        return driver;
     }
 
 }
