@@ -65,6 +65,11 @@ public class DeliveryController {
         //TODO: REPLACE THIS FOR SOMETHING COMING FROM THE WEBSITE
         Client client = userService.getClientById(2);
         List<Menu> menuCart = cartService.getClientCart(client);
+        if(menuCart.isEmpty()){
+            model.addAttribute("empty_cart",true);
+            return "cart";
+        }
+        model.addAttribute("empty_cart",false);
         double total = 0;
         for(Menu menu : menuCart)total+=menu.getPrice();
         model.addAttribute("menus",menuCart);
