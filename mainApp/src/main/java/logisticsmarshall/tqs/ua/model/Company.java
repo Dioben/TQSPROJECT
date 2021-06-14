@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Set;
 
+
 @Data
 @Entity
 @Table(name = "company")

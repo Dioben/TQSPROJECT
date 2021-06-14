@@ -4,10 +4,8 @@ import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LogisticsWebController {
-
+    static String ADMINROLE = "ADMIN";
+    static String COMPANYROLE = "COMPANY";
+    static String DRIVERROLE = "DRIVER";
     @Autowired
     UserServiceImpl userServiceImpl;
 
@@ -45,9 +45,9 @@ public class LogisticsWebController {
         if (userServiceImpl.isAuthenticated())
             return redirectRoot;
 
-        if (user.getRole().equals("COMPANY"))
+        if (user.getRole().equals(COMPANYROLE))
             user.setCompany(company);
-        else if (user.getRole().equals("DRIVER"))
+        else if (user.getRole().equals(DRIVERROLE))
             user.setDriver(driver);
         else
             throw new AccountDataException();
@@ -76,9 +76,9 @@ public class LogisticsWebController {
     public String index() {
         User user = userServiceImpl.getUserFromAuth();
         if (user==null){return "redirect:/info";}
-        if (user.getRole().equals("COMPANY")){return "redirect:/companyDash";}
-        if (user.getRole().equals("DRIVER")){return "redirect:/driverDash";}
-        if (user.getRole().equals("ADMIN")){return "redirect:/adminDash";}
+        if (user.getRole().equals(COMPANYROLE)){return "redirect:/companyDash";}
+        if (user.getRole().equals(DRIVERROLE)){return "redirect:/driverDash";}
+        if (user.getRole().equals(ADMINROLE)){return "redirect:/adminDash";}
         return "redirect:/info";
     }
 
@@ -90,40 +90,40 @@ public class LogisticsWebController {
 
     @GetMapping(path="/companyDash")
     public String companyDash(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("COMPANY");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
         return "mainDash";
     }
 
 
     @GetMapping(path="/driverDash")
     public String workerDash(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("DRIVER");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         return "mainDash";
     }
 
 
     @GetMapping(path="/companyProfile")
     public String companyProfile(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("COMPANY");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
         return "businessOwnerProfile";
     }
 
 
     @GetMapping(path="/driverProfile")
     public String driverProfile(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("DRIVER");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         return "workerProfile";
     }
 
     @GetMapping(path="/adminDash")
     public String adminDashboard(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("ADMIN");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         return "adminDash";
     }
 
     @PostMapping(path="/grantApiAccess")
     public String adminDashboard() throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials("ADMIN");
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         return "redirect:/adminDash";
     }
 
