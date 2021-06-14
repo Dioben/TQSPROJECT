@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LogisticsWebController {
-    static String ADMINROLE = "ADMIN";
-    static String COMPANYROLE = "COMPANY";
-    static String DRIVERROLE = "DRIVER";
+    static final String ADMINROLE = "ADMIN";
+    static final String COMPANYROLE = "COMPANY";
+    static final String DRIVERROLE = "DRIVER";
     @Autowired
     UserServiceImpl userServiceImpl;
 

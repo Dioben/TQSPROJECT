@@ -61,7 +61,7 @@ public class User {
     public User() {
 
     }
-    static public User fromDTO(UserDTO userDTO){
+    public static User fromDTO(UserDTO userDTO){
         User user = new User();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());

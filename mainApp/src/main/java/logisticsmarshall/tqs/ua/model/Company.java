@@ -53,7 +53,7 @@ public class Company {
 
     public Company(){}
 
-    static public Company fromDTO(CompanyDTO companyDTO){
+    public static  Company fromDTO(CompanyDTO companyDTO){
             Company company = new Company();
             company.setUser(companyDTO.getUser());
             company.setAddress(companyDTO.getAddress());
