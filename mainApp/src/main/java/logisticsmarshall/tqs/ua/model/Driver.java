@@ -45,4 +45,15 @@ public class Driver {
     @EqualsAndHashCode.Exclude
     private Set<Reputation> reputation;
 
+    static public Driver fromDTO(DriverDTO driverDTO){
+        Driver driver = new Driver();
+        driver.setUser(driverDTO.getUser());
+        driver.setPhoneNo(driverDTO.getPhoneNo());
+        driver.setStatus(driverDTO.getStatus());
+        driver.setVehicle(driverDTO.getVehicle());
+        driver.setDelivery(driverDTO.getDelivery());
+        driver.setReputation(driverDTO.getReputation());
+        return driver;
+
+    }
 }

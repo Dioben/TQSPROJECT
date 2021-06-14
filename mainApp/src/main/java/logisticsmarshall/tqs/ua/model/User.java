@@ -57,4 +57,14 @@ public class User {
     public User() {
 
     }
+    static public User fromDTO(UserDTO userDTO){
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        user.setDriver(userDTO.getDriver());
+        user.setCompany(userDTO.getCompany());
+        return user;
+    }
 }

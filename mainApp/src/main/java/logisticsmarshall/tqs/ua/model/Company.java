@@ -52,4 +52,15 @@ public class Company {
 
     public Company(){}
 
+    static public Company fromDTO(CompanyDTO companyDTO){
+            Company company = new Company();
+            company.setUser(companyDTO.getUser());
+            company.setAddress(companyDTO.getAddress());
+            company.setPhoneNumber(companyDTO.getPhoneNumber());
+            company.setDeliveryType(companyDTO.getDeliveryType());
+            company.setApiKey(companyDTO.getApiKey());
+            company.setDelivery(companyDTO.getDelivery());
+            return company;
+
+    }
 }
