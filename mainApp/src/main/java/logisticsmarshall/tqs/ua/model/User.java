@@ -3,6 +3,8 @@ package logisticsmarshall.tqs.ua.model;
 import javax.persistence.*;
 import lombok.Data;
 
+import java.util.regex.Pattern;
+
 @Data
 @Entity
 @Table(name = "logistics_user")
@@ -66,5 +68,29 @@ public class User {
         user.setDriver(userDTO.getDriver());
         user.setCompany(userDTO.getCompany());
         return user;
+    }
+
+    static public boolean validateNewUser(User user, Driver driver, Company company) {
+        // https://github.com/Baeldung/spring-security-registration/blob/master/src/main/java/com/baeldung/validation/EmailValidator.java
+        String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*+@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]{2,})*+$";
+        Pattern emailPattern = Pattern.compile(emailRegex);
+        // https://regexr.com/2to9u
+        String phoneRegex = "([+(\\d]{1})(([\\d() \\-.]){0,11})(\\d{5,})";
+        Pattern phonePattern = Pattern.compile(phoneRegex);
+
+        return user.getName() != null
+                && user.getEmail() != null
+                && user.getPassword() != null
+                && user.getRole() != null
+                && emailPattern.matcher(user.getEmail()).matches()
+                && ((user.getRole().equals("DRIVER")
+                && driver.getPhoneNo() != null
+                && driver.getVehicle() != null
+                && phonePattern.matcher(driver.getPhoneNo()).matches())
+                || (user.getRole().equals("COMPANY")
+                && company.getPhoneNumber() != null
+                && company.getAddress() != null
+                && company.getDeliveryType() != null
+                && phonePattern.matcher(company.getPhoneNumber()).matches()));
     }
 }

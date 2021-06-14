@@ -5,6 +5,7 @@ import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class LogisticsWebController {
         Company company = Company.fromDTO(companyDTO);
         Driver driver = Driver.fromDTO(driverDTO);
 
-        if (!validateNewUser(user, driver, company))
+        if (!User.validateNewUser(user, driver, company))
             throw new AccountDataException();
         if (userServiceImpl.isAuthenticated())
             return redirectRoot;
@@ -76,32 +77,40 @@ public class LogisticsWebController {
         return "index";
     }
 
-    private boolean validateNewUser(User user, Driver driver, Company company) {
-        // https://github.com/Baeldung/spring-security-registration/blob/master/src/main/java/com/baeldung/validation/EmailValidator.java
-        String emailRegex = "^[_A-Za-z0-9-\\\\+]+(\\.[_A-Za-z0-9-]+)*+@[A-Za-z0-9-]{2,}(\\.[A-Za-z0-9]{2,})*+$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
-        // https://regexr.com/2to9u
-        String phoneRegex = "([+(\\d]{1})(([\\d() \\-.]){0,11})(\\d{5,})";
-        Pattern phonePattern = Pattern.compile(phoneRegex);
 
-        return user.getName() != null
-                && user.getEmail() != null
-                && user.getPassword() != null
-                && user.getRole() != null
-                && emailPattern.matcher(user.getEmail()).matches()
-                && ((user.getRole().equals("DRIVER")
-                        && driver.getPhoneNo() != null
-                        && driver.getVehicle() != null
-                        && phonePattern.matcher(driver.getPhoneNo()).matches())
-                    || (user.getRole().equals("COMPANY")
-                        && company.getPhoneNumber() != null
-                        && company.getAddress() != null
-                        && company.getDeliveryType() != null
-                        && phonePattern.matcher(company.getPhoneNumber()).matches()));
+    @PreAuthorize("hasRole('COMPANY')")
+    @GetMapping(path="/companyDash")
+    public String companyDash(Model model){
+        return "mainDash";
     }
 
+    @PreAuthorize("hasRole('DRIVER')")
+    @GetMapping(path="/driverDash")
+    public String workerDash(Model model){
+        return "mainDash";
+    }
 
+    @PreAuthorize("hasRole('COMPANY')")
+    @GetMapping(path="/companyProfile")
+    public String companyProfile(Model model){
+        return "businessOwnerProfile";
+    }
 
+    @PreAuthorize("hasRole('DRIVER')")
+    @GetMapping(path="/driverProfile")
+    public String driverProfile(Model model){
+        return "workerProfile";
+    }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(path="/adminDashboard")
+    public String adminDashboard(Model model){
+        return "adminDash";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path="/grantApiAccess")
+    public String adminDashboard(){
+        return "redirect:/adminDash";
+    }
 
 }
