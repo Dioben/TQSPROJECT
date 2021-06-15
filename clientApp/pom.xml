@@ -122,6 +122,25 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            marchingfood/tqs/ua/model/*
+                        </exclude>
+                        <exclude>
+                            marchingfood/tqs/ua/exceptions/*
+                        </exclude>
+                        <exclude>
+                            marchingfood/tqs/ua/repository/*
+                        </exclude>
+                        <exclude>
+                            marchingfood/tqs/ua/config/*
+                        </exclude>
+                        <exclude>
+                            marchingfood/tqs/ua/MainAppApplication.class
+                        </exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

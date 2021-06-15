@@ -146,6 +146,25 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/model/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/exceptions/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/repository/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/configs/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/MainAppApplication.class
+                        </exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
