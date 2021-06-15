@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "driver")
 public class Driver {
     public enum Vehicle {
-        BICLYCLE, CAR, MOTORCYCLE, ONFOOT;
+        BICYCLE, CAR, MOTORCYCLE, ONFOOT;
     }
 
     @Id
@@ -45,4 +45,15 @@ public class Driver {
     @EqualsAndHashCode.Exclude
     private Set<Reputation> reputation;
 
+    public static  Driver fromDTO(DriverDTO driverDTO){
+        Driver driver = new Driver();
+        driver.setUser(driverDTO.getUser());
+        driver.setPhoneNo(driverDTO.getPhoneNo());
+        driver.setStatus(driverDTO.getStatus());
+        driver.setVehicle(driverDTO.getVehicle());
+        driver.setDelivery(driverDTO.getDelivery());
+        driver.setReputation(driverDTO.getReputation());
+        return driver;
+
+    }
 }

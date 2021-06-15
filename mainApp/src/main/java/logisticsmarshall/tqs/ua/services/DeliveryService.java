@@ -30,7 +30,7 @@ public class DeliveryService {
         return null;
     }
     public List<Delivery> getDeliveriesByCompany(Company company) {
-        return deliveryRepository.findAllDeliveriesByCompany_id(company.getId());
+        return deliveryRepository.findAllDeliveriesByCompanyId(company.getId());
     }
     public Company getApiKeyHolder(String apiKey) {
         return companyRepository.findCompanyByApiKey(apiKey);

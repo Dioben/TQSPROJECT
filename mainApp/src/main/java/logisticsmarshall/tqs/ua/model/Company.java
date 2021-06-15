@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Set;
 
+
 @Data
 @Entity
 @Table(name = "company")
@@ -46,9 +47,21 @@ public class Company {
         this.apiKey = apiKey;
     }
 
-    public Company(){};
     public Company(User user){
         this.user=user;
-    };
+    }
 
+    public Company(){}
+
+    public static  Company fromDTO(CompanyDTO companyDTO){
+            Company company = new Company();
+            company.setUser(companyDTO.getUser());
+            company.setAddress(companyDTO.getAddress());
+            company.setPhoneNumber(companyDTO.getPhoneNumber());
+            company.setDeliveryType(companyDTO.getDeliveryType());
+            company.setApiKey(companyDTO.getApiKey());
+            company.setDelivery(companyDTO.getDelivery());
+            return company;
+
+    }
 }

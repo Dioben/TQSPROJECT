@@ -2,6 +2,7 @@ package marchingfood.tqs.ua.controller;
 
 import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Menu;
+import marchingfood.tqs.ua.model.MenuDTO;
 import marchingfood.tqs.ua.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,13 +26,15 @@ public class AdminController {
         return "restaurantDash";
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})
-    public String postMenu(@ModelAttribute("menu") Menu menu) throws BadParameterException {
+    public String postMenu(MenuDTO menuDTO) throws BadParameterException {
+        Menu menu = convertMenuDTOtoMenu(menuDTO);
         menu.validate();
         menuService.save(menu);
         return redirectAdmin;
     }
     @PostMapping(path="/menu/{id}", consumes = {"application/x-www-form-urlencoded"})
-    public String editMenu(@ModelAttribute("menu") Menu menu, @PathVariable long id) throws BadParameterException {
+    public String editMenu(MenuDTO menuDTO, @PathVariable long id) throws BadParameterException {
+        Menu menu = convertMenuDTOtoMenu(menuDTO);
         menu.validate();
         menuService.edit(id,menu);
         return redirectAdmin;
@@ -40,6 +43,16 @@ public class AdminController {
     public String deleteMenu(@PathVariable long id){
         menuService.tryDelete(id);
         return redirectAdmin;
+    }
+
+    private Menu convertMenuDTOtoMenu(MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        menu.setName(menuDTO.getName());
+        menu.setPrice(menuDTO.getPrice());
+        menu.setDescription(menuDTO.getDescription());
+        menu.setImageurl(menuDTO.getImageurl());
+        menu.setOrderEntities(menuDTO.getOrderEntities());
+        return menu;
     }
 
 }

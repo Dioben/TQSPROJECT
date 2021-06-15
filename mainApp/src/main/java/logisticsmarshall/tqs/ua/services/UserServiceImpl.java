@@ -1,5 +1,6 @@
 package logisticsmarshall.tqs.ua.services;
 
+import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,17 +60,6 @@ public class UserServiceImpl implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), grantedAuthorities);
     }
 
-    public void autoLogin(String username, String password) {
-        UserDetails userDetails = loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-
-        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
-    }
-
     public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
@@ -78,7 +68,28 @@ public class UserServiceImpl implements UserDetailsService {
         }
         return authentication.isAuthenticated();
     }
+    public User getUserFromAuth(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || AnonymousAuthenticationToken.class.
+                isAssignableFrom(authentication.getClass())) {
+            return null;
+        }
 
+
+        return userRepository.findByName(authentication.getName());
+    }
+
+    public User getUserFromAuthAndCheckCredentials(String role) throws AccessForbiddenException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || AnonymousAuthenticationToken.class.
+                isAssignableFrom(authentication.getClass())) {
+            throw new AccessForbiddenException("You must log in");
+        }
+        User user = userRepository.findByName(authentication.getName());
+        if (user==null){throw new AccessForbiddenException("You must log in");}
+        if (!user.getRole().equals(role)){throw new AccessForbiddenException("Bad Credentials");}
+        return  user;
+    }
     public void encryptPasswordAndStoreUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
