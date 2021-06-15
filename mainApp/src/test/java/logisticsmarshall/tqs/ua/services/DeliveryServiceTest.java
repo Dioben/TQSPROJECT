@@ -1,5 +1,6 @@
 package logisticsmarshall.tqs.ua.services;
 
+import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
@@ -58,8 +59,7 @@ class DeliveryServiceTest {
 
     @Test
     void whenValidInAcceptDeliveryThenSuccess() {
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { fail(e); }
+        assertDoesNotThrow(()->deliveryService.acceptDelivery(user, delivery.getId()));
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertEquals(delivery.getDriver(), user.getDriver());
         assertEquals(Delivery.Stage.ACCEPTED, delivery.getStage());
@@ -67,76 +67,56 @@ class DeliveryServiceTest {
 
     @Test
     void whenInvalidDeliveryIdInAcceptDeliveryThenThrowException() {
-        try { deliveryService.acceptDelivery(user, -1L); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(NullPointerException.class, ()->deliveryService.acceptDelivery(user, -1L));
     }
 
     @Test
     void whenDeliveryHasDriverInAcceptDeliveryThenThrowException() {
         delivery.setDriver(new Driver());
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryAlreadyHasDriverException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverIsNullInAcceptDeliveryThenThrowException() {
         user.setDriver(null);
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasEmptyPhoneNumberInAcceptDeliveryThenThrowException() {
         user.getDriver().setPhoneNo("");
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasFalseStatusInAcceptDeliveryThenThrowException() {
         user.getDriver().setStatus(false);
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasAcceptedStateInAcceptDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(user.getDriver());
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasPickedUpStateInAcceptDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
-        delivery.setDriver(user.getDriver());
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasDeliveredStateInAcceptDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.DELIVERED);
-        delivery.setDriver(user.getDriver());
-        try { deliveryService.acceptDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenValidInCancelDeliveryThenSuccess() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.cancelDelivery(user, delivery.getId()); }
-        catch (Exception e) { fail(e); }
+        assertDoesNotThrow(()->deliveryService.cancelDelivery(user, delivery.getId()));
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertNull(delivery.getDriver());
         assertEquals(Delivery.Stage.CANCELED, delivery.getStage());
@@ -146,27 +126,21 @@ class DeliveryServiceTest {
     void whenInvalidDeliveryIdInCancelDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.cancelDelivery(user, -1L); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(NullPointerException.class, ()->deliveryService.cancelDelivery(user, -1L));
     }
 
     @Test
     void whenDeliveryHasDifferentDriverInCancelDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(new Driver());
-        try { deliveryService.cancelDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryDoesntHaveSameDriverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverIsNullInCancelDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         user.setDriver(null);
-        try { deliveryService.cancelDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryHasNoDriverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -174,9 +148,7 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
         user.getDriver().setPhoneNo("");
-        try { deliveryService.cancelDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -184,17 +156,14 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
         user.getDriver().setStatus(false);
-        try { deliveryService.cancelDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenValidInPickUpDeliveryThenSuccess() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { fail(e); }
+        assertDoesNotThrow(()->deliveryService.pickUpDelivery(user, delivery.getId()));
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertEquals(Delivery.Stage.PICKEDUP, delivery.getStage());
     }
@@ -203,27 +172,21 @@ class DeliveryServiceTest {
     void whenInvalidDeliveryIdInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, -1L); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(NullPointerException.class, ()->deliveryService.pickUpDelivery(user, -1L));
     }
 
     @Test
     void whenDeliveryHasDifferentDriverInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(new Driver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryDoesntHaveSameDriverException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverIsNullInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         user.setDriver(null);
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryHasNoDriverException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -231,9 +194,7 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
         user.getDriver().setPhoneNo("");
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -241,53 +202,42 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
         user.getDriver().setStatus(false);
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasRequestedStateInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.REQUESTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasCanceledStateInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.CANCELED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasPickedUpStateInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasDeliveredStateInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.DELIVERED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.pickUpDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenValidInFinishDeliveryThenSuccess() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { fail(e); }
+        assertDoesNotThrow(()->deliveryService.finishDelivery(user, delivery.getId()));
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertEquals(Delivery.Stage.DELIVERED, delivery.getStage());
     }
@@ -296,27 +246,21 @@ class DeliveryServiceTest {
     void whenInvalidDeliveryIdInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, -1L); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(NullPointerException.class, ()->deliveryService.finishDelivery(user, -1L));
     }
 
     @Test
     void whenDeliveryHasDifferentDriverInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(new Driver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryDoesntHaveSameDriverException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverIsNullInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         user.setDriver(null);
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryHasNoDriverException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -324,9 +268,7 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
         user.getDriver().setPhoneNo("");
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
@@ -334,45 +276,35 @@ class DeliveryServiceTest {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
         user.getDriver().setStatus(false);
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(AccountCantDeliverException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasRequestedStateInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.REQUESTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasCanceledStateInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.CANCELED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasPickedUpStateInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
     @Test
     void whenDriverHasDeliveredStateInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.DELIVERED);
         delivery.setDriver(user.getDriver());
-        try { deliveryService.finishDelivery(user, delivery.getId()); }
-        catch (Exception e) { return; }
-        fail();
+        assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
 }
