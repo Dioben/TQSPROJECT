@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -34,6 +35,9 @@ public class Driver {
     @Enumerated(EnumType.STRING)
     private Vehicle vehicle = Vehicle.MOTORCYCLE;
 
+    @Column(name = "apiKey", nullable = true, unique = true)
+    private String apiKey;
+
     @OneToMany(mappedBy = "driver")
     private Set<Delivery> delivery;
 
@@ -53,6 +57,7 @@ public class Driver {
         driver.setVehicle(driverDTO.getVehicle());
         driver.setDelivery(driverDTO.getDelivery());
         driver.setReputation(driverDTO.getReputation());
+        driver.setApiKey(UUID.randomUUID().toString());
         return driver;
 
     }
