@@ -8,10 +8,14 @@ import marchingfood.tqs.ua.repository.ClientRepository;
 import marchingfood.tqs.ua.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -24,6 +28,9 @@ public class DeliveryService {
     private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(5);
     @Autowired
     private final WebClient localApiClient;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     DeliveryRepository deliveryRepository;
@@ -45,12 +52,19 @@ public class DeliveryService {
 
     public Delivery postToLogisticsClient(Delivery delivery) {
         String deliveryJSON = getPostMapFromDelivery(delivery,LOGISTICS_MARSHALL_APIKEY);
-        localApiClient
-                .post()
-                .uri("/api/delivery")
-                .bodyValue(deliveryJSON)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .retrieve();
+
+        final String uri = "http://backendmain:8080/api/delivery";
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<String>(deliveryJSON, headers);
+        ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
+
+        System.out.println(result.getStatusCode());
+        System.out.println(result.getBody());
+
         return delivery;
     }
 

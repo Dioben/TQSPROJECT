@@ -27,6 +27,7 @@ public class LogisticsAPIController {
                     @RequestBody String content
                     //TODO:Maybe include vehicle
     ) {
+        System.out.println("Delivery Posting controller");
         Map<String, String> contentMap = null;
         try {
             contentMap = objectMapper.readValue(content, new TypeReference<Map<String,String>>(){});
