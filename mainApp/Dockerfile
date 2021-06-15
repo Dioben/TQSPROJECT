@@ -1,9 +1,9 @@
 FROM maven:3.6.3-jdk-11 AS builder
 WORKDIR /workdir/server
-COPY mainApp/pom.xml /workdir/server/pom.xml
+COPY ./pom.xml /workdir/server/pom.xml
 RUN mvn dependency:go-offline
 
-COPY mainApp/src /workdir/server/src
+COPY ./src /workdir/server/src
 RUN mvn install
 RUN mkdir  -p target/dependency
 WORKDIR /workdir/server/target/dependency

@@ -37,6 +37,7 @@ public class LogisticsWebController {
 
     @PostMapping("/register")
     public String registration(@ModelAttribute("user") User user,@ModelAttribute("company") Company company,@ModelAttribute("driver") Driver driver , BindingResult bindingResult,  Model model) throws AccountDataException {
+        System.out.println("/register");
         if (!validateNewUser(user, driver, company))
             throw new AccountDataException("Invalid username or password.");
         if (userServiceImpl.isAuthenticated())
