@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class DeliveryServiceTest {
+class DeliveryServiceTest {
 
     @Mock(lenient = true)
     private CompanyRepository companyRepository;
@@ -62,7 +62,7 @@ public class DeliveryServiceTest {
         catch (Exception e) { fail(e); }
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertEquals(delivery.getDriver(), user.getDriver());
-        assertEquals(delivery.getStage(), Delivery.Stage.ACCEPTED);
+        assertEquals(Delivery.Stage.ACCEPTED, delivery.getStage());
     }
 
     @Test
@@ -139,7 +139,7 @@ public class DeliveryServiceTest {
         catch (Exception e) { fail(e); }
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
         assertNull(delivery.getDriver());
-        assertEquals(delivery.getStage(), Delivery.Stage.CANCELED);
+        assertEquals(Delivery.Stage.CANCELED, delivery.getStage());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class DeliveryServiceTest {
         try { deliveryService.pickUpDelivery(user, delivery.getId()); }
         catch (Exception e) { fail(e); }
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
-        assertEquals(delivery.getStage(), Delivery.Stage.PICKEDUP);
+        assertEquals(Delivery.Stage.PICKEDUP, delivery.getStage());
     }
 
     @Test
@@ -289,7 +289,7 @@ public class DeliveryServiceTest {
         try { deliveryService.finishDelivery(user, delivery.getId()); }
         catch (Exception e) { fail(e); }
         Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
-        assertEquals(delivery.getStage(), Delivery.Stage.DELIVERED);
+        assertEquals(Delivery.Stage.DELIVERED, delivery.getStage());
     }
 
     @Test

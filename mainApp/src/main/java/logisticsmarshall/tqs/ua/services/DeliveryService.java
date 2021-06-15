@@ -62,7 +62,7 @@ public class DeliveryService {
     @Transactional
     public void cancelDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
-        Driver driver = validateDeliveryChange(user, delivery, true);
+        validateDeliveryChange(user, delivery, true);
         delivery.setDriver(null);
         delivery.setStage(Delivery.Stage.CANCELED);
         deliveryRepository.save(delivery);
@@ -71,7 +71,7 @@ public class DeliveryService {
     @Transactional
     public void pickUpDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException, DeliveryCantSkipStagesException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
-        Driver driver = validateDeliveryChange(user, delivery, true);
+        validateDeliveryChange(user, delivery, true);
         if (delivery.getStage() != Delivery.Stage.ACCEPTED)
             throw new DeliveryCantSkipStagesException();
         delivery.setStage(Delivery.Stage.PICKEDUP);
@@ -81,7 +81,7 @@ public class DeliveryService {
     @Transactional
     public void finishDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException, DeliveryCantSkipStagesException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
-        Driver driver = validateDeliveryChange(user, delivery, true);
+        validateDeliveryChange(user, delivery, true);
         if (delivery.getStage() != Delivery.Stage.PICKEDUP)
             throw new DeliveryCantSkipStagesException();
         delivery.setStage(Delivery.Stage.DELIVERED);
@@ -103,7 +103,7 @@ public class DeliveryService {
         Driver driver = user.getDriver();
         if (driver == null
                 || driver.getPhoneNo().isEmpty()
-                || !driver.getStatus())
+                || Boolean.FALSE.equals(driver.getStatus()))
             throw new AccountCantDeliverException();
         return driver;
     }
