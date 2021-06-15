@@ -10,12 +10,18 @@ import java.sql.Timestamp;
 @Data
 @Table(name = "delivery")
 public class Delivery {
-
-
     public enum Priority {
         HIGHPRIORITY,
         REGULARPRIORITY,
         LOWPRIORITY;
+    }
+
+    public enum Stage {
+        REQUESTED,
+        ACCEPTED,
+        PICKEDUP,
+        DELIVERED,
+        CANCELED
     }
 
     @Id //logistics_id
@@ -26,11 +32,9 @@ public class Delivery {
     @CreationTimestamp
     private Timestamp orderTimestamp;
 
-    @Column(name = "delivered", nullable = false)
-    private Boolean delivered;
-
-    @Column(name = "paid", nullable = false)
-    private Boolean paid;
+    @Column(name="stage")
+    @Enumerated(EnumType.STRING)
+    private Stage stage = Stage.REQUESTED;
 
     @Column(name = "address", nullable = false)
     private String address;
@@ -41,7 +45,7 @@ public class Delivery {
     private Priority priority;
 
     @OneToOne
-    @JoinColumn(name = "reputation_id", nullable = false)
+    @JoinColumn(name = "reputation_id", nullable = true)
     private Reputation reputation;
 
 

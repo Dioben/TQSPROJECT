@@ -1,7 +1,6 @@
 package logisticsmarshall.tqs.ua.controllers;
 
-import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
-import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
+import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class LogisticsWebController {
@@ -62,7 +64,7 @@ public class LogisticsWebController {
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
-        if (userServiceImpl.isAuthenticated()) {
+        if (userServiceImpl.isAuthenticated() && logout == null) {
             return redirectRoot;
         }
         if (error != null)
@@ -125,6 +127,36 @@ public class LogisticsWebController {
     public String adminDashboard() throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         return "redirect:/adminDash";
+    }
+
+    @PostMapping(path="/driverDash")
+    public String changeDelivery(Model model, String action, long deliveryId) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        try {
+            switch (action) {
+                case "accept":
+                    userServiceImpl.acceptDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully accepted");
+                    break;
+                case "pickup":
+                    userServiceImpl.pickUpDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully picked up");
+                    break;
+                case "finish":
+                    userServiceImpl.finishDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully finished");
+                    break;
+                case "cancel":
+                    userServiceImpl.cancelDelivery(user, deliveryId);
+                    model.addAttribute("message", "Delivery was successfully canceled");
+                    break;
+                default:
+                    throw new InvalidDeliveryActionException();
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "mainDash";
     }
 
 }
