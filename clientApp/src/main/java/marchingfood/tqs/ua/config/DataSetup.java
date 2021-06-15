@@ -4,6 +4,7 @@ import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.repository.ClientRepository;
 import marchingfood.tqs.ua.repository.MenuRepository;
+import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,27 +12,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataSetup {
     @Bean
-    CommandLineRunner setUpData(ClientRepository clientRepository, MenuRepository menuRepository){
+    CommandLineRunner setUpData(UserServiceImpl userService, MenuRepository menuRepository){
         return args -> {
             Client admin = new Client();
             admin.setAdmin(true);
             admin.setEmail("admin@ua.pt");
             admin.setName("admin");
-            //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
             admin.setPassword("admin");
             admin.setAddress("ADMIN");
-            clientRepository.save(admin);
-            System.out.println(clientRepository.findAll());
+            userService.encryptPasswordAndStoreUser(admin);
 
-            //TODO: REPLACE THIS FOR AN ACTUAL USER AFTER SS IS DONE
             Client user1 = new Client();
             user1.setEmail("user1@ua.pt");
             user1.setName("user1");
             user1.setAddress("Userhouse");
-            //TODO: USE PASSWORD ENCODER WHEN SPRING SECURITY IS DONE
             user1.setPassword("12345");
             user1.setAddress("somewhere");
-            clientRepository.save(user1);
+            userService.encryptPasswordAndStoreUser(user1);
 
             Menu menu1 = new Menu();
             menu1.setPrice(7.55);

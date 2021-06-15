@@ -40,6 +40,18 @@ public class Menu {
     public Menu(){
         //framework required
     }
+
+    public static Menu fromDTO(MenuDTO menuDTO) {
+            Menu menu = new Menu();
+            menu.setName(menuDTO.getName());
+            menu.setPrice(menuDTO.getPrice());
+            menu.setDescription(menuDTO.getDescription());
+            menu.setImageurl(menuDTO.getImageurl());
+            menu.setOrderEntities(menuDTO.getOrderEntities());
+            return menu;
+
+    }
+
     public void validate() throws BadParameterException {
         if (price<=0){
             throw new BadParameterException("Price must be larger than 0");

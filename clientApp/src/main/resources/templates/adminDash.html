@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en"><!-- Basic -->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="/css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .table-wrapper {
+            display: inline-block;
+        }
+        .table-wrapper table {
+            min-width: 600px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- Start header -->
+<div>
+    <header class="top-navbar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <img src="" alt="" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbars-rs-food">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item "><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item "><a class="nav-link" href="/restaurant">Menus</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">User Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="/admin/dashboard">ADMIN</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</div>
+<!-- End header -->
+<!-- Restaurant MENUS  -->
+<div class="container" style="padding-top: 100px;">
+    <h2 style="margin-left:170px;"> Restaurant Menus </h2>
+    <h4 style="margin-left:170px; "><span> <i class="far fa-plus-square" onclick="displayAdder()"></i>  New Menu</span> </h4>
+
+    <table th:if="${not #lists.isEmpty(menus)}" style=" margin-left:auto;margin-right:auto;" class="styled-table">
+        <thead>
+        <tr>
+            <th> Name </th>
+            <th> Price </th>
+            <th> Description </th>
+            <th> Actions </th>
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <tr th:each="menu : ${menus}">
+            <td><span th:text="${menu.name}" th:id="'menuName' + ${menu.id}"> Name </span></td>
+            <td><span th:text="${menu.price}" th:id="'menuPrice' + ${menu.id}"> Price </span></td>
+            <td><span th:text="${menu.description}" th:id="'menuDesc' + ${menu.id}"> Description </span></td>
+
+            <td>
+                <span style="display: none" th:id="'menuURL' + ${menu.id}" th:text="${menu.imageurl}"></span>
+                <button type="button" class="btn btn-success" th:onclick="'javascript:displayEdit(' + ${menu.id} + ');'"><i class="fas fa-edit"></i></button>
+                <form th:action="@{/admin/menu/delete/} + ${menu.id}" method="get">
+                    <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                </form>
+
+
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<div id="adder_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
+    <h4>New Menu:</h4>
+    <form method="post" action="/admin/menu">
+        <input type="text" name="name" placeholder="name">
+        <input type="number" name="price" placeholder="price in €" step="0.01">
+        <input type="text" name="imageurl" placeholder="image url">
+        <br>
+        <textarea name="description" placeholder="description"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div id="edit_div" class="container" style="display: none;margin-left:auto;margin-right:auto;">
+    <h4>Edit Menu:</h4>
+    <form method="post" id="edit_form" action="/admin/menu">
+        <input type="text" name="name" placeholder="name" id="edit-name">
+        <input type="number" name="price" placeholder="price in €" step="0.01" id="edit-price">
+        <input type="text" name="imageurl" placeholder="image url" id="edit-url">
+        <br>
+        <textarea name="description" placeholder="description" id="edit-desc"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+
+
+
+<br><br>
+
+
+
+
+
+<br><br>
+<!-- Restaurant <> Delivery Mand  -->
+<div class="container">
+    <h2 style="margin-left:170px;">Delivery Info </h2>
+
+    <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Delivery man ID </th>
+
+            <th>Status</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1234 </td>
+            <td>1111</td>
+            <td>Delivered</td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--GRAPH RESTAURANT STATS-->
+<div style="margin-left:130px ">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <div  id="chart_div"></div>
+</div>
+
+
+
+
+<!-- End details -->
+
+
+
+
+
+<script>
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function displayAdder() {
+        document.getElementById("adder_div").style.display = "block";
+    }
+    function displayEdit(x) {
+        document.getElementById("edit_div").style.display = "block";
+        document.getElementById("edit-name").value = document.getElementById("menuName"+x).innerText;
+        document.getElementById("edit-desc").value = document.getElementById("menuDesc"+x).innerText;
+        document.getElementById("edit-price").value = document.getElementById("menuPrice"+x).innerText;
+        document.getElementById("edit-url").value = document.getElementById("menuURL"+x).innerText;
+        document.getElementById("edit_form").action = "/admin/menu/"+x;
+    }
+    function drawChart() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Time of Day');
+        data.addColumn('number', 'Sales');
+
+        data.addRows([
+            [new Date(2021, 0, 1), 5],  [new Date(2021, 0, 2), 7],  [new Date(2021, 0, 3), 3],
+            [new Date(2021, 0, 4), 1],  [new Date(2021, 0, 5), 3],  [new Date(2021, 0, 6), 4],
+            [new Date(2021, 0, 7), 3],  [new Date(2021, 0, 8), 4],  [new Date(2021, 0, 9), 2],
+            [new Date(2021, 0, 10), 5], [new Date(2021, 0, 11), 8], [new Date(2021, 0, 12), 6],
+            [new Date(2021, 0, 13), 3], [new Date(2021, 0, 14), 3], [new Date(2021, 0, 15), 5],
+            [new Date(2021, 0, 16), 7], [new Date(2021, 0, 17), 6], [new Date(2021, 0, 18), 6],
+            [new Date(2021, 0, 19), 3], [new Date(2021, 0, 20), 1], [new Date(2021, 0, 21), 2],
+            [new Date(2021, 0, 22), 4], [new Date(2021, 0, 23), 6], [new Date(2021, 0, 24), 5],
+            [new Date(2021, 0, 25), 9], [new Date(2021, 0, 26), 4], [new Date(2021, 0, 27), 9],
+            [new Date(2021, 0, 28), 8], [new Date(2021, 0, 29), 6], [new Date(2021, 0, 30), 4],
+            [new Date(2021, 0, 31), 6], [new Date(2021, 1, 1), 7],  [new Date(2021, 1, 2), 9]
+        ]);
+
+
+        var options = {
+            title: 'Restaurant statistics',
+            width: 900,
+            height: 500,
+            hAxis: {
+                format: 'M/d/yy',
+                gridlines: {count: 15}
+            },
+            vAxis: {
+                gridlines: {color: 'none'},
+                minValue: 0
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        var button = document.getElementById('change');
+
+        button.onclick = function () {
+
+            options.hAxis.format === 'M/d/yy' ?
+                options.hAxis.format = 'MMM dd, yyyy' :
+                options.hAxis.format = 'M/d/yy';
+
+            chart.draw(data, options);
+        };
+    }
+
+</script>
+
+</body>
+</html>

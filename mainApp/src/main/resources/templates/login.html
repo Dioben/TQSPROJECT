@@ -9,11 +9,11 @@
 	</head>
 	<body >
 		<div th:if="${param.error}">
-			wrong user or password
+			<p th:text="${param.error}"></p>
 		</div>
 
 		<div th:if="${param.logout}">
-			You are logged out
+			You are currently logged out
 		</div>
 
 

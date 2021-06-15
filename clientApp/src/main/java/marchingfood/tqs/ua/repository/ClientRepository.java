@@ -10,4 +10,6 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client,Long> {
     Client findById(long id);
     List<Client> findAllByAdmin(boolean admin);
+    Client findByEmail(String email);
+    Client findByName(String username);
 }

@@ -5,34 +5,23 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.Ur
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
 import lombok.SneakyThrows;
-import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.service.MenuService;
+import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(AdminController.class)
 class MenuCRUDTest {
 
@@ -42,6 +31,8 @@ class MenuCRUDTest {
     @MockBean
     MenuService serviceMock;
 
+    @MockBean
+    UserServiceImpl userService;
     @SneakyThrows
     @Test
     void badPriceNewMenuTest(){
