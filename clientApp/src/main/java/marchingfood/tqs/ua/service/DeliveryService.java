@@ -53,7 +53,7 @@ public class DeliveryService {
     public Delivery postToLogisticsClient(Delivery delivery) {
         String deliveryJSON = getPostMapFromDelivery(delivery,LOGISTICS_MARSHALL_APIKEY);
 
-        final String uri = "http://backendMain:8080/api/delivery";
+        final String uri = "http://backendmain:8080/api/delivery";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();

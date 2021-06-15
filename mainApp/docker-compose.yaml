@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  backendMain:
+  backendmain:
     build: .
     #image: dioben/tqs-provider-server:dev
     ports:
