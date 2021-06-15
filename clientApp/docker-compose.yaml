@@ -15,8 +15,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    volumes:
-      - ./client-db-data:/var/lib/postgresql/data
     ports:
       - 5433:5433
     command: -p 5433
