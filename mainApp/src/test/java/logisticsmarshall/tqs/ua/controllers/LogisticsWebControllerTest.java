@@ -6,6 +6,7 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.Bas
 import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ class LogisticsWebControllerTest {
 
     @MockBean
     UserServiceImpl service;
+
+    @MockBean
+    DeliveryService deliveryService;
 
     @Test
     void whenRegisterEmptyParametersReturnError() throws Exception {
