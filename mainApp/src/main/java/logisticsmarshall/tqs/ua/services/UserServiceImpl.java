@@ -118,24 +118,28 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void pickUpDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
+    public void pickUpDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException, DeliveryCantSkipStagesException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
         Driver driver = validateDeliveryChange(user, delivery, true);
+        if (delivery.getStage() != Delivery.Stage.ACCEPTED)
+            throw new DeliveryCantSkipStagesException();
         delivery.setStage(Delivery.Stage.PICKEDUP);
         deliveryRepository.save(delivery);
     }
 
     @Transactional
-    public void finishDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
+    public void finishDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException, DeliveryCantSkipStagesException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
         Driver driver = validateDeliveryChange(user, delivery, true);
+        if (delivery.getStage() != Delivery.Stage.PICKEDUP)
+            throw new DeliveryCantSkipStagesException();
         delivery.setStage(Delivery.Stage.DELIVERED);
         deliveryRepository.save(delivery);
     }
 
     private Driver validateDeliveryChange(User user, Delivery delivery, boolean shouldHaveDriver) throws DeliveryAlreadyHasDriverException, AccountCantDeliverException, DeliveryDoesntHaveSameDriverException, DeliveryHasNoDriverException {
-        if (!isAuthenticated())
-            throw new AuthenticationCredentialsNotFoundException("User is not logged in");
+        if (delivery == null)
+            throw new NullPointerException("Delivery doesn't exist");
         if (shouldHaveDriver) {
             if (delivery.getDriver() == null)
                 throw new DeliveryHasNoDriverException();

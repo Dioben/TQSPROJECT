@@ -45,7 +45,7 @@ public class Delivery {
     private Priority priority;
 
     @OneToOne
-    @JoinColumn(name = "reputation_id", nullable = false)
+    @JoinColumn(name = "reputation_id", nullable = true)
     private Reputation reputation;
 
 

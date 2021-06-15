@@ -12,7 +12,7 @@ public class DeliveryDoesntHaveSameDriverException extends Exception {
     }
 
     public DeliveryDoesntHaveSameDriverException() {
-        super("Delivery is not in progress");
+        super("Delivery is already in progress/done");
     }
 
 }

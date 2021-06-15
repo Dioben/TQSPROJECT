@@ -5,12 +5,13 @@ import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class LogisticsWebController {
@@ -63,7 +64,7 @@ public class LogisticsWebController {
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
-        if (userServiceImpl.isAuthenticated()) {
+        if (userServiceImpl.isAuthenticated() && logout == null) {
             return redirectRoot;
         }
         if (error != null)
