@@ -60,7 +60,7 @@ public class DeliveryService {
 
         HttpEntity<String> entity = new HttpEntity<String>(deliveryJSON, headers);
         ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
-        
+
 
         return delivery;
     }
