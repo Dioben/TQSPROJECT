@@ -52,7 +52,6 @@ public class DeliveryService {
 
     public Delivery postToLogisticsClient(Delivery delivery) {
         String deliveryJSON = getPostMapFromDelivery(delivery,LOGISTICS_MARSHALL_APIKEY);
-        System.out.println(deliveryJSON);
         final String uri = "http://backendmain:8080/api/delivery";
         RestTemplate restTemplate = new RestTemplate();
 
@@ -61,9 +60,7 @@ public class DeliveryService {
 
         HttpEntity<String> entity = new HttpEntity<String>(deliveryJSON, headers);
         ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
-
-        System.out.println(result.getStatusCode());
-        System.out.println(result.getBody());
+        
 
         return delivery;
     }
