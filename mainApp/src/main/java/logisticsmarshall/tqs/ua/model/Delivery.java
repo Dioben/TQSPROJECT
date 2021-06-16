@@ -10,6 +10,16 @@ import java.sql.Timestamp;
 @Data
 @Table(name = "delivery")
 public class Delivery {
+    public static Delivery fromNewPost(NewDelivery newDelivery,Company company) {
+        Delivery delivery = new Delivery();
+        delivery.setAddress(newDelivery.getAddress());
+        delivery.setPriority(Priority.valueOf(newDelivery.getPriority()));
+        delivery.setCompany(company);
+        delivery.setStage(Delivery.Stage.REQUESTED);
+        delivery.pickupAddress = company.getAddress();
+        return delivery;
+    }
+
     public enum Priority {
         HIGHPRIORITY,
         REGULARPRIORITY,
@@ -36,6 +46,8 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     private Stage stage = Stage.REQUESTED;
 
+    @Column(name = "pickup_address", nullable = false)
+    private String pickupAddress;
     @Column(name = "address", nullable = false)
     private String address;
 
@@ -48,10 +60,6 @@ public class Delivery {
     @JoinColumn(name = "reputation_id", nullable = true)
     private Reputation reputation;
 
-
-    @OneToOne
-    @JoinColumn(name = "payment_id", nullable = true)
-    private Payment payment;
 
 
     @ManyToOne
