@@ -27,7 +27,8 @@ public class LogisticsAPIController {
 
     @PostMapping(path="/delivery",consumes = "application/json")
     public ResponseEntity<Delivery> postDelivery(@RequestBody NewDelivery newDelivery) {
-        Company companyFromAPIKey = deliveryService.getApiKeyHolder(newDelivery.getApiKey());
+        System.out.println(newDelivery);
+        Company companyFromAPIKey = deliveryService.getApiKeyHolder(newDelivery.getAPIKey());
         if (companyFromAPIKey == null) return ResponseEntity.status(403).build();
         Delivery delivery = Delivery.fromNewPost(newDelivery,companyFromAPIKey);
         deliveryService.postDelivery(delivery);

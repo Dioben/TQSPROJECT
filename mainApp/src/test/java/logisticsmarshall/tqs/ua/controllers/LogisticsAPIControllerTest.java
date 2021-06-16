@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
+import logisticsmarshall.tqs.ua.services.UserService;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,13 +39,14 @@ class LogisticsAPIControllerTest {
     @MockBean
     DeliveryService serviceMock;
 
-    //@Autowired
-    //ObjectMapper jsonParser;
+    @MockBean
+    UserService userService;
+    @Autowired
+    ObjectMapper jsonParser;
 
     @SneakyThrows
     @Test
      void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() {
-        System.out.println("literally the first line");
         Delivery del = new Delivery();
         String apiKey = "12SDF341G6";
         del.setId(1050L);
@@ -62,19 +64,17 @@ class LogisticsAPIControllerTest {
 
     @Test
     void whenGetDelivery_invalidAPIKeyOrDeliveryId_returnError() throws Exception {
-        System.out.println("what the shitv1?");
         Delivery del = new Delivery();
         del.setId(1050L);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(del);
         Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(false);
-        System.out.println("what the shit?");
         mvc.perform(get("/api/delivery/1050")
                 .param("APIKey", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(400));
     }
 
-    /*@Test
+    @Test
     void whenGetDeliveries_validAPIKey_returnListDeliveries() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
         Delivery del = new Delivery();
@@ -115,14 +115,15 @@ class LogisticsAPIControllerTest {
         Company company = new Company();
         company.setApiKey(apiKey);
         company.setAddress(address);
-
+        String requestcontent = "{\"priority\":\"HIGHPRIORITY\"," +
+                "\"address\": "+ address + ","+
+                "\"APIKey\":\""+ apiKey +
+                "\"}";
+        System.out.println(requestcontent);
         Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(company);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"priority\":\"HIGHPRIORITY\"," +
-                        "\"address\": "+ address + ","+
-                        "\"APIKey\":\""+ apiKey +
-                        "\"}")
+                .content(requestcontent)
         ).andExpect(status().is(200))
                 .andExpect(jsonPath("address", Matchers.equalToIgnoringCase(address.replaceAll("\"",""))));
 
@@ -153,7 +154,7 @@ class LogisticsAPIControllerTest {
         ).andExpect(status().is(403));
     }
 
-/*
+
     @Test
     void whenGetDeliveriesState_validAPIKey_returnListStates() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
@@ -190,5 +191,5 @@ class LogisticsAPIControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(400));
     }
-*/
+
 }
