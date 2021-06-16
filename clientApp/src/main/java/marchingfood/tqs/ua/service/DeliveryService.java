@@ -74,7 +74,7 @@ public class DeliveryService {
         map.put("address",delivery.getAddress());
         //This is a restaurant, we serve food
         map.put("priority","HIGHPRIORITY");
-        map.put("APIKey",logisticsMarshallApikey);
+        map.put("apiKey",logisticsMarshallApikey);
 
         String result = "";
         try {

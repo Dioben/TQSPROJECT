@@ -117,7 +117,7 @@ class LogisticsAPIControllerTest {
         company.setAddress(address);
         String requestcontent = "{\"priority\":\"HIGHPRIORITY\"," +
                 "\"address\": "+ address + ","+
-                "\"APIKey\":\""+ apiKey +
+                "\"apiKey\":\""+ apiKey +
                 "\"}";
         System.out.println(requestcontent);
         Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(company);

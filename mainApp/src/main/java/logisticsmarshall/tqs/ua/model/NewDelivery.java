@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class NewDelivery {
-    private String APIKey;
+    private String apiKey;
     private String address;
     private String priority;
 }
