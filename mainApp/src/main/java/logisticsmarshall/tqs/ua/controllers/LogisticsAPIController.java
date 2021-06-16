@@ -27,19 +27,19 @@ public class LogisticsAPIController {
 
     @PostMapping(path="/delivery",consumes = "application/json")
     public ResponseEntity<Delivery> postDelivery(@RequestBody NewDelivery newDelivery) {
-        Company companyFromAPIKey = deliveryService.getApiKeyHolder(newDelivery.getApiKey());
-        if (companyFromAPIKey == null) return ResponseEntity.status(403).build();
-        Delivery delivery = Delivery.fromNewPost(newDelivery,companyFromAPIKey);
+        Company companyFromapiKey = deliveryService.getApiKeyHolder(newDelivery.getApiKey());
+        if (companyFromapiKey == null) return ResponseEntity.status(403).build();
+        Delivery delivery = Delivery.fromNewPost(newDelivery,companyFromapiKey);
         deliveryService.postDelivery(delivery);
         return ResponseEntity.ok(delivery);
     }
 
     @GetMapping(path="/delivery_state")
-    public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="APIKey") String apikey) {
+    public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="apiKey") String apikey) {
         System.out.println("Log /delivery_state");
-        Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
-        if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
-        List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromAPIKey);
+        Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
+        if (companyFromapiKey == null) return ResponseEntity.status(400).build();
+        List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromapiKey);
         List<Map<String, String>> infoList = getStateMapList(deliveries);
         try {
             String contentJson = objectMapper.writeValueAsString(infoList);
@@ -56,10 +56,10 @@ public class LogisticsAPIController {
     @GetMapping(path="/delivery_state/{id}")
     public ResponseEntity<String> getDeliveryState(
             @PathVariable(name="id") long deliveryId,
-            @RequestParam(name="APIKey") String apikey) {
+            @RequestParam(name="apiKey") String apikey) {
         System.out.println("Log /delivery_state/{id}");
-        Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
-        if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
+        Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
+        if (companyFromapiKey == null) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
         Map<String,String> infoDelivery = new HashMap<>();
         infoDelivery.put(del.getAddress(),del.getStage().name());
@@ -74,17 +74,17 @@ public class LogisticsAPIController {
     }
 
     @GetMapping(path="/delivery")
-    public ResponseEntity<List<Delivery>> getDeliveries(@RequestParam(name="APIKey") String apikey) {
-        Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
-        if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
-        List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromAPIKey);
+    public ResponseEntity<List<Delivery>> getDeliveries(@RequestParam(name="apiKey") String apikey) {
+        Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
+        if (companyFromapiKey == null) return ResponseEntity.status(400).build();
+        List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromapiKey);
         return ResponseEntity.ok(deliveries);
     }
 
     @GetMapping(path="/delivery/{id}")
     public ResponseEntity<Delivery> getDelivery(
             @PathVariable(name="id") long deliveryId,
-            @RequestParam(name="APIKey") String apikey) {
+            @RequestParam(name="apiKey") String apikey) {
         if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
         return ResponseEntity.ok(del);
