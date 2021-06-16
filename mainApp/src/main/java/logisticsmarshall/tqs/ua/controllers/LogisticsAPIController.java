@@ -11,8 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static logisticsmarshall.tqs.ua.utils.Utils.getStateMapList;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
@@ -50,6 +54,45 @@ public class LogisticsAPIController {
         delivery.setStage(Delivery.Stage.REQUESTED);
         deliveryService.postDelivery(delivery);
         return ResponseEntity.ok(delivery);
+    }
+
+    @GetMapping(path="/delivery_state")
+    public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="APIKey") String apikey) {
+        System.out.println("Log /delivery_state");
+        Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
+        if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
+        List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromAPIKey);
+        List<Map<String, String>> infoList = getStateMapList(deliveries);
+        try {
+            String contentJson = objectMapper.writeValueAsString(infoList);
+            System.out.println("Content in JSON:");
+            System.out.println(contentJson);
+            return ResponseEntity.ok(contentJson);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(400).build();
+        }
+    }
+
+
+
+    @GetMapping(path="/delivery_state/{id}")
+    public ResponseEntity<String> getDeliveryState(
+            @PathVariable(name="id") long deliveryId,
+            @RequestParam(name="APIKey") String apikey) {
+        System.out.println("Log /delivery_state/{id}");
+        Company companyFromAPIKey = deliveryService.getApiKeyHolder(apikey);
+        if (companyFromAPIKey == null) return ResponseEntity.status(400).build();
+        Delivery del = deliveryService.getDeliveryById(deliveryId);
+        Map<String,String> infoDelivery = new HashMap<>();
+        infoDelivery.put(del.getAddress(),del.getStage().name());
+        try {
+            String contentJson = objectMapper.writeValueAsString(infoDelivery);
+            System.out.println("Content in JSON:");
+            System.out.println(contentJson);
+            return ResponseEntity.ok(contentJson);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(400).build();
+        }
     }
 
     @GetMapping(path="/delivery")

@@ -15,7 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import static logisticsmarshall.tqs.ua.utils.Utils.getStateMapList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,15 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LogisticsAPIController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class LogisticsAPIControllerTest {
 /*
+
     @Autowired
     MockMvc mvc;
 
     @MockBean
     DeliveryService serviceMock;
 
-    ObjectMapper jsonParser = new ObjectMapper();
+    @Autowired
+    ObjectMapper jsonParser;
 
     @Test
      void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() throws Exception {
@@ -142,5 +148,45 @@ class LogisticsAPIControllerTest {
                         "\"}")
         ).andExpect(status().is(403));
     }
-    */
+
+
+    @Test
+    void whenGetDeliveriesState_validAPIKey_returnListStates() throws Exception {
+        ArrayList<Delivery> delLst = new ArrayList<>();
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Delivery del2 = new Delivery();
+        del2.setId(1051L);
+
+        delLst.add(del);
+        delLst.add(del2);
+
+        String apiKey = "12SDF341G6";
+        Company com = new Company();
+        com.setApiKey(apiKey);
+        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getDeliveriesByCompany(Mockito.any())).thenReturn(delLst);
+
+        List<Map<String, String>> infoList = getStateMapList(delLst);
+        String contentJson = jsonParser.writeValueAsString(infoList);
+
+        mvc.perform(get("/api/delivery_state")
+                .param("APIKey", apiKey)
+                .content(jsonParser.writeValueAsString(del))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$", hasSize(delLst.size())))
+                .andExpect(jsonPath("$[0].id", is(String.valueOf(delLst.get(0).getId()))))
+                .andExpect(jsonPath("$[0].state", is(delLst.get(0).getStage().name())));
+    }
+
+    @Test
+    void whenGetDeliveriesState_invalidAPIKey_returnError() throws Exception {
+        mvc.perform(get("/api/delivery_state")
+                .param("APIKey", "invalid")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(400));
+    }
+*/
+
 }
