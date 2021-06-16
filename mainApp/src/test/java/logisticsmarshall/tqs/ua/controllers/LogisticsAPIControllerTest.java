@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
+import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(LogisticsAPIController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(LogisticsAPIController.class)
 class LogisticsAPIControllerTest {
-/*
 
     @Autowired
     MockMvc mvc;
@@ -37,22 +38,23 @@ class LogisticsAPIControllerTest {
     @MockBean
     DeliveryService serviceMock;
 
-    @Autowired
-    ObjectMapper jsonParser;
+    //@Autowired
+    //ObjectMapper jsonParser;
 
+    @SneakyThrows
     @Test
-     void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() throws Exception {
+     void whenGetDelivery_validAPIKeyAndDeliveryId_returnDelivery() {
+        System.out.println("literally the first line");
         Delivery del = new Delivery();
-        Company comp = new Company();
         String apiKey = "12SDF341G6";
-        comp.setApiKey(apiKey);
         del.setId(1050L);
-        del.setCompany(comp);
+        del.setAddress("somewhere");
+        del.setPickupAddress("somewhere else");
         Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(true);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
         mvc.perform(get("/api/delivery/1050")
                 .param("APIKey", apiKey)
-                .content(jsonParser.writeValueAsString(del))
+                .content("{\"APIKey\":\"12SDF341G6\",\"address\":\"somewhere\",\"priority\":\"HIGHPRIORITY\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.id",is(Integer.valueOf(String.valueOf(del.getId())))));
@@ -60,17 +62,19 @@ class LogisticsAPIControllerTest {
 
     @Test
     void whenGetDelivery_invalidAPIKeyOrDeliveryId_returnError() throws Exception {
+        System.out.println("what the shitv1?");
         Delivery del = new Delivery();
         del.setId(1050L);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(del);
         Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(false);
+        System.out.println("what the shit?");
         mvc.perform(get("/api/delivery/1050")
                 .param("APIKey", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(400));
     }
 
-    @Test
+    /*@Test
     void whenGetDeliveries_validAPIKey_returnListDeliveries() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
         Delivery del = new Delivery();
@@ -149,7 +153,7 @@ class LogisticsAPIControllerTest {
         ).andExpect(status().is(403));
     }
 
-
+/*
     @Test
     void whenGetDeliveriesState_validAPIKey_returnListStates() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
@@ -179,7 +183,6 @@ class LogisticsAPIControllerTest {
                 .andExpect(jsonPath("$[0].id", is(String.valueOf(delLst.get(0).getId()))))
                 .andExpect(jsonPath("$[0].state", is(delLst.get(0).getStage().name())));
     }
-
     @Test
     void whenGetDeliveriesState_invalidAPIKey_returnError() throws Exception {
         mvc.perform(get("/api/delivery_state")
@@ -188,5 +191,4 @@ class LogisticsAPIControllerTest {
                 .andExpect(status().is(400));
     }
 */
-
 }

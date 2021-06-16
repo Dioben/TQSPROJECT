@@ -28,9 +28,8 @@ public class DeliveryService {
     public void postDelivery(Delivery delivery){
         deliveryRepository.save(delivery);
     }
-    //TODO
-    public List<Delivery> getDeliveriesByDriver() {
-        return null;
+    public List<Delivery> getDeliveriesByDriver(Driver driver) {
+        return deliveryRepository.findAllByDriverId(driver.getId());
     }
     public List<Delivery> getDeliveriesByCompany(Company company) {
         return deliveryRepository.findAllDeliveriesByCompanyId(company.getId());
