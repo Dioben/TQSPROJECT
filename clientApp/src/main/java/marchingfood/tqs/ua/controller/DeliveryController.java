@@ -2,6 +2,7 @@ package marchingfood.tqs.ua.controller;
 
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.exceptions.AccountDataException;
+import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.ClientDTO;
 import marchingfood.tqs.ua.model.Delivery;
@@ -119,7 +120,7 @@ public class DeliveryController {
 
     @PostMapping("/cart")
     @ResponseStatus(HttpStatus.OK)
-    public void deliveryFromCartPost() throws AccessForbiddenException {
+    public void deliveryFromCartPost() throws AccessForbiddenException, BadParameterException {
         Client client = userService.getUserFromAuthOrException();
         List<Menu> menuCart = cartService.getClientCart(client);
         double total = 0;
