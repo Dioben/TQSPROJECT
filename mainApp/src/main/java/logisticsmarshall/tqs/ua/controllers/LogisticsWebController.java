@@ -97,8 +97,16 @@ public class LogisticsWebController {
     @GetMapping(path="/companyDash")
     public String companyDash(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
-
-
+        Company company = user.getCompany();
+        if(company == null) throw new AccessForbiddenException();
+        List<Delivery> delList = new ArrayList<>(deliveryService.getDeliveriesByCompany(company));
+        System.out.println(delList);
+        model.addAttribute("profile",user);
+        model.addAttribute("company",company);
+        model.addAttribute("deliveries",delList);
+        for(Delivery del : delList){
+            System.out.println(del.getId());
+        }
         return "mainDash";
     }
 

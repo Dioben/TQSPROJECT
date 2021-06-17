@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Configuration
 public class DataSetup {
@@ -57,6 +59,7 @@ public class DataSetup {
             del1.setId(1);
             del1.setOrderTimestamp(Timestamp.valueOf(LocalDateTime.now()));
             del1.setPriority(Delivery.Priority.HIGHPRIORITY);
+            marchingFoodAsCompany.setDelivery(new HashSet<>(Arrays.asList(del1)));
 
             Delivery del2 = new Delivery();
             del2.setCompany(marchingFoodAsCompany);
@@ -74,6 +77,8 @@ public class DataSetup {
             rep1.setDelivery(del1);
             rep1.setDriver(riderAsDriver);
             del1.setReputation(rep1);
+
+
 
 
             reputationService.postReputation(rep1);
