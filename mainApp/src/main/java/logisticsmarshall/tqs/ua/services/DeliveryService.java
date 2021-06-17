@@ -102,8 +102,12 @@ public class DeliveryService {
         Driver driver = user.getDriver();
         if (driver == null
                 || driver.getPhoneNo().isEmpty()
-                || Boolean.FALSE.equals(driver.getStatus()))
+                || driver.getStatus())
             throw new AccountCantDeliverException();
         return driver;
+    }
+
+    public List<Delivery> getDeliveriesByStage(Delivery.Stage requested) {
+        return deliveryRepository.findAllDeliveriesByStage(requested);
     }
 }

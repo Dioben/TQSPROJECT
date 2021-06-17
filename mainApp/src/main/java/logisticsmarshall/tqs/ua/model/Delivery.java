@@ -70,5 +70,14 @@ public class Delivery {
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 
-
+    @Override
+    public String toString() {
+        return "Delivery{" +
+                "id=" + id +
+                ", orderTimestamp=" + orderTimestamp +
+                ", stage=" + stage +
+                ", address='" + address + '\'' +
+                ", priority=" + priority +
+                '}';
+    }
 }

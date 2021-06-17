@@ -9,7 +9,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class LogisticsWebController {
@@ -93,6 +98,14 @@ public class LogisticsWebController {
     @GetMapping(path="/companyDash")
     public String companyDash(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
+        Company company = user.getCompany();
+        if(company == null) throw new AccessForbiddenException();
+        List<Delivery> delList = new ArrayList<>(deliveryService.getDeliveriesByCompany(company));
+
+        model.addAttribute("profile",user);
+        model.addAttribute("company",company);
+        model.addAttribute("deliveries",delList);
+
         return "mainDash";
     }
 
@@ -100,6 +113,21 @@ public class LogisticsWebController {
     @GetMapping(path="/driverDash")
     public String workerDash(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        Driver driver = user.getDriver();
+        if(driver == null) throw new AccessForbiddenException();
+        //Show driver Available to pickup + delivery history
+        List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
+        List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
+        delDriverList.addAll(delAvailableList);
+        model.addAttribute("profile",user);
+        model.addAttribute("driver",driver);
+        model.addAttribute("deliveries",delDriverList);
+        double rep = 0;
+        if(driver.getReputation().size() != 0){
+            for(Reputation r : driver.getReputation()) rep+=r.getRating();
+            rep/=driver.getReputation().size();
+        }
+        model.addAttribute("driver_avg_reputation",rep);
         return "mainDash";
     }
 
@@ -107,6 +135,13 @@ public class LogisticsWebController {
     @GetMapping(path="/companyProfile")
     public String companyProfile(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
+        Company company = user.getCompany();
+        if(company == null) throw new AccessForbiddenException();
+        model.addAttribute("profile",user);
+        model.addAttribute("phone_number",company.getPhoneNumber());
+        model.addAttribute("delivery_type",company.getDeliveryType());
+        model.addAttribute("apikey",company.getApiKey());
+        model.addAttribute("address",company.getAddress());
         return "businessOwnerProfile";
     }
 
@@ -114,6 +149,19 @@ public class LogisticsWebController {
     @GetMapping(path="/driverProfile")
     public String driverProfile(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        Driver driver = user.getDriver();
+        if(driver == null) throw new AccessForbiddenException();
+        model.addAttribute("profile_name",user.getName());
+        model.addAttribute("phone_number",driver.getPhoneNo());
+        model.addAttribute("vehicle",driver.getVehicle().name());
+        model.addAttribute("apikey",driver.getApiKey());
+        Set<Reputation> repLst = driver.getReputation();
+        int avgRep = 0;
+        if(!repLst.isEmpty()){
+            for(Reputation rep : repLst)avgRep+=rep.getRating();
+            avgRep/=repLst.size();
+        }
+        model.addAttribute("avg_reputation",avgRep);
         return "workerProfile";
     }
 
@@ -130,24 +178,42 @@ public class LogisticsWebController {
     }
 
     @PostMapping(path="/driverDash")
-    public String changeDelivery(Model model, String action, long deliveryId) throws AccessForbiddenException {
+    public String changeDelivery(Model model, @ModelAttribute("action") String action, @ModelAttribute("deliveryId") String deliveryId) throws AccessForbiddenException {
+        long deliveryIdValue = Long.parseLong(deliveryId);
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        Driver driver = user.getDriver();
+        if(driver == null) throw new AccessForbiddenException();
+        //Show driver Available to pickup + delivery history
+        List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
+        List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
+        delDriverList.addAll(delAvailableList);
+        model.addAttribute("profile",user);
+        model.addAttribute("driver",driver);
+        model.addAttribute("deliveries",delDriverList);
+        double rep = 0;
+        if(driver.getReputation().size() != 0){
+            for(Reputation r : driver.getReputation()) rep+=r.getRating();
+            rep/=driver.getReputation().size();
+        }
+        model.addAttribute("driver_avg_reputation",rep);
+
+
         try {
             switch (action) {
                 case "accept":
-                    deliveryService.acceptDelivery(user, deliveryId);
+                    deliveryService.acceptDelivery(user, deliveryIdValue);
                     model.addAttribute("message", "Delivery was successfully accepted");
                     break;
                 case "pickup":
-                    deliveryService.pickUpDelivery(user, deliveryId);
+                    deliveryService.pickUpDelivery(user, deliveryIdValue);
                     model.addAttribute("message", "Delivery was successfully picked up");
                     break;
                 case "finish":
-                    deliveryService.finishDelivery(user, deliveryId);
+                    deliveryService.finishDelivery(user, deliveryIdValue);
                     model.addAttribute("message", "Delivery was successfully finished");
                     break;
                 case "cancel":
-                    deliveryService.cancelDelivery(user, deliveryId);
+                    deliveryService.cancelDelivery(user, deliveryIdValue);
                     model.addAttribute("message", "Delivery was successfully canceled");
                     break;
                 default:
