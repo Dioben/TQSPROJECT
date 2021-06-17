@@ -35,9 +35,7 @@ public class DeliveryService {
     @Autowired
     DeliveryRepository deliveryRepository;
 
-
-    //TODO:REPLACE THIS FOR A VALUE IN LM DATABASE, SET IT UP
-    private static final String LOGISTICS_MARSHALL_APIKEY = "12312312SDAFSD";
+    private static final String LOGISTICS_MARSHALL_APIKEY = "12345678-1111-2222-3333-123456789000";
 
     ObjectMapper objectMapper = new ObjectMapper();
 

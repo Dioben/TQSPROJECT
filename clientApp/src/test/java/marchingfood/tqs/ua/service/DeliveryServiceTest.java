@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,9 +22,11 @@ class DeliveryServiceTest {
     @Mock(lenient = true)
     WebClient localApiClient;
 
+    @Mock(lenient = true)
+    RestTemplate restTemplate;
+
     @InjectMocks
     DeliveryService service;
-
 
 //    @Test
 //    void postDelivery_returnDeliveryTest(){
