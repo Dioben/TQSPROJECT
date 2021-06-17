@@ -28,7 +28,7 @@
 				<h3>Worker Profile</h3>
 			<form>
 				<div class="col-12">
-					<input type="text" th:text="${profile_name}" name="name" id="name" placeholder="Name" />
+					<input type="text" th:value="${profile_name}" name="name" id="name" placeholder="Name" />
 				</div>
 
 
@@ -39,12 +39,12 @@
 
 				<br>
 				<div class="col-12">
-					<input th:text="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
+					<input th:value="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
 				</div>
 				<br>
 
 				<div class="col-12">
-					<input th:text="${vehicle}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
+					<input th:value="${vehicle}" type="text" name="deliveryType" id="deliveryType" placeholder="Vehicle Type" />
 				</div>
 
 				<br>

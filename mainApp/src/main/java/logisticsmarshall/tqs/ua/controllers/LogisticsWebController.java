@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class LogisticsWebController {
@@ -151,6 +152,19 @@ public class LogisticsWebController {
     @GetMapping(path="/driverProfile")
     public String driverProfile(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        Driver driver = user.getDriver();
+        if(driver == null) throw new AccessForbiddenException();
+        model.addAttribute("profile_name",user.getName());
+        model.addAttribute("phone_number",driver.getPhoneNo());
+        model.addAttribute("vehicle",driver.getVehicle().name());
+        model.addAttribute("apikey",driver.getApiKey());
+        Set<Reputation> repLst = driver.getReputation();
+        int avgRep = 0;
+        if(!repLst.isEmpty()){
+            for(Reputation rep : repLst)avgRep+=rep.getRating();
+            avgRep/=repLst.size();
+        }
+        model.addAttribute("avg_reputation",avgRep);
         return "workerProfile";
     }
 
