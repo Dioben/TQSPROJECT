@@ -15,7 +15,7 @@
             <!-- Nav -->
                 <nav id="nav">
                     <ul>
-                        <li ><a href="logisticsMarshallPrototype/index.html">Home</a></li>
+                        <li ><a href="logisticsMarshallPrototype/index">Home</a></li>
 
                         <li class="current"><a href="">My Profile</a></li>
                     </ul>
@@ -27,10 +27,8 @@
 		<div style="width:700px; margin:0 auto; margin-top:100px" >
 				<h3>Business owner profile</h3>
 				<form>
-
-
 						<div class="col-12">
-							<input type="text" name="name" id="name" placeholder="Name" />
+							<input type="text" th:text="${profile.name}" name="name" id="name" placeholder="Name" />
 						</div>
 						
 
@@ -41,22 +39,27 @@
 						
 						<br>
 						<div class="col-12">
-							<input type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
+							<input th:text="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
 						</div>
 						<br>
 
-                        <br>
 						<div class="col-12">
-							<input type="text" name="vehicle" id="vehicle" placeholder="Vehicle" />
+							<input th:text="${delivery_type}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
 						</div>
 
-                        <br>
-
-						<div class="col-3">
-							<button style=" height: 40px;float:left; display: inline; " class="alt" >Edit</button>
+						<br>
+						<div class="col-12">
+							<label for="apikey">API Key attributed:</label>
+							<p id="apikey" th:text="${apikey}"></p>
+						</div>
+						<br>
+						<div class="col-12">
+							<label for="address">Address:</label>
+							<p id="address" th:text="${address}"></p>
 						</div>
 
 
+					<br>
 				</form>
 			
 

@@ -5,6 +5,8 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,6 +20,23 @@ public class Driver {
 
     @Id
     private long id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Driver driver = (Driver) o;
+        return id == driver.id &&
+                Objects.equals(phoneNo, driver.phoneNo) &&
+                Objects.equals(status, driver.status) &&
+                vehicle == driver.vehicle &&
+                Objects.equals(apiKey, driver.apiKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, phoneNo, status, vehicle, apiKey);
+    }
 
     @PrimaryKeyJoinColumn
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -26,38 +26,39 @@
 
 		<div style="width:700px; margin:0 auto; margin-top:100px" >
 				<h3>Worker Profile</h3>
-				<form>
+			<form>
+				<div class="col-12">
+					<input type="text" th:text="${profile_name}" name="name" id="name" placeholder="Name" />
+				</div>
 
 
-						<div class="col-12">
-							<input type="text" name="name" id="name" placeholder="Name" />
-						</div>
-						
+				<br>
+				<div class="col-12">
+					<input type="password" name="password" id="password" placeholder="Password" />
+				</div>
 
-						<br>
-						<div class="col-12">
-							<input type="password" name="password" id="password" placeholder="Password" />
-						</div>
-						
-						<br>
-						<div class="col-12">
-							<input type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
-						</div>
-						<br>
+				<br>
+				<div class="col-12">
+					<input th:text="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
+				</div>
+				<br>
 
-                        <br>
-						<div class="col-12">
-							<input type="text" name="vehicle" id="vehicle" placeholder="Vehicle" />
-						</div>
+				<div class="col-12">
+					<input th:text="${vehicle}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
+				</div>
 
-                        <br>
+				<br>
+				<div class="col-12">
+					<label for="apikey">API Key attributed:</label>
+					<p id="apikey" th:text="${apikey}"></p>
+				</div>
+				<br>
+				<div class="col-12">
+					<label for="avg_reputation">Average Rating:</label>
+					<p id="avg_reputation" th:text="${avg_reputation}"></p>
+				</div>
 
-						<div class="col-3">
-							<button style=" height: 40px;float:left; display: inline; " class="alt" >Edit</button>
-						</div>
-
-
-				</form>
+			</form>
 			
 
 		</div>

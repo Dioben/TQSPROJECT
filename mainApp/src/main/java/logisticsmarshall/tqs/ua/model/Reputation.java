@@ -30,4 +30,12 @@ public class Reputation {
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driver;
 
+    @Override
+    public String toString() {
+        return "Reputation{" +
+                "id=" + id +
+                ", rating=" + rating +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
