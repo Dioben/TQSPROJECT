@@ -1,19 +1,23 @@
 package marchingfood.tqs.ua.service;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.SneakyThrows;
+import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Delivery;
-import marchingfood.tqs.ua.repository.MenuRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class DeliveryServiceTest {
@@ -21,21 +25,35 @@ class DeliveryServiceTest {
     @Mock(lenient = true)
     WebClient localApiClient;
 
+    @Mock(lenient = true)
+    RestTemplate restTemplate;
+
+    @Mock(lenient = true) //I have no clue why but @Spy does not work
+    ObjectMapper objectMapper ;
+
     @InjectMocks
     DeliveryService service;
 
 
-//    @Test
-//    void postDelivery_returnDeliveryTest(){
-//        Delivery del = new Delivery();
-//        del.setAddress("myPlace");
-//        String deliveryJSON = "{'address' : 'myPlace','priority' : 'HIGHPRIORITY','APIKey' : '123SADASD1321'}";
-//        Mockito.when(localApiClient
-//                .post()
-//                .uri("/api/delivery")
-//                .bodyValue(deliveryJSON)
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .retrieve()).thenReturn(null);
-//        assertEquals(service.postToLogisticsClient(del),del);
-//    }
+    @SneakyThrows
+    @Test
+    void deliveryPostTestOk(){
+        Delivery delivery  = new Delivery();
+        delivery.setAddress("Right here");
+        Mockito.when(
+                restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        service.postToLogisticsClient(delivery);
+    }
+
+    @Test
+    @SneakyThrows
+    void deliveryPostTestBadData(){
+        Delivery delivery  = new Delivery();
+        delivery.setAddress("Right here");
+        Mockito.when(
+                restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        assertThrows(BadParameterException.class,()->service.postToLogisticsClient(delivery));
+    }
 }
