@@ -15,12 +15,12 @@ public class CartService {
     private Map<Client, List<Menu>> cart = new HashMap<>();
 
     public void addMenu(Menu menuAdded,Client client){
-        if(!cart.containsKey(client))cart.put(client,new ArrayList<>());
+        if(!cart.containsKey(client)){cart.put(client,new ArrayList<>());}
         cart.get(client).add(menuAdded);
     }
 
     public List<Menu> getClientCart(Client client){
-        if(!cart.containsKey(client)) return new ArrayList<>();
+        if(!cart.containsKey(client)){ return new ArrayList<>();}
         return cart.get(client);
     }
 
