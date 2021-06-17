@@ -102,7 +102,7 @@ public class DeliveryService {
         Driver driver = user.getDriver();
         if (driver == null
                 || driver.getPhoneNo().isEmpty()
-                || Boolean.TRUE.equals(driver.getStatus()))
+                || driver.getStatus())
             throw new AccountCantDeliverException();
         return driver;
     }

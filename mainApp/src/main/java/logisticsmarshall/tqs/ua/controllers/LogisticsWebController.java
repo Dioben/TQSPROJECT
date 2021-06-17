@@ -101,20 +101,17 @@ public class LogisticsWebController {
         Company company = user.getCompany();
         if(company == null) throw new AccessForbiddenException();
         List<Delivery> delList = new ArrayList<>(deliveryService.getDeliveriesByCompany(company));
-        System.out.println(delList);
+
         model.addAttribute("profile",user);
         model.addAttribute("company",company);
         model.addAttribute("deliveries",delList);
-        for(Delivery del : delList){
-            System.out.println(del.getId());
-        }
+
         return "mainDash";
     }
 
 
     @GetMapping(path="/driverDash")
     public String workerDash(Model model) throws AccessForbiddenException {
-        System.out.println("workerDash");
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
@@ -182,7 +179,6 @@ public class LogisticsWebController {
 
     @PostMapping(path="/driverDash")
     public String changeDelivery(Model model, @ModelAttribute("action") String action, @ModelAttribute("deliveryId") String deliveryId) throws AccessForbiddenException {
-        System.out.println(deliveryId);
         long deliveryIdValue = Long.parseLong(deliveryId);
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         Driver driver = user.getDriver();
@@ -202,7 +198,6 @@ public class LogisticsWebController {
         model.addAttribute("driver_avg_reputation",rep);
 
 
-        System.out.println(action);
         try {
             switch (action) {
                 case "accept":
