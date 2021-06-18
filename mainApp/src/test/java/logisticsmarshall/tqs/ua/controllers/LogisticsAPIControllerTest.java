@@ -7,7 +7,6 @@ import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserService;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import static logisticsmarshall.tqs.ua.utils.Utils.getStateMapList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(LogisticsAPIController.class)
@@ -172,9 +167,6 @@ class LogisticsAPIControllerTest {
         Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
         Mockito.when(serviceMock.getDeliveriesByCompany(Mockito.any())).thenReturn(delLst);
 
-        List<Map<String, String>> infoList = getStateMapList(delLst);
-        String contentJson = jsonParser.writeValueAsString(infoList);
-
         mvc.perform(get("/api/delivery_state")
                 .param("apiKey", apiKey)
                 .content(jsonParser.writeValueAsString(del))
@@ -187,6 +179,34 @@ class LogisticsAPIControllerTest {
     @Test
     void whenGetDeliveriesState_invalidapiKey_returnError() throws Exception {
         mvc.perform(get("/api/delivery_state")
+                .param("apiKey", "invalid")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(400));
+    }
+
+
+    @Test
+    void whenGetDeliveryState_validApiKey_returnState() throws Exception {
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        String apiKey = "12SDF341G6";
+        Company com = new Company();
+        com.setApiKey(apiKey);
+        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
+
+        mvc.perform(get("/api/delivery_state/"+del.getId())
+                .param("apiKey", apiKey)
+                .content(jsonParser.writeValueAsString(del))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200))
+                .andExpect(content().string(del.getStage().name()));
+
+    }
+
+    @Test
+    void whenGetDeliveryState_invalidApiKey_returnState() throws Exception {
+        mvc.perform(get("/api/delivery_state/1050")
                 .param("apiKey", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(400));

@@ -28,14 +28,14 @@ public class Driver {
         Driver driver = (Driver) o;
         return id == driver.id &&
                 Objects.equals(phoneNo, driver.phoneNo) &&
-                Objects.equals(status, driver.status) &&
+                Objects.equals(busy, driver.busy) &&
                 vehicle == driver.vehicle &&
                 Objects.equals(apiKey, driver.apiKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, phoneNo, status, vehicle, apiKey);
+        return Objects.hash(id, phoneNo, busy, vehicle, apiKey);
     }
 
     @PrimaryKeyJoinColumn
@@ -47,8 +47,8 @@ public class Driver {
     @Column(name = "phoneNumber", nullable = false)
     private String phoneNo;
 
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Column(name = "busy", nullable = false)
+    private boolean busy = false;
 
     @Column(name = "vehicle", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -72,7 +72,7 @@ public class Driver {
         Driver driver = new Driver();
         driver.setUser(driverDTO.getUser());
         driver.setPhoneNo(driverDTO.getPhoneNo());
-        driver.setStatus(driverDTO.getStatus());
+        driver.setBusy(driverDTO.getStatus());
         driver.setVehicle(driverDTO.getVehicle());
         driver.setDelivery(driverDTO.getDelivery());
         driver.setReputation(driverDTO.getReputation());
