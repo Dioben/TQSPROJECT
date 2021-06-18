@@ -3,10 +3,7 @@ package marchingfood.tqs.ua.controller;
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.exceptions.AccountDataException;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
-import marchingfood.tqs.ua.model.Client;
-import marchingfood.tqs.ua.model.ClientDTO;
-import marchingfood.tqs.ua.model.Delivery;
-import marchingfood.tqs.ua.model.Menu;
+import marchingfood.tqs.ua.model.*;
 import marchingfood.tqs.ua.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -132,6 +129,13 @@ public class DeliveryController {
         deliveryMade.setClient(client);
         deliveryMade.setDelivered(false);
         deliveryMade.setPaid(false);
+
+
+        Payment payment = new Payment();
+        payment.setPrice(total);
+        deliveryMade.setPayment(payment);
+
+
         deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
         cartService.cleanClientCart(client);
