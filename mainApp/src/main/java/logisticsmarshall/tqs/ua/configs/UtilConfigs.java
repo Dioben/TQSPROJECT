@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
 public class UtilConfigs {
 
     @Bean
-    public ObjectMapper jsonParser(){ return new ObjectMapper();};
+    public ObjectMapper jsonParser(){ return new ObjectMapper();}
 }

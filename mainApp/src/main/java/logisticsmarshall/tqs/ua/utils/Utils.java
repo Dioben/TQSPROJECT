@@ -19,4 +19,7 @@ public class Utils {
         }
         return infoList;
     }
+    private Utils(){
+        //exists so this class can't be instanced
+    }
 }

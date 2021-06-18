@@ -21,6 +21,9 @@ public class LogisticsWebController {
     static final String ADMINROLE = "ADMIN";
     static final String COMPANYROLE = "COMPANY";
     static final String DRIVERROLE = "DRIVER";
+    static final String EMBEDMESSAGE = "message";
+    static final String EMBEDPROFILE = "profile";
+    static final String MAINDASHFILE = "mainDash";
     @Autowired
     UserServiceImpl userServiceImpl;
     @Autowired
@@ -75,7 +78,7 @@ public class LogisticsWebController {
         if (error != null)
             model.addAttribute("error", error);
         if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
+            model.addAttribute(EMBEDMESSAGE, "You have been logged out successfully.");
         return "login";
     }
 
@@ -102,11 +105,11 @@ public class LogisticsWebController {
         if(company == null) throw new AccessForbiddenException();
         List<Delivery> delList = new ArrayList<>(deliveryService.getDeliveriesByCompany(company));
 
-        model.addAttribute("profile",user);
+        model.addAttribute(EMBEDPROFILE,user);
         model.addAttribute("company",company);
         model.addAttribute("deliveries",delList);
 
-        return "mainDash";
+        return MAINDASHFILE;
     }
 
 
@@ -116,7 +119,7 @@ public class LogisticsWebController {
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
         populateDriverPage(model,user,driver);
-        return "mainDash";
+        return MAINDASHFILE;
     }
 
 
@@ -125,7 +128,7 @@ public class LogisticsWebController {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
         Company company = user.getCompany();
         if(company == null) throw new AccessForbiddenException();
-        model.addAttribute("profile",user);
+        model.addAttribute(EMBEDPROFILE,user);
         model.addAttribute("phone_number",company.getPhoneNumber());
         model.addAttribute("delivery_type",company.getDeliveryType());
         model.addAttribute("apikey",company.getApiKey());
@@ -155,13 +158,13 @@ public class LogisticsWebController {
 
     @GetMapping(path="/adminDash")
     public String adminDashboard(Model model) throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
+        userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         return "adminDash";
     }
 
     @PostMapping(path="/grantApiAccess")
     public String adminDashboard() throws AccessForbiddenException {
-        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
+        userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         return "redirect:/adminDash";
     }
 
@@ -179,19 +182,19 @@ public class LogisticsWebController {
             switch (action) {
                 case "accept":
                     deliveryService.acceptDelivery(user, deliveryIdValue);
-                    model.addAttribute("message", "Delivery was successfully accepted");
+                    model.addAttribute(EMBEDMESSAGE, "Delivery was successfully accepted");
                     break;
                 case "pickup":
                     deliveryService.pickUpDelivery(user, deliveryIdValue);
-                    model.addAttribute("message", "Delivery was successfully picked up");
+                    model.addAttribute(EMBEDMESSAGE, "Delivery was successfully picked up");
                     break;
                 case "finish":
                     deliveryService.finishDelivery(user, deliveryIdValue);
-                    model.addAttribute("message", "Delivery was successfully finished");
+                    model.addAttribute(EMBEDMESSAGE, "Delivery was successfully finished");
                     break;
                 case "cancel":
                     deliveryService.cancelDelivery(user, deliveryIdValue);
-                    model.addAttribute("message", "Delivery was successfully canceled");
+                    model.addAttribute(EMBEDMESSAGE, "Delivery was successfully canceled");
                     break;
                 default:
                     throw new InvalidDeliveryActionException();
@@ -199,14 +202,14 @@ public class LogisticsWebController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        return "mainDash";
+        return MAINDASHFILE;
     }
 
     private void populateDriverPage(Model model, User user, Driver driver) {
         List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
         List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
         delDriverList.addAll(delAvailableList);
-        model.addAttribute("profile",user);
+        model.addAttribute(EMBEDPROFILE,user);
         model.addAttribute("driver",driver);
         model.addAttribute("deliveries",delDriverList);
         double rep = 0;

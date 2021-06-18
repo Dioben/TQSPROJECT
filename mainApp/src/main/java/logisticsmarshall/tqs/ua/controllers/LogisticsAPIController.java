@@ -35,15 +35,12 @@ public class LogisticsAPIController {
 
     @GetMapping(path="/delivery_state")
     public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="apiKey") String apikey) {
-        System.out.println("Log /delivery_state");
         Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
         if (companyFromapiKey == null) return ResponseEntity.status(400).build();
         List<Delivery> deliveries = deliveryService.getDeliveriesByCompany(companyFromapiKey);
         List<Map<String, String>> infoList = getStateMapList(deliveries);
         try {
             String contentJson = objectMapper.writeValueAsString(infoList);
-            System.out.println("Content in JSON:");
-            System.out.println(contentJson);
             return ResponseEntity.ok(contentJson);
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(400).build();
@@ -56,7 +53,6 @@ public class LogisticsAPIController {
     public ResponseEntity<String> getDeliveryState(
             @PathVariable(name="id") long deliveryId,
             @RequestParam(name="apiKey") String apikey) {
-        System.out.println("Log /delivery_state/{id}");
         Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
         if (companyFromapiKey == null) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);

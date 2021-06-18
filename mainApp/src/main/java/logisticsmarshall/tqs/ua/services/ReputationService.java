@@ -1,6 +1,5 @@
 package logisticsmarshall.tqs.ua.services;
 
-import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.model.Reputation;
 import logisticsmarshall.tqs.ua.repository.ReputationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
