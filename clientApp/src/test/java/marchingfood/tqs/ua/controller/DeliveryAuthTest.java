@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(value = DeliveryController.class)
-public class DeliveryAuthTest {
+class DeliveryAuthTest {
     @Autowired
     MockMvc mvc;
 

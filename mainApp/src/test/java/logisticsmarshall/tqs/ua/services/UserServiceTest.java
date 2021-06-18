@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock(lenient = true)
     private UserRepository userRepository;
