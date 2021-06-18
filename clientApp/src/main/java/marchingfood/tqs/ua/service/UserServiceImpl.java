@@ -5,7 +5,6 @@ import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,8 +21,6 @@ import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
     @Autowired
     private ClientRepository userRepository;
 
@@ -78,13 +75,7 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     public Client getUserFromAuthIfAdmin() throws AccessForbiddenException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || AnonymousAuthenticationToken.class.
-                isAssignableFrom(authentication.getClass())) {
-            throw new AccessForbiddenException("You must log in");
-        }
-        Client user = userRepository.findByName(authentication.getName());
-        if (user==null){throw new AccessForbiddenException("You must log in");}
+        Client user = getUserFromAuthOrException();
         if (!user.isAdmin()){throw new AccessForbiddenException("You are not admin");}
         return  user;
     }

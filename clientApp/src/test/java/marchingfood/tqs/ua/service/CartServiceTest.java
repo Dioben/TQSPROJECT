@@ -36,7 +36,6 @@ public class CartServiceTest {
         cart.add(menu);
         assertDoesNotThrow(()->service.addMenu(menu,client));
         assertDoesNotThrow(()->service.addMenu(menu,client));
-        System.out.println(service.getClientCart(client));
         assertEquals(cart,service.getClientCart(client));
     }
 
