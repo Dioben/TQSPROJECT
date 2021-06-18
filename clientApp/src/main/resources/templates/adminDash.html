@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><!-- Basic -->
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 
 <head>
     <meta charset="utf-8">
@@ -139,25 +141,37 @@
 <div class="container">
     <h2 style="margin-left:170px;">Delivery Info </h2>
 
-    <table style=" margin-left:auto;margin-right:auto;" class="styled-table">
+    <table style="margin-left:auto;margin-right:auto;" class="styled-table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Delivery man ID </th>
-
-            <th>Status</th>
-
+            <th>Tracking id </th>
+            <th>Order Timestamp </th>
+            <th>Delivered</th>
+            <th>Paid</th>
+            <th>Address (From)</th>
+            <th>Price</th>
+            <th>Client name</th>
+            <th>Client email</th>
+            <th>Client address (To)</th>
         </tr>
         </thead>
         <tbody>
+        <div th:each="delivery : ${deliveries}"></div>
         <tr>
-            <td>1234 </td>
-            <td>1111</td>
-            <td>Delivered</td>
-
+            <td th:text="${delivery.id}"></td>
+            <td th:text="${delivery.orderTimestamp}"></td>
+            <td th:text="${delivery.delivered}"></td>
+            <td th:text="${delivery.paid}"></td>
+            <td th:text="${delivery.address}"></td>
+            <td th:text="${delivery.payment.price}"></td>
+            <td th:text="${delivery.client.name}"></td>
+            <td th:text="${delivery.client.email}"></td>
+            <td th:text="${delivery.client.address}"></td>
         </tr>
         </tbody>
     </table>
+
+
 </div>
 
 

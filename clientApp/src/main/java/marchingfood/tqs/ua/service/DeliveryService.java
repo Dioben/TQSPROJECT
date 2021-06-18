@@ -4,6 +4,7 @@ package marchingfood.tqs.ua.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
+import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -29,6 +31,9 @@ public class DeliveryService {
     @Autowired
     ObjectMapper objectMapper;
 
+    public List<Delivery> getDeliveries(){return deliveryRepository.findAll();}
+
+    public List<Delivery> getDeliveriesByClient(Client client){return deliveryRepository.findByClient(client);}
 
     public void saveDelivery(Delivery delivery){
         deliveryRepository.save(delivery);
