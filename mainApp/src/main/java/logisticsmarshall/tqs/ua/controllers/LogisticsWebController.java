@@ -115,19 +115,7 @@ public class LogisticsWebController {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
-        //Show driver Available to pickup + delivery history
-        List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
-        List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
-        delDriverList.addAll(delAvailableList);
-        model.addAttribute("profile",user);
-        model.addAttribute("driver",driver);
-        model.addAttribute("deliveries",delDriverList);
-        double rep = 0;
-        if(driver.getReputation().size() != 0){
-            for(Reputation r : driver.getReputation()) rep+=r.getRating();
-            rep/=driver.getReputation().size();
-        }
-        model.addAttribute("driver_avg_reputation",rep);
+        populateDriverPage(model,user,driver);
         return "mainDash";
     }
 
@@ -184,18 +172,7 @@ public class LogisticsWebController {
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
         //Show driver Available to pickup + delivery history
-        List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
-        List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
-        delDriverList.addAll(delAvailableList);
-        model.addAttribute("profile",user);
-        model.addAttribute("driver",driver);
-        model.addAttribute("deliveries",delDriverList);
-        double rep = 0;
-        if(driver.getReputation().size() != 0){
-            for(Reputation r : driver.getReputation()) rep+=r.getRating();
-            rep/=driver.getReputation().size();
-        }
-        model.addAttribute("driver_avg_reputation",rep);
+        populateDriverPage(model,user,driver);
 
 
         try {
@@ -223,6 +200,21 @@ public class LogisticsWebController {
             model.addAttribute("error", e.getMessage());
         }
         return "mainDash";
+    }
+
+    private void populateDriverPage(Model model, User user, Driver driver) {
+        List<Delivery> delAvailableList = deliveryService.getDeliveriesByStage(Delivery.Stage.REQUESTED);
+        List<Delivery> delDriverList = new ArrayList<>(driver.getDelivery());
+        delDriverList.addAll(delAvailableList);
+        model.addAttribute("profile",user);
+        model.addAttribute("driver",driver);
+        model.addAttribute("deliveries",delDriverList);
+        double rep = 0;
+        if(!driver.getReputation().isEmpty()){
+            for(Reputation r : driver.getReputation()) rep+=r.getRating();
+            rep/=driver.getReputation().size();
+        }
+        model.addAttribute("driver_avg_reputation",rep);
     }
 
 }

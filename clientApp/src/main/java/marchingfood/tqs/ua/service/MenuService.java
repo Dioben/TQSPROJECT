@@ -17,7 +17,7 @@ public class MenuService {
         menuRepository.save(menu);
     }
     public List<Menu> getMenus(){return menuRepository.findAll();}
-    public Menu getMenuById(long menu_id){return menuRepository.findById(menu_id);}
+    public Menu getMenuById(long menuId){return menuRepository.findById(menuId);}
     public void tryDelete(long id) {
         Menu menu = menuRepository.findById(id);
         if (menu==null){ throw new ResourceNotFoundException("Menu with id "+id+ " was not found");}
