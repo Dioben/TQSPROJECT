@@ -1,7 +1,11 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.exceptions.*;
+import logisticsmarshall.tqs.ua.model.Company;
+import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.repository.CompanyRepository;
+import logisticsmarshall.tqs.ua.repository.DriverRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
@@ -16,14 +20,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private DriverRepository driverRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -34,7 +42,8 @@ public class UserServiceImpl implements UserDetailsService {
     public User getUserByName(String username) {
         return userRepository.findByName(username);
     }
-
+    public List<Driver> getKeylessDrivers(){return driverRepository.findAllByApiKey(null);}
+    public List<Company> getKeylessCompanies(){return companyRepository.findAllByApiKey(null);}
     public User save(User newUser) {
         return userRepository.save(newUser);
     }
