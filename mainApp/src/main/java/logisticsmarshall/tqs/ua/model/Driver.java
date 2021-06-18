@@ -19,6 +19,7 @@ public class Driver {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Override

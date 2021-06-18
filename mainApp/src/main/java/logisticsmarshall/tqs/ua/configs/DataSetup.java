@@ -30,6 +30,7 @@ public class DataSetup {
             marchingFood.setEmail("marchingfood@ua.pt");
             marchingFood.setName("marchingfood");
             marchingFood.setPassword("marchingfood");
+
             Company marchingFoodAsCompany = new Company();
             marchingFoodAsCompany.setAddress("In my heart");
             marchingFoodAsCompany.setDeliveryType("Food - Urgent");
