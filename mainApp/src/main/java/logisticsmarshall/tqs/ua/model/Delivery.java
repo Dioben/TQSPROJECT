@@ -35,7 +35,7 @@ public class Delivery {
     }
 
     @Id //logistics_id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "order_timestamp", nullable = false)

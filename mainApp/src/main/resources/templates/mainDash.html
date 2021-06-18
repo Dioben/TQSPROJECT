@@ -81,42 +81,10 @@
     </div>
 
 
-    <!-- Delivery Orders Done - Company Exclusive -->
-
-		<div class="container" sec:authorize="hasAuthority('COMPANY')">
-            <h2>Delivery orders </h2>
-
-            <table style="margin-left:auto;margin-right:auto;" class="styled-table">
-    
-                <thead>
-                    <tr>
-                        <th>Tracking id </th>
-                        <th>Delivery order </th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Status</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                <div th:each="delivery : ${deliveries}"></div>
-                    <tr>
-                        <td th:text="${delivery.id}">12345</td>
-                        <td th:text="${delivery.orderTimestamp}">20-10-2021 15:30</td>
-                        <td th:text="${company.address}">MacDonalds Aveiro</td>
-                        <td th:text="${delivery.address}">Rua do Chafariz, 3123-231 (...)</td>
-                        <td th:text="${delivery.stage}">Delivered</td>
-
-                    </tr>
-                </tbody>
-            </table>
-							
-        </div>
-	<!-- End details -->
 
     <!-- Delivery Orders Available/InProgress/Done - Driver Exclusive -->
 
-    <div class="container" sec:authorize="hasAuthority('DRIVER')">
+    <div class="container">
         <h2>Delivery orders </h2>
         <div th:if="${#arrays.length(deliveries) != 0}">
             <table style="margin-left:auto;margin-right:auto;" class="styled-table">
@@ -140,6 +108,7 @@
                         <td th:text="${delivery.address}">Rua do Chafariz, 3123-231 (...)</td>
                         <td>
                             <div th:text="${delivery.stage}">Requested</div>
+                            <div sec:authorize="hasAuthority('DRIVER')">
                             <div th:if="${delivery.stage.name() == 'REQUESTED'}">
                                 <form id="acceptDeliveryForm" method="POST" th:action="@{/driverDash}">
                                     <input type="hidden" name="action" value="accept"/>
@@ -167,6 +136,7 @@
                                     <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
                                 </form>
                                 <button class="btn btn-primary" onclick="document.forms['cancelDeliveryForm'].submit()">Cancel</button>
+                            </div>
                             </div>
                         </td>
 

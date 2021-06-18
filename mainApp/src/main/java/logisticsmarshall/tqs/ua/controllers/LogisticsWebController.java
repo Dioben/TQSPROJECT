@@ -103,11 +103,9 @@ public class LogisticsWebController {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
         Company company = user.getCompany();
         if(company == null) throw new AccessForbiddenException();
-        List<Delivery> delList = new ArrayList<>(deliveryService.getDeliveriesByCompany(company));
-
         model.addAttribute(EMBEDPROFILE,user);
         model.addAttribute("company",company);
-        model.addAttribute("deliveries",delList);
+        model.addAttribute("deliveries",deliveryService.getDeliveriesByCompany(company));
 
         return MAINDASHFILE;
     }
