@@ -7,6 +7,9 @@ import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -246,47 +249,14 @@ class LogisticsWebControllerTest {
                 andExpect(status().is(302));
     }
 
-    @Test
-    void whenGetIndexPageAndUserIsCompanyThenRedirect() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"COMPANY", "DRIVER", "ADMIN"})
+    void whenGetIndexPageAndUserIsRoleThenRedirect(String role) throws Exception {
         User u1 = new User(
                 "name",
                 "email@gmail.com",
                 "randompass",
-                "COMPANY",
-                null,
-                null
-        );
-
-        when(userService.getUserFromAuth()).thenReturn(u1);
-
-        mvc.perform(get("/")).
-                andExpect(status().is(302));
-    }
-
-    @Test
-    void whenGetIndexPageAndUserIsDriverThenRedirect() throws Exception {
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "DRIVER",
-                null,
-                null
-        );
-
-        when(userService.getUserFromAuth()).thenReturn(u1);
-
-        mvc.perform(get("/")).
-                andExpect(status().is(302));
-    }
-
-    @Test
-    void whenGetIndexPageAndUserIsAdminThenRedirect() throws Exception {
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "ADMIN",
+                role,
                 null,
                 null
         );
@@ -324,8 +294,14 @@ class LogisticsWebControllerTest {
                 andExpect(status().is(200));
     }
 
-    @Test
-    void whenGetCompanyDashPageAndUserCompanyIsNullThenThrowException() throws Exception {
+    @ParameterizedTest
+    @CsvSource({
+            "COMPANY, /companyDash",
+            "COMPANY, /companyProfile",
+            "DRIVER, /driverDash",
+            "DRIVER, /driverProfile",
+    })
+    void whenGetDashOrProfilePageAndUserCompanyOrDriverIsNullThenThrowException(String role, String url) throws Exception {
         User u1 = new User(
                 "name",
                 "email@gmail.com",
@@ -335,9 +311,9 @@ class LogisticsWebControllerTest {
                 null
         );
 
-        when(userService.getUserFromAuthAndCheckCredentials("COMPANY")).thenReturn(u1);
+        when(userService.getUserFromAuthAndCheckCredentials(role)).thenReturn(u1);
 
-        mvc.perform(get("/companyDash")).
+        mvc.perform(get(url)).
                 andExpect(status().is(403));
     }
 
@@ -388,23 +364,6 @@ class LogisticsWebControllerTest {
     }
 
     @Test
-    void whenGetDriverDashPageAndUserDriverIsNullThenThrowException() throws Exception {
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                null,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(get("/driverDash")).
-                andExpect(status().is(403));
-    }
-
-    @Test
     void whenGetCompanyProfilePageAndUserHasCompanyThenSuccess() throws Exception {
         Company c1 = new Company();
         c1.setDeliveryType("food");
@@ -423,23 +382,6 @@ class LogisticsWebControllerTest {
 
         mvc.perform(get("/companyProfile")).
                 andExpect(status().is(200));
-    }
-
-    @Test
-    void whenGetCompanyProfilePageAndUserCompanyIsNullThenThrowException() throws Exception {
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                null,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("COMPANY")).thenReturn(u1);
-
-        mvc.perform(get("/companyProfile")).
-                andExpect(status().is(403));
     }
 
     @Test
@@ -488,25 +430,9 @@ class LogisticsWebControllerTest {
                 andExpect(status().is(200));
     }
 
-    @Test
-    void whenGetDriverProfilePageAndUserDriverIsNullThenThrowException() throws Exception {
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                null,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(get("/driverProfile")).
-                andExpect(status().is(403));
-    }
-
-    @Test
-    void whenAcceptDeliveryAndUserHasDriverAndUserHasReputationThenSuccess() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"accept", "pickup", "finish", "cancel", "invalid"})
+    void whenChangeDeliveryAndUserHasDriverAndUserHasReputationThenSuccess(String action) throws Exception {
         Reputation r1 = new Reputation();
         r1.setRating(5);
         Driver d1 = new Driver();
@@ -528,7 +454,7 @@ class LogisticsWebControllerTest {
         mvc.perform(post("/driverDash").
                 contentType(MediaType.APPLICATION_FORM_URLENCODED).
                 content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("action", "accept"),
+                        new BasicNameValuePair("action", action),
                         new BasicNameValuePair("deliveryId", "1050")
                 ))))).
                 andExpect(status().is(200));
@@ -581,121 +507,5 @@ class LogisticsWebControllerTest {
                         new BasicNameValuePair("deliveryId", "1050")
                 ))))).
                 andExpect(status().is(403));
-    }
-
-    @Test
-    void whenPickUpDeliveryAndUserHasDriverAndUserHasReputationThenSuccess() throws Exception {
-        Reputation r1 = new Reputation();
-        r1.setRating(5);
-        Driver d1 = new Driver();
-        d1.setPhoneNo("933333333");
-        d1.setVehicle(Driver.Vehicle.ONFOOT);
-        d1.setDelivery(new HashSet<>());
-        d1.setReputation(new HashSet<>(Arrays.asList(r1, r1)));
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                d1,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(post("/driverDash").
-                contentType(MediaType.APPLICATION_FORM_URLENCODED).
-                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("action", "pickup"),
-                        new BasicNameValuePair("deliveryId", "1050")
-                ))))).
-                andExpect(status().is(200));
-    }
-
-    @Test
-    void whenFinishDeliveryAndUserHasDriverAndUserHasReputationThenSuccess() throws Exception {
-        Reputation r1 = new Reputation();
-        r1.setRating(5);
-        Driver d1 = new Driver();
-        d1.setPhoneNo("933333333");
-        d1.setVehicle(Driver.Vehicle.ONFOOT);
-        d1.setDelivery(new HashSet<>());
-        d1.setReputation(new HashSet<>(Arrays.asList(r1, r1)));
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                d1,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(post("/driverDash").
-                contentType(MediaType.APPLICATION_FORM_URLENCODED).
-                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("action", "finish"),
-                        new BasicNameValuePair("deliveryId", "1050")
-                ))))).
-                andExpect(status().is(200));
-    }
-
-    @Test
-    void whenCancelDeliveryAndUserHasDriverAndUserHasReputationThenSuccess() throws Exception {
-        Reputation r1 = new Reputation();
-        r1.setRating(5);
-        Driver d1 = new Driver();
-        d1.setPhoneNo("933333333");
-        d1.setVehicle(Driver.Vehicle.ONFOOT);
-        d1.setDelivery(new HashSet<>());
-        d1.setReputation(new HashSet<>(Arrays.asList(r1, r1)));
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                d1,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(post("/driverDash").
-                contentType(MediaType.APPLICATION_FORM_URLENCODED).
-                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("action", "cancel"),
-                        new BasicNameValuePair("deliveryId", "1050")
-                ))))).
-                andExpect(status().is(200));
-    }
-
-    @Test
-    void whenChangeDeliveryAndUserHasDriverAndUserHasReputationAndActionIsInvalidThenThrowException() throws Exception {
-        Reputation r1 = new Reputation();
-        r1.setRating(5);
-        Driver d1 = new Driver();
-        d1.setPhoneNo("933333333");
-        d1.setVehicle(Driver.Vehicle.ONFOOT);
-        d1.setDelivery(new HashSet<>());
-        d1.setReputation(new HashSet<>(Arrays.asList(r1, r1)));
-        User u1 = new User(
-                "name",
-                "email@gmail.com",
-                "randompass",
-                "COMPANY",
-                d1,
-                null
-        );
-
-        when(userService.getUserFromAuthAndCheckCredentials("DRIVER")).thenReturn(u1);
-
-        mvc.perform(post("/driverDash").
-                contentType(MediaType.APPLICATION_FORM_URLENCODED).
-                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                        new BasicNameValuePair("action", "none"),
-                        new BasicNameValuePair("deliveryId", "1050")
-                ))))).
-                andExpect(status().is(200));
     }
 }
