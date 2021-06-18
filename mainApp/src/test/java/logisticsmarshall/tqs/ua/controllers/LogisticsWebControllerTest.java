@@ -397,7 +397,7 @@ class LogisticsWebControllerTest {
                 "name",
                 "email@gmail.com",
                 "randompass",
-                "COMPANY",
+                "DRIVER",
                 d1,
                 null
         );
@@ -419,7 +419,7 @@ class LogisticsWebControllerTest {
                 "name",
                 "email@gmail.com",
                 "randompass",
-                "COMPANY",
+                "DRIVER",
                 d1,
                 null
         );
