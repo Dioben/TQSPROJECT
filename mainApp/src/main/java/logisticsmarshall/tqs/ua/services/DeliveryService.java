@@ -32,7 +32,7 @@ public class DeliveryService {
         return deliveryRepository.findAllByDriverId(driver.getId());
     }
     public List<Delivery> getDeliveriesByCompany(Company company) {
-        return deliveryRepository.findAllDeliveriesByCompanyId(company.getId());
+        return deliveryRepository.findAllByCompanyId(company.getId());
     }
     public Company getApiKeyHolder(String apiKey) {
         return companyRepository.findCompanyByApiKey(apiKey);

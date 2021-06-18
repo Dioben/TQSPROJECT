@@ -14,6 +14,7 @@ import java.util.Set;
 public class Company {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.PERSIST, orphanRemoval = true)

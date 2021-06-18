@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 <html>
@@ -10,18 +10,22 @@
 	</head>
 	<body >
 
-        <!-- Header -->
-        <div style="margin-top: -40px;" id="header">
-            <!-- Nav -->
-                <nav id="nav">
-                    <ul>
-                        <li ><a href="logisticsMarshallPrototype/index.html">Home</a></li>
-
-                        <li class="current"><a href="">My Profile</a></li>
-                    </ul>
-                </nav>
-
-        </div>
+	<header class="top-navbar">
+		<nav id="nav" class="navbar justify-content-between">
+			<ul>
+				<li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+				<li class="current nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+			</ul>
+			<ul style="float: right;">
+				<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+				<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+			</ul>
+		</nav>
+	</header>
 
 
 		<div style="width:700px; margin:0 auto; margin-top:100px" >
@@ -63,10 +67,6 @@
 
 		</div>
 
-		<div>
-			<img src="/images/foodDriver.png" alt="Smiley face" style=" float: right; width: 20%; height: 20%; margin-right:100px; " >
-
-		</div>
 
 		<!-- Scripts -->
 			<script src="/js/jquery.min.js"></script>

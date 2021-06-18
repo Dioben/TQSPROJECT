@@ -30,6 +30,7 @@ public class DataSetup {
             marchingFood.setEmail("marchingfood@ua.pt");
             marchingFood.setName("marchingfood");
             marchingFood.setPassword("marchingfood");
+
             Company marchingFoodAsCompany = new Company();
             marchingFoodAsCompany.setAddress("In my heart");
             marchingFoodAsCompany.setDeliveryType("Food - Urgent");
@@ -56,6 +57,7 @@ public class DataSetup {
             del1.setStage(Delivery.Stage.DELIVERED);
             del1.setDriver(riderAsDriver);
             del1.setAddress("The house with the balloons attached, can't miss it");
+            del1.setPickupAddress(marchingFoodAsCompany.getAddress());
             del1.setId(1);
             del1.setOrderTimestamp(Timestamp.valueOf(LocalDateTime.now()));
             del1.setPriority(Delivery.Priority.HIGHPRIORITY);
@@ -66,6 +68,7 @@ public class DataSetup {
             del2.setStage(Delivery.Stage.REQUESTED);
             del2.setAddress("The house with the balloons attached, can't miss it");
             del2.setId(2);
+            del2.setPickupAddress(marchingFoodAsCompany.getAddress());
             del2.setOrderTimestamp(Timestamp.valueOf(LocalDateTime.now()));
             del2.setPriority(Delivery.Priority.HIGHPRIORITY);
 

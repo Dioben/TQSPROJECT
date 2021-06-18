@@ -2571,10 +2571,10 @@ input, select, textarea {
 
 		#nav > ul {
 			margin: 0;
+			display: inline-flex;
 		}
 
 			#nav > ul > li {
-				position: relative;
 				display: inline-block;
 				margin-left: 1em;
 			}
