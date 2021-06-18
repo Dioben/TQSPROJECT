@@ -15,7 +15,7 @@ public class CartService {
     private Map<Client, List<Menu>> cart = new HashMap<>();
 
     public void addMenu(Menu menuAdded,Client client){
-        if(!cart.containsKey(client)){cart.put(client,new ArrayList<>());}
+        cart.computeIfAbsent(client,k ->new ArrayList<>());
         cart.get(client).add(menuAdded);
     }
 

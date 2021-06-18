@@ -1,5 +1,6 @@
 package marchingfood.tqs.ua.service;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Delivery;
@@ -9,14 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +42,7 @@ class DeliveryServiceTest {
         Mockito.when(
                 restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
-        service.postToLogisticsClient(delivery);
+        assertDoesNotThrow(()->service.postToLogisticsClient(delivery));
     }
 
     @Test

@@ -2,7 +2,6 @@ package marchingfood.tqs.ua.config;
 
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Menu;
-import marchingfood.tqs.ua.repository.ClientRepository;
 import marchingfood.tqs.ua.repository.MenuRepository;
 import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.springframework.boot.CommandLineRunner;

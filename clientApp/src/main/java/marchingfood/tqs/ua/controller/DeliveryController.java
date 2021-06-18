@@ -89,9 +89,9 @@ public class DeliveryController {
     }
 
     @PostMapping("/restaurant")
-    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menu_id) throws AccessForbiddenException {
+    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menuId) throws AccessForbiddenException {
         //Add post to cart map
-        Menu gotten = menuService.getMenuById(menu_id);
+        Menu gotten = menuService.getMenuById(menuId);
         Client client = userService.getUserFromAuthOrException();
         if(client == null)return ResponseEntity.status(404).build();
         cartService.addMenu(gotten,client);
@@ -123,7 +123,7 @@ public class DeliveryController {
         double total = 0;
         for(Menu menu : menuCart)total+=menu.getPrice();
         Delivery deliveryMade = new Delivery();
-        List<Menu> menusInDelivery = new ArrayList<Menu>(menuCart);
+        List<Menu> menusInDelivery = new ArrayList<>(menuCart);
         deliveryMade.setMenus(menusInDelivery);
         deliveryMade.setAddress(client.getAddress());
         deliveryMade.setClient(client);

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CartServiceTest {
+class CartServiceTest {
 
     CartService service = new CartService();
     Client client = new Client();

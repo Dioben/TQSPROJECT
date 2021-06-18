@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
-//TODO: RESTRICT THIS WHOLE CLASS TO ADMIN ONLY
 public class AdminController {
 
     @Autowired
