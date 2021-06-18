@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,16 +60,7 @@ public class LogisticsAPIController {
         Company companyFromapiKey = deliveryService.getApiKeyHolder(apikey);
         if (companyFromapiKey == null) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
-        Map<String,String> infoDelivery = new HashMap<>();
-        infoDelivery.put(del.getAddress(),del.getStage().name());
-        try {
-            String contentJson = objectMapper.writeValueAsString(infoDelivery);
-            System.out.println("Content in JSON:");
-            System.out.println(contentJson);
-            return ResponseEntity.ok(contentJson);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.status(400).build();
-        }
+        return ResponseEntity.ok(del.getStage().name());
     }
 
     @GetMapping(path="/delivery")

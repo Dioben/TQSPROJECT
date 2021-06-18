@@ -41,7 +41,6 @@ class DeliveryServiceTest {
         driver.setId(1L);
         driver.setVehicle(Driver.Vehicle.CAR);
         driver.setPhoneNo("933333333");
-        driver.setStatus(true);
 
         user = new User();
         user.setId(1L);
@@ -92,7 +91,7 @@ class DeliveryServiceTest {
 
     @Test
     void whenDriverHasFalseStatusInAcceptDeliveryThenThrowException() {
-        user.getDriver().setStatus(false);
+        user.getDriver().setBusy(true);
         assertThrows(AccountCantDeliverException.class, ()->deliveryService.acceptDelivery(user, delivery.getId()));
     }
 
@@ -157,7 +156,7 @@ class DeliveryServiceTest {
     void whenDriverHasFalseStatusInCancelDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        user.getDriver().setStatus(false);
+        user.getDriver().setBusy(true);
         assertThrows(AccountCantDeliverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
     }
 
@@ -203,7 +202,7 @@ class DeliveryServiceTest {
     void whenDriverHasFalseStatusInPickUpDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
-        user.getDriver().setStatus(false);
+        user.getDriver().setBusy(true);
         assertThrows(AccountCantDeliverException.class, ()->deliveryService.pickUpDelivery(user, delivery.getId()));
     }
 
@@ -277,7 +276,7 @@ class DeliveryServiceTest {
     void whenDriverHasFalseStatusInFinishDeliveryThenThrowException() {
         delivery.setStage(Delivery.Stage.PICKEDUP);
         delivery.setDriver(user.getDriver());
-        user.getDriver().setStatus(false);
+        user.getDriver().setBusy(true);
         assertThrows(AccountCantDeliverException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
