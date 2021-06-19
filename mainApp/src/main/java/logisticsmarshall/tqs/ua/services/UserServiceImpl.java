@@ -1,14 +1,8 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.exceptions.*;
-import logisticsmarshall.tqs.ua.model.Company;
-import logisticsmarshall.tqs.ua.model.Driver;
-import logisticsmarshall.tqs.ua.model.DriverAdminView;
-import logisticsmarshall.tqs.ua.model.User;
-import logisticsmarshall.tqs.ua.repository.CompanyRepository;
-import logisticsmarshall.tqs.ua.repository.DriverRepository;
-import logisticsmarshall.tqs.ua.repository.ReputationRepository;
-import logisticsmarshall.tqs.ua.repository.UserRepository;
+import logisticsmarshall.tqs.ua.model.*;
+import logisticsmarshall.tqs.ua.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -24,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
@@ -34,6 +29,8 @@ public class UserServiceImpl implements UserDetailsService {
     private CompanyRepository companyRepository;
     @Autowired
     private DriverRepository driverRepository;
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     @Autowired
     private ReputationRepository reputationRepository;
@@ -110,4 +107,33 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
 
+    public void grantCompanyKey(Long id) throws AccountDataException {
+        Company company = companyRepository.findCompanyById(id);
+        if (company==null){throw  new AccountDataException();}
+        company.setApiKey(UUID.randomUUID().toString());
+        companyRepository.save(company);
+
+    }
+
+    public void grantDriverKey(Long id) throws AccountDataException{
+        Driver driver = driverRepository.findDriverById(id);
+        if (driver==null){throw new AccountDataException();}
+        driver.setApiKey(UUID.randomUUID().toString());
+        driverRepository.save(driver);
+    }
+
+    public void banDriver(Long id) throws AccountDataException {
+        Driver driver = driverRepository.findDriverById(id);
+        if (driver==null){throw new AccountDataException();}
+        //cascade is a mess
+        for (Delivery delivery: driver.getDelivery()){
+            delivery.setDriver(null);
+        }
+        deliveryRepository.saveAll(driver.getDelivery());
+        User user = driver.getUser();
+        user.setRole("BANNED DRIVER");
+        userRepository.save(user);
+        driverRepository.delete(driver);
+
+    }
 }

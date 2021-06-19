@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
-import logisticsmarshall.tqs.ua.services.UserService;
+import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,8 @@ class LogisticsAPIControllerTest {
     DeliveryService serviceMock;
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userService;
+
     @Autowired
     ObjectMapper jsonParser;
 

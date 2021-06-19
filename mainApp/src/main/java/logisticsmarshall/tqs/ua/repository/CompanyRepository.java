@@ -10,4 +10,6 @@ import java.util.List;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     Company findCompanyByApiKey(String apiKey);
     List<Company> findAllByApiKey(String apiKey);
+
+    Company findCompanyById(Long id);
 }

@@ -1,6 +1,7 @@
 package logisticsmarshall.tqs.ua.controllers;
 
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.ParseException;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
 import logisticsmarshall.tqs.ua.model.*;
@@ -19,6 +20,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -235,13 +237,6 @@ class LogisticsWebControllerTest {
         mvc.perform(get("/login")).
                 andExpect(status().is(302));
     }
-
-/*    @Test
-    void whenLogoutAndIsAuthenticatedThenSuccess() throws Exception {
-        when(userService.isAuthenticated()).thenReturn(true);
-        mvc.perform(get("/login?logout")).
-                andExpect(status().is(200));
-    }*/
 
     @Test
     void whenGetIndexPageAndUserIsNullThenRedirect() throws Exception {
@@ -507,5 +502,30 @@ class LogisticsWebControllerTest {
                         new BasicNameValuePair("deliveryId", "1050")
                 ))))).
                 andExpect(status().is(403));
+    }
+
+    @Test
+
+    void grantBadRoleKeyTest() throws Exception {
+        when(userService.getUserFromAuthAndCheckCredentials(Mockito.anyString())).thenReturn(null);
+        mvc.perform(post("/grantKey").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("id", "1"),
+                        new BasicNameValuePair("type", "ADMIN")
+                ))))).
+                andExpect(status().is(400));
+
+    }
+    @Test
+    void grantGoodRoleKeyTest() throws  Exception{
+        when(userService.getUserFromAuthAndCheckCredentials(Mockito.anyString())).thenReturn(null);
+        mvc.perform(post("/grantKey").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("id", "1"),
+                        new BasicNameValuePair("type", "COMPANY")
+                ))))).
+                andExpect(status().is(302));
     }
 }

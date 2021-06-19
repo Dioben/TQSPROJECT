@@ -6,12 +6,15 @@ import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.management.BadAttributeValueExpException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -163,9 +166,20 @@ public class LogisticsWebController {
         return "adminDash";
     }
 
-    @PostMapping(path="/grantApiAccess")
-    public String adminDashboard() throws AccessForbiddenException {
+    @PostMapping(path="/grantKey")
+    public String grantKey(String type,Long id) throws AccessForbiddenException, AccountDataException {
         userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
+        switch (type){
+            case COMPANYROLE:userServiceImpl.grantCompanyKey(id);break;
+            case DRIVERROLE:userServiceImpl.grantDriverKey(id);break;
+            default: throw new AccountDataException("Unknown Role");
+        }
+        return "redirect:/adminDash";
+    }
+    @PostMapping(path="/banDriver")
+    public String banDriver(Long id) throws AccessForbiddenException, AccountDataException {
+        userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
+        userServiceImpl.banDriver(id);
         return "redirect:/adminDash";
     }
 
