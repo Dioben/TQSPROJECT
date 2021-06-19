@@ -19,7 +19,7 @@ public class DataSetup {
     CommandLineRunner setUpData(UserServiceImpl userService, DeliveryService deliveryService, ReputationService reputationService){
         return args -> {
 
-            String DRIVERROLE  = "DRIVER";
+            final String DRIVERROLE  = "DRIVER";
             User admin = new User();
             admin.setRole("ADMIN");
             admin.setEmail("admin@ua.pt");
