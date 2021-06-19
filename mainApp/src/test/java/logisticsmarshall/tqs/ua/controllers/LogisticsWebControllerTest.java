@@ -7,6 +7,8 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.Bas
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -527,5 +529,19 @@ class LogisticsWebControllerTest {
                         new BasicNameValuePair("type", "COMPANY")
                 ))))).
                 andExpect(status().is(302));
+    }
+    @Test
+    @SneakyThrows
+    void requestKeyTest(){
+        User user = new User();
+        user.setRole("COMPANY");
+        Company company= new Company();
+        user.setCompany(company);
+        company.setApiKey("12345");
+        when(userService.getUserFromAuth()).thenReturn(user);
+        mvc.perform(post("/requestReset")).
+                andExpect(status().is(302));
+        Assertions.assertEquals(null,company.getApiKey());
+
     }
 }
