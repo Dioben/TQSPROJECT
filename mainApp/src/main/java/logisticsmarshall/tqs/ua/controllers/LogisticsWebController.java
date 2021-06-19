@@ -1,20 +1,19 @@
 package logisticsmarshall.tqs.ua.controllers;
 
-import logisticsmarshall.tqs.ua.exceptions.*;
+import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
+import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
+import logisticsmarshall.tqs.ua.exceptions.InvalidDeliveryActionException;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.management.BadAttributeValueExpException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -27,17 +26,20 @@ public class LogisticsWebController {
     static final String EMBEDMESSAGE = "message";
     static final String EMBEDPROFILE = "profile";
     static final String MAINDASHFILE = "mainDash";
+    static final String REDIRECTROOT = "redirect:/";
+    static final String REDIRECTADMIN = "redirect:/adminDash";
     @Autowired
     UserServiceImpl userServiceImpl;
     @Autowired
     DeliveryService deliveryService;
 
-    String redirectRoot = "redirect:/";
+
+
 
     @GetMapping("/register")
     public String registration(Model model) {
         if (userServiceImpl.isAuthenticated()) {
-            return redirectRoot;
+            return REDIRECTROOT;
         }
         User user = new User();
         user.setCompany(new Company());
@@ -56,7 +58,7 @@ public class LogisticsWebController {
         if (!User.validateNewUser(user, driver, company))
             throw new AccountDataException();
         if (userServiceImpl.isAuthenticated())
-            return redirectRoot;
+            return REDIRECTROOT;
 
         if (user.getRole().equals(COMPANYROLE))
             user.setCompany(company);
@@ -70,13 +72,13 @@ public class LogisticsWebController {
         } catch (DataIntegrityViolationException e) {
             throw new AccountDataException();
         }
-        return redirectRoot;
+        return REDIRECTROOT;
     }
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
         if (userServiceImpl.isAuthenticated() && logout == null) {
-            return redirectRoot;
+            return REDIRECTROOT;
         }
         if (error != null)
             model.addAttribute("error", error);
@@ -91,7 +93,7 @@ public class LogisticsWebController {
         if (user==null){return "redirect:/info";}
         if (user.getRole().equals(COMPANYROLE)){return "redirect:/companyDash";}
         if (user.getRole().equals(DRIVERROLE)){return "redirect:/driverDash";}
-        if (user.getRole().equals(ADMINROLE)){return "redirect:/adminDash";}
+        if (user.getRole().equals(ADMINROLE)){return REDIRECTADMIN;}
         return "redirect:/info";
     }
 
@@ -174,13 +176,13 @@ public class LogisticsWebController {
             case DRIVERROLE:userServiceImpl.grantDriverKey(id);break;
             default: throw new AccountDataException("Unknown Role");
         }
-        return "redirect:/adminDash";
+        return REDIRECTADMIN;
     }
     @PostMapping(path="/banDriver")
     public String banDriver(Long id) throws AccessForbiddenException, AccountDataException {
         userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         userServiceImpl.banDriver(id);
-        return "redirect:/adminDash";
+        return REDIRECTADMIN;
     }
 
     @PostMapping(path="/driverDash")

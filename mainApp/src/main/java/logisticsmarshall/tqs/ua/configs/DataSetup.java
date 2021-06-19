@@ -18,6 +18,8 @@ public class DataSetup {
     @Bean
     CommandLineRunner setUpData(UserServiceImpl userService, DeliveryService deliveryService, ReputationService reputationService){
         return args -> {
+
+            String DRIVERROLE  = "DRIVER";
             User admin = new User();
             admin.setRole("ADMIN");
             admin.setEmail("admin@ua.pt");
@@ -53,7 +55,7 @@ public class DataSetup {
             userService.encryptPasswordAndStoreUser(stoppedFood);
             
             User rider = new User();
-            rider.setRole("DRIVER");
+            rider.setRole(DRIVERROLE);
             rider.setEmail("rider@ua.pt");
             rider.setName("rider");
             rider.setPassword("rider");
@@ -66,7 +68,7 @@ public class DataSetup {
 
 
             User keylessRider = new User();
-            keylessRider.setRole("DRIVER");
+            keylessRider.setRole(DRIVERROLE);
             keylessRider.setEmail("keylessRider@ua.pt");
             keylessRider.setName("keylessRider");
             keylessRider.setPassword("keylessRider");
@@ -116,7 +118,7 @@ public class DataSetup {
             
             //bad driver setup
             User badRider = new User();
-            badRider.setRole("DRIVER");
+            badRider.setRole(DRIVERROLE);
             badRider.setEmail("badRider@ua.pt");
             badRider.setName("badRider");
             badRider.setPassword("badRider");
@@ -140,7 +142,7 @@ public class DataSetup {
             baddel2.setCompany(stoppedFoodAsCompany);
             baddel2.setStage(Delivery.Stage.DELIVERED);
             baddel2.setDriver(badRiderAsDriver);
-            baddel2.setAddress("The retirement home down the street");
+            baddel2.setAddress("Grandma");
             baddel2.setPickupAddress(stoppedFoodAsCompany.getAddress());
             baddel2.setPriority(Delivery.Priority.LOWPRIORITY);
 
@@ -148,7 +150,7 @@ public class DataSetup {
             baddel3.setCompany(stoppedFoodAsCompany);
             baddel3.setStage(Delivery.Stage.DELIVERED);
             baddel3.setDriver(badRiderAsDriver);
-            baddel3.setAddress("The retirement home down the street");
+            baddel3.setAddress("UP, the movie");
             baddel3.setPickupAddress(stoppedFoodAsCompany.getAddress());
             baddel3.setPriority(Delivery.Priority.LOWPRIORITY);
             
