@@ -7,6 +7,7 @@ import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.repository.CompanyRepository;
 import logisticsmarshall.tqs.ua.repository.DeliveryRepository;
+import logisticsmarshall.tqs.ua.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ public class DeliveryService {
     CompanyRepository companyRepository;
     @Autowired
     DeliveryRepository deliveryRepository;
+    @Autowired
+    DriverRepository driverRepository;
 
     public Delivery getDeliveryById(long id) {
         return deliveryRepository.findDeliveryById(id);
@@ -34,7 +37,7 @@ public class DeliveryService {
     public List<Delivery> getDeliveriesByCompany(Company company) {
         return deliveryRepository.findAllByCompanyId(company.getId());
     }
-    public Company getApiKeyHolder(String apiKey) {
+    public Company getApiKeyHolderCompany(String apiKey) {
         return companyRepository.findCompanyByApiKey(apiKey);
     }
     public boolean driverCanQuery(Driver driver, long deliveryId){
@@ -44,6 +47,9 @@ public class DeliveryService {
     public boolean apiKeyCanQuery(String apiKey, Long deliveryId){
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
         return delivery.getCompany().getApiKey().equals(apiKey);
+    }
+    public Driver getApiKeyHolderDriver(String apiKey) {
+        return driverRepository.findDriverByApiKey(apiKey);
     }
 
 

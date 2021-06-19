@@ -1,13 +1,17 @@
 package logisticsmarshall.tqs.ua.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import logisticsmarshall.tqs.ua.model.Company;
-import logisticsmarshall.tqs.ua.model.Delivery;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
+import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -71,7 +77,7 @@ class LogisticsAPIControllerTest {
     }
 
     @Test
-    void whenGetDeliveries_validapiKey_returnListDeliveries() throws Exception {
+    void whenGetDeliveriesByCompany_validapiKey_returnListDeliveries() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
         Delivery del = new Delivery();
         del.setId(1050L);
@@ -84,22 +90,25 @@ class LogisticsAPIControllerTest {
         String apiKey = "12SDF341G6";
         Company com = new Company();
         com.setApiKey(apiKey);
-        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(com);
         Mockito.when(serviceMock.getDeliveriesByCompany(Mockito.any())).thenReturn(delLst);
 
 
         mvc.perform(get("/api/delivery/")
         .param("apiKey", apiKey)
+        .param("role", "company")
         .content(jsonParser.writeValueAsString(del))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(200))
         .andExpect(jsonPath("$", hasSize(delLst.size())));
     }
 
-    @Test
-    void whenGetDeliveries_invalidapiKey_returnError() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = {"company", "driver", "invalid"})
+    void whenGetDeliveries_invalidapiKey_returnError(String role) throws Exception {
         mvc.perform(get("/api/delivery/")
         .param("apiKey", "invalid")
+        .param("role", role)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(400));
     }
@@ -116,7 +125,7 @@ class LogisticsAPIControllerTest {
                 "\"apiKey\":\""+ apiKey +
                 "\"}";
         System.out.println(requestcontent);
-        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(company);
+        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)
                 .content(requestcontent)
@@ -140,7 +149,7 @@ class LogisticsAPIControllerTest {
         company.setApiKey(apiKey);
         company.setAddress(address);
 
-        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(null);
+        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(null);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"priority\":\"HIGHPRIORITY\"," +
@@ -165,7 +174,7 @@ class LogisticsAPIControllerTest {
         String apiKey = "12SDF341G6";
         Company com = new Company();
         com.setApiKey(apiKey);
-        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(com);
         Mockito.when(serviceMock.getDeliveriesByCompany(Mockito.any())).thenReturn(delLst);
 
         mvc.perform(get("/api/delivery_state")
@@ -193,7 +202,7 @@ class LogisticsAPIControllerTest {
         String apiKey = "12SDF341G6";
         Company com = new Company();
         com.setApiKey(apiKey);
-        Mockito.when(serviceMock.getApiKeyHolder(Mockito.anyString())).thenReturn(com);
+        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(com);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
 
         mvc.perform(get("/api/delivery_state/"+del.getId())
@@ -211,6 +220,164 @@ class LogisticsAPIControllerTest {
                 .param("apiKey", "invalid")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(400));
+    }
+
+    @Test
+    void whenGetDeliveriesByDriver_validapiKey_returnListDeliveries() throws Exception {
+        ArrayList<Delivery> delLst = new ArrayList<>();
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Delivery del2 = new Delivery();
+        del2.setId(1051L);
+        delLst.add(del);
+        delLst.add(del2);
+
+        ArrayList<Delivery> delLst2 = new ArrayList<>();
+        Delivery del3 = new Delivery();
+        del3.setId(1052L);
+        delLst2.add(del3);
+
+        String apiKey = "12SDF341G6";
+        Driver driver = new Driver();
+        driver.setApiKey(apiKey);
+        Mockito.when(serviceMock.getApiKeyHolderDriver(Mockito.anyString())).thenReturn(driver);
+        Mockito.when(serviceMock.getDeliveriesByStage(Delivery.Stage.REQUESTED)).thenReturn(delLst);
+        Mockito.when(serviceMock.getDeliveriesByDriver(Mockito.any())).thenReturn(delLst2);
+
+        int size = delLst.size()+delLst2.size();
+
+        mvc.perform(get("/api/delivery/")
+                .param("apiKey", apiKey)
+                .param("role", "driver")
+                .content(jsonParser.writeValueAsString(del))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$", hasSize(size))).andReturn();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"accept", "pickup", "finish", "cancel"})
+    void whenChangeDelivery_validApiKey_thenSuccess(String action) throws Exception {
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Driver d1 = new Driver();
+        d1.setPhoneNo("933333333");
+        d1.setVehicle(Driver.Vehicle.ONFOOT);
+        d1.setDelivery(new HashSet<>());
+        d1.setApiKey("12SDF341G6");
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "DRIVER",
+                d1,
+                null
+        );
+
+        Mockito.when(serviceMock.getApiKeyHolderDriver(d1.getApiKey())).thenReturn(d1);
+        Mockito.when(serviceMock.driverCanQuery(d1, del.getId())).thenReturn(true);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
+
+        mvc.perform(post("/api/delivery/1050").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("action", action),
+                        new BasicNameValuePair("apiKey", d1.getApiKey())
+                ))))).
+                andExpect(status().is(200));
+    }
+
+    @Test
+    void whenAcceptDelivery_invalidApiKey_thenError() throws Exception {
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Driver d1 = new Driver();
+        d1.setPhoneNo("933333333");
+        d1.setVehicle(Driver.Vehicle.ONFOOT);
+        d1.setDelivery(new HashSet<>());
+        d1.setApiKey("12SDF341G6");
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "DRIVER",
+                d1,
+                null
+        );
+
+        Mockito.when(serviceMock.getApiKeyHolderDriver(d1.getApiKey())).thenReturn(d1);
+        Mockito.when(serviceMock.driverCanQuery(d1, del.getId())).thenReturn(true);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
+
+        mvc.perform(post("/api/delivery/1050").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("action", "accept"),
+                        new BasicNameValuePair("apiKey", "invalidApiKey")
+                ))))).
+                andExpect(status().is(400));
+    }
+
+    @Test
+    void whenAcceptDelivery_driverCannotQuery_thenError() throws Exception {
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Driver d1 = new Driver();
+        d1.setPhoneNo("933333333");
+        d1.setVehicle(Driver.Vehicle.ONFOOT);
+        d1.setDelivery(new HashSet<>());
+        d1.setApiKey("12SDF341G6");
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "DRIVER",
+                d1,
+                null
+        );
+
+        Mockito.when(serviceMock.getApiKeyHolderDriver(d1.getApiKey())).thenReturn(d1);
+        Mockito.when(serviceMock.driverCanQuery(d1, del.getId())).thenReturn(false);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
+
+        mvc.perform(post("/api/delivery/1050").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("action", "accept"),
+                        new BasicNameValuePair("apiKey", d1.getApiKey())
+                ))))).
+                andExpect(status().is(400));
+    }
+
+    @Test
+    void whenAcceptDelivery_invalidAction_thenError() throws Exception {
+        Delivery del = new Delivery();
+        del.setId(1050L);
+        Driver d1 = new Driver();
+        d1.setPhoneNo("933333333");
+        d1.setVehicle(Driver.Vehicle.ONFOOT);
+        d1.setDelivery(new HashSet<>());
+        d1.setApiKey("12SDF341G6");
+        User u1 = new User(
+                "name",
+                "email@gmail.com",
+                "randompass",
+                "DRIVER",
+                d1,
+                null
+        );
+
+        Mockito.when(serviceMock.getApiKeyHolderDriver(d1.getApiKey())).thenReturn(d1);
+        Mockito.when(serviceMock.driverCanQuery(d1, del.getId())).thenReturn(true);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
+
+        mvc.perform(post("/api/delivery/1050").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("action", "invalid"),
+                        new BasicNameValuePair("apiKey", d1.getApiKey())
+                ))))).
+                andExpect(status().is(400));
     }
 
 }
