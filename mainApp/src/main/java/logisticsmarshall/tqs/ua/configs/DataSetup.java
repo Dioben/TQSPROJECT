@@ -39,6 +39,19 @@ public class DataSetup {
             marchingFood.setCompany(marchingFoodAsCompany);
             userService.encryptPasswordAndStoreUser(marchingFood);
 
+            User stoppedFood = new User();
+            stoppedFood.setRole("COMPANY");
+            stoppedFood.setEmail("stoppedfood@ua.pt");
+            stoppedFood.setName("stoppedFood");
+            stoppedFood.setPassword("stoppedFood");
+
+            Company stoppedFoodAsCompany = new Company();
+            stoppedFoodAsCompany.setAddress("We do not actually exist");
+            stoppedFoodAsCompany.setDeliveryType("No hurry");
+            stoppedFoodAsCompany.setPhoneNumber("1515151515");
+            stoppedFood.setCompany(stoppedFoodAsCompany);
+            userService.encryptPasswordAndStoreUser(stoppedFood);
+            
             User rider = new User();
             rider.setRole("DRIVER");
             rider.setEmail("rider@ua.pt");
@@ -50,6 +63,18 @@ public class DataSetup {
             riderAsDriver.setVehicle(Driver.Vehicle.MOTORCYCLE);
             rider.setDriver(riderAsDriver);
             userService.encryptPasswordAndStoreUser(rider);
+
+
+            User keylessRider = new User();
+            keylessRider.setRole("DRIVER");
+            keylessRider.setEmail("keylessRider@ua.pt");
+            keylessRider.setName("keylessRider");
+            keylessRider.setPassword("keylessRider");
+            Driver keylessRiderAsDriver = new Driver();
+            keylessRiderAsDriver.setPhoneNo("987654321");
+            keylessRiderAsDriver.setVehicle(Driver.Vehicle.MOTORCYCLE);
+            keylessRider.setDriver(keylessRiderAsDriver);
+            userService.encryptPasswordAndStoreUser(keylessRider);
 
             //Delivery Setup
             Delivery del1 = new Delivery();
@@ -87,6 +112,76 @@ public class DataSetup {
             reputationService.postReputation(rep1);
             deliveryService.postDelivery(del1);
             deliveryService.postDelivery(del2);
+            
+            
+            //bad driver setup
+            User badRider = new User();
+            badRider.setRole("DRIVER");
+            badRider.setEmail("badRider@ua.pt");
+            badRider.setName("badRider");
+            badRider.setPassword("badRider");
+            Driver badRiderAsDriver = new Driver();
+            badRiderAsDriver.setPhoneNo("999999999");
+            badRiderAsDriver.setApiKey("12345678-1111-2222-3333-000000000000");
+            badRiderAsDriver.setVehicle(Driver.Vehicle.MOTORCYCLE);
+            badRider.setDriver(badRiderAsDriver);
+            userService.encryptPasswordAndStoreUser(badRider);
+
+
+            Delivery baddel1 = new Delivery();
+            baddel1.setCompany(stoppedFoodAsCompany);
+            baddel1.setStage(Delivery.Stage.DELIVERED);
+            baddel1.setDriver(badRiderAsDriver);
+            baddel1.setAddress("The retirement home down the street");
+            baddel1.setPickupAddress(stoppedFoodAsCompany.getAddress());
+            baddel1.setPriority(Delivery.Priority.LOWPRIORITY);
+
+            Delivery baddel2 = new Delivery();
+            baddel2.setCompany(stoppedFoodAsCompany);
+            baddel2.setStage(Delivery.Stage.DELIVERED);
+            baddel2.setDriver(badRiderAsDriver);
+            baddel2.setAddress("The retirement home down the street");
+            baddel2.setPickupAddress(stoppedFoodAsCompany.getAddress());
+            baddel2.setPriority(Delivery.Priority.LOWPRIORITY);
+
+            Delivery baddel3 = new Delivery();
+            baddel3.setCompany(stoppedFoodAsCompany);
+            baddel3.setStage(Delivery.Stage.DELIVERED);
+            baddel3.setDriver(badRiderAsDriver);
+            baddel3.setAddress("The retirement home down the street");
+            baddel3.setPickupAddress(stoppedFoodAsCompany.getAddress());
+            baddel3.setPriority(Delivery.Priority.LOWPRIORITY);
+            
+            stoppedFoodAsCompany.setDelivery(new HashSet<>(Arrays.asList(baddel1,baddel2,baddel3)));
+
+            //Reputation Setup
+            Reputation badRep1 = new Reputation();
+            badRep1.setDescription("I really liked Rider, very chill dude, good driver, no complaints here");
+            badRep1.setRating(2);
+            badRep1.setDelivery(baddel1);
+            badRep1.setDriver(badRiderAsDriver);
+            del1.setReputation(badRep1);
+
+            Reputation badRep2 = new Reputation();
+            badRep2.setDescription("he was too french");
+            badRep2.setRating(2);
+            badRep2.setDelivery(baddel2);
+            badRep2.setDriver(badRiderAsDriver);
+            del1.setReputation(badRep2);
+
+            Reputation badRep3 = new Reputation();
+            badRep3.setDescription("His father smelt of elderberries");
+            badRep3.setRating(2);
+            badRep3.setDelivery(baddel3);
+            badRep3.setDriver(badRiderAsDriver);
+            del1.setReputation(badRep3);
+
+            reputationService.postReputation(badRep1);
+            reputationService.postReputation(badRep2);
+            reputationService.postReputation(badRep3);
+            deliveryService.postDelivery(baddel1);
+            deliveryService.postDelivery(baddel2);
+            deliveryService.postDelivery(baddel3);
         };
     }
 }

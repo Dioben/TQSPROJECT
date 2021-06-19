@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserDetailsService {
     public List<Driver> getKeylessDrivers(){return driverRepository.findAllByApiKey(null);}
     public List<Company> getKeylessCompanies(){return companyRepository.findAllByApiKey(null);}
     public List<DriverAdminView> getLowRatingDrivers() {
-        return reputationRepository.findAllByRatingMaximum(2.5,3);
+        return reputationRepository.findAllByRatingMaximum(2.5,3l);
     }
     public User save(User newUser) {
         return userRepository.save(newUser);
