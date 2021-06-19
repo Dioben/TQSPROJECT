@@ -220,4 +220,58 @@ class UserServiceTest {
         Mockito.when(driverRepository.findDriverById(Mockito.anyLong())).thenReturn(null);
         Assertions.assertThrows(AccountDataException.class, ()->userService.banDriver(1l));
     }
+
+    @Test
+    void validatePasswordOkTest(){
+        User user = new User();
+        String pass = "password";
+        user.setPassword(passwordEncoder.encode(pass));
+       Assertions.assertDoesNotThrow(()->userService.validatePassword(user,pass));
+    }
+    @Test
+    void validatePasswordFailTest(){
+        User user = new User();
+        String pass = "password";
+        user.setPassword(passwordEncoder.encode(pass));
+        Assertions.assertThrows(AccountDataException.class, ()->userService.validatePassword(user,"xpto"));
+    }
+
+    @Test
+    void editCompanyGoodDataTest(){
+        User user = new User();
+        user.setEmail("man@ua.pt");
+        user.setRole("COMPANY");
+        user.setCompany(new Company());
+        Assertions.assertDoesNotThrow(()->userService.editCompany(user,"user","test","123456789","test","test"));
+    }
+    @Test
+    void editCompanyBadDataTest(){
+        User user = new User();
+        user.setCompany(new Company());
+        Assertions.assertThrows(AccountDataException.class,()->userService.editCompany(user,"user","test","bad","test","test"));
+
+    }
+    @Test
+    void editDriverGoodDataTest(){
+        User user = new User();
+        user.setEmail("man@ua.pt");
+        user.setRole("DRIVER");
+        user.setDriver(new Driver());
+        Assertions.assertDoesNotThrow(()->userService.editDriver(user,"user","test","123456789","MOTORCYCLE"));
+    }
+    @Test
+    void editDriverBadDataTest(){
+        User user = new User();
+        user.setDriver(new Driver());
+        Assertions.assertThrows(AccountDataException.class,
+                ()->userService.editDriver(user,"user","test","1abc","CAR"));
+    }
+    @Test
+    void editDriverBadVehicleTest(){
+        User user = new User();
+        user.setDriver(new Driver());
+        Assertions.assertThrows(IllegalArgumentException.class,
+                ()->userService.editDriver(user,"user","test","1abc","MIKE"));
+    }
+
 }

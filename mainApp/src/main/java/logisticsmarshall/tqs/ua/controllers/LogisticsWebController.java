@@ -28,6 +28,7 @@ public class LogisticsWebController {
     static final String MAINDASHFILE = "mainDash";
     static final String REDIRECTROOT = "redirect:/";
     static final String REDIRECTADMIN = "redirect:/adminDash";
+    private static final String REDIRECTLOGOUT = "redirect:/logout";
     @Autowired
     UserServiceImpl userServiceImpl;
     @Autowired
@@ -139,13 +140,20 @@ public class LogisticsWebController {
         return "businessOwnerProfile";
     }
 
+    @PostMapping("/updateCompany")
+    public String updateCompany(String name, String password, String newPassword, String phoneNumber, String deliveryType, String address) throws AccessForbiddenException, AccountDataException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
+        userServiceImpl.validatePassword(user,password);
+        userServiceImpl.editCompany(user,name,newPassword,phoneNumber,deliveryType,address);
+        return REDIRECTLOGOUT;
+    }
 
     @GetMapping(path="/driverProfile")
     public String driverProfile(Model model) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
-        model.addAttribute("profile_name",user.getName());
+        model.addAttribute("name",user.getName());
         model.addAttribute("phone_number",driver.getPhoneNo());
         model.addAttribute("vehicle",driver.getVehicle().name());
         model.addAttribute("apikey",driver.getApiKey());
@@ -159,6 +167,13 @@ public class LogisticsWebController {
         return "workerProfile";
     }
 
+    @PostMapping("/updateDriver")
+    public String updateDriver(String name, String password, String newPassword, String phoneNumber, String vehicle) throws AccessForbiddenException, AccountDataException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
+        userServiceImpl.validatePassword(user,password);
+        userServiceImpl.editDriver(user,name,newPassword,phoneNumber,vehicle);
+        return REDIRECTLOGOUT;
+    }
     @GetMapping(path="/adminDash")
     public String adminDashboard(Model model) throws AccessForbiddenException {
         userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
@@ -183,6 +198,15 @@ public class LogisticsWebController {
         userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
         userServiceImpl.banDriver(id);
         return REDIRECTADMIN;
+    }
+    @PostMapping(path = "/requestReset")
+    public String resetKey() throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuth();
+        if (user==null){throw new AccessForbiddenException("You must log in");}
+        if (user.getCompany()!=null){userServiceImpl.clearApiKey(user.getCompany());return "redirect:/companyProfile";}
+        if (user.getDriver()!=null){userServiceImpl.clearApiKey(user.getDriver());return "redirect:/driverProfile";}
+        return REDIRECTROOT;
+
     }
 
     @PostMapping(path="/driverDash")
