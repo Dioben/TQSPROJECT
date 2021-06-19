@@ -8,6 +8,7 @@ import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.UserServiceImpl;
 import lombok.SneakyThrows;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
@@ -543,5 +545,69 @@ class LogisticsWebControllerTest {
         mvc.perform(post("/requestReset")).
                 andExpect(status().is(302)).andExpect(redirectedUrl("/companyProfile"));
 
+    }
+    @Test
+    @SneakyThrows
+    void requestKeyTestNoUser(){
+        User user = new User();
+        user.setRole("COMPANY");
+        Company company = new Company();
+        company.setUser(user);
+        user.setCompany(company);
+        when(userService.getUserFromAuth()).thenReturn(null);
+        mvc.perform(post("/requestReset")).
+                andExpect(status().is(403));
+
+    }
+    @Test
+    @SneakyThrows
+    void requestKeyTestDriver(){
+        User user = new User();
+        user.setRole("Driver");
+        Driver driver = new Driver();
+        driver.setUser(user);
+        user.setDriver(driver);
+        when(userService.getUserFromAuth()).thenReturn(user);
+        mvc.perform(post("/requestReset")).
+                andExpect(status().is(302)).andExpect(redirectedUrl("/driverProfile"));
+
+    }
+
+    @Test
+    @SneakyThrows
+    void updateCompanyTest(){
+        User user = new User();
+        user.setRole("COMPANY");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        when(userService.getUserFromAuthAndCheckCredentials(Mockito.anyString())).thenReturn(user);
+        mvc.perform(post("/updateCompany").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("password", "password"),
+                        new BasicNameValuePair("newPassword", "test"),
+                        new BasicNameValuePair("phoneNumber", "999999999"),
+                        new BasicNameValuePair("address", "test"),
+                        new BasicNameValuePair("deliveryType", "test")
+                ))))).
+                andExpect(status().is(302)).andExpect(redirectedUrl("/logout"));
+    }
+    @Test
+    @SneakyThrows
+    void updateDriverTest(){
+        User user = new User();
+        user.setRole("DRIVER");
+        user.setPassword(new BCryptPasswordEncoder().encode("password"));
+        when(userService.getUserFromAuthAndCheckCredentials(Mockito.anyString())).thenReturn(user);
+        mvc.perform(post("/updateDriver").
+                contentType(MediaType.APPLICATION_FORM_URLENCODED).
+                content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
+                        new BasicNameValuePair("name", "test"),
+                        new BasicNameValuePair("password", "password"),
+                        new BasicNameValuePair("newPassword", "test"),
+                        new BasicNameValuePair("phoneNumber", "999999999"),
+                        new BasicNameValuePair("vehicle", "CAR")
+                ))))).
+                andExpect(status().is(302)).andExpect(redirectedUrl("/logout"));
     }
 }
