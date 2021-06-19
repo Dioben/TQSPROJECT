@@ -49,11 +49,18 @@
 						<div class="col-12">
 							<input th:value="${delivery_type}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
 						</div>
-
+				</form>
 						<br>
-						<div class="col-12">
-							<label for="apikey">API Key attributed:</label>
-							<p id="apikey" th:text="${apikey}"></p>
+						<div class="col-12" style="display: inline-block">
+							<div class="col-9">
+								<label for="apikey">API Key attributed:</label>
+								<p id="apikey" th:text="${apikey} ?: 'Awaiting Admin Approval'"></p>
+							</div>
+							<div class="col-3" th:if="${apikey != null}">
+								<form  method="post" action="/requestReset" ><input type="submit" class="button" value="Request Reset"></form>
+							</div>
+
+
 						</div>
 						<br>
 						<div class="col-12">
@@ -63,7 +70,7 @@
 
 
 					<br>
-				</form>
+
 			
 
 		</div>

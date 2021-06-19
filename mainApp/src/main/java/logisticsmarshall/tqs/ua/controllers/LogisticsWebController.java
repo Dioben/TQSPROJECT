@@ -184,6 +184,15 @@ public class LogisticsWebController {
         userServiceImpl.banDriver(id);
         return REDIRECTADMIN;
     }
+    @PostMapping(path = "/requestReset")
+    public String resetKey() throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuth();
+        if (user==null){throw new AccessForbiddenException("You must log in");}
+        if (user.getCompany()!=null){userServiceImpl.clearApiKey(user.getCompany());return "redirect:/companyProfile";}
+        if (user.getDriver()!=null){userServiceImpl.clearApiKey(user.getDriver());return "redirect:/companyProfile";}
+        return REDIRECTROOT;
+
+    }
 
     @PostMapping(path="/driverDash")
     public String changeDelivery(Model model, @ModelAttribute("action") String action, @ModelAttribute("deliveryId") String deliveryId) throws AccessForbiddenException {

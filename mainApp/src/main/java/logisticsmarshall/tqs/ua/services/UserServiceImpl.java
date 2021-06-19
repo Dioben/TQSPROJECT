@@ -136,4 +136,14 @@ public class UserServiceImpl implements UserDetailsService {
         driverRepository.delete(driver);
 
     }
+
+    public void clearApiKey(Company company) {
+        company.setApiKey(null);
+        companyRepository.save(company);
+    }
+
+    public void clearApiKey(Driver driver) {
+        driver.setApiKey(null);
+        driverRepository.save(driver);
+    }
 }
