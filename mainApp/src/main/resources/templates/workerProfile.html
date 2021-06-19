@@ -34,7 +34,7 @@
 
 				<div class="col-12">
 					<label for="name">Name:</label>
-					<input type="text" th:value="${profile.name}" name="name" id="name" placeholder="Name" />
+					<input type="text" th:value="${name}" name="name" id="name" placeholder="Name" />
 				</div>
 				<br>
 				<div class="col-12">
@@ -55,11 +55,11 @@
 				<br>
 				<div class="col-12 ">
 					<label for="vehicle">Vehicle</label>
-					<select name="vehicle" th:value="*{vehicle}" id="vehicle">
-						<option th:value="BICYCLE" th:text="Bicycle"></option>
-						<option th:value="CAR" th:text="Car"></option>
-						<option th:value="MOTORCYCLE" th:text="Motorcycle"></option>
-						<option th:value="ONFOOT" th:text="Onfoot"></option>
+					<select name="vehicle" id="vehicle">
+						<option th:value="BICYCLE" th:text="Bicycle" th:selected="${vehicle == 'BICYCLE'}"></option>
+						<option th:value="CAR" th:text="Car" th:selected="${vehicle == 'CAR'}"></option>
+						<option th:value="MOTORCYCLE" th:text="Motorcycle" th:selected="${vehicle == 'MOTORCYCLE'}"></option>
+						<option th:value="ONFOOT" th:text="Onfoot" th:selected="${vehicle == 'ONFOOT'}"></option>
 					</select>
 				</div>
 				<br>
