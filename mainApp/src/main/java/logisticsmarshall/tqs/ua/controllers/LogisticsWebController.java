@@ -157,6 +157,9 @@ public class LogisticsWebController {
     @GetMapping(path="/adminDash")
     public String adminDashboard(Model model) throws AccessForbiddenException {
         userServiceImpl.getUserFromAuthAndCheckCredentials(ADMINROLE);
+        model.addAttribute("drivers",userServiceImpl.getKeylessDrivers());
+        model.addAttribute("companies",userServiceImpl.getKeylessCompanies());
+        model.addAttribute("problemdrivers",userServiceImpl.getLowRatingDrivers());
         return "adminDash";
     }
 

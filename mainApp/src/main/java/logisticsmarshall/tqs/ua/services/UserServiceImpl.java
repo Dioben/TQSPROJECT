@@ -3,9 +3,11 @@ package logisticsmarshall.tqs.ua.services;
 import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.Company;
 import logisticsmarshall.tqs.ua.model.Driver;
+import logisticsmarshall.tqs.ua.model.DriverAdminView;
 import logisticsmarshall.tqs.ua.model.User;
 import logisticsmarshall.tqs.ua.repository.CompanyRepository;
 import logisticsmarshall.tqs.ua.repository.DriverRepository;
+import logisticsmarshall.tqs.ua.repository.ReputationRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
@@ -34,6 +36,8 @@ public class UserServiceImpl implements UserDetailsService {
     private DriverRepository driverRepository;
 
     @Autowired
+    private ReputationRepository reputationRepository;
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public User findByEmail(String email) {
@@ -44,6 +48,9 @@ public class UserServiceImpl implements UserDetailsService {
     }
     public List<Driver> getKeylessDrivers(){return driverRepository.findAllByApiKey(null);}
     public List<Company> getKeylessCompanies(){return companyRepository.findAllByApiKey(null);}
+    public List<DriverAdminView> getLowRatingDrivers() {
+        return reputationRepository.findAllByRatingMaximum(2.5,3);
+    }
     public User save(User newUser) {
         return userRepository.save(newUser);
     }
@@ -101,5 +108,6 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
 
 }

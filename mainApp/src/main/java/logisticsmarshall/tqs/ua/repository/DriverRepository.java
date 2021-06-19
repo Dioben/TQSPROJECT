@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver,Long> {
     List<Driver> findAllByApiKey(String apiKey);
+
 }
