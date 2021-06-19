@@ -58,7 +58,7 @@ public class Driver {
     @Column(name = "apiKey", nullable = true, unique = true)
     private String apiKey;
 
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.REMOVE)
     private Set<Delivery> delivery;
 
 

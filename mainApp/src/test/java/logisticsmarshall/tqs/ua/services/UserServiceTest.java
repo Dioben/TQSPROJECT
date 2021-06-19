@@ -1,7 +1,14 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
+import logisticsmarshall.tqs.ua.exceptions.AccountDataException;
+import logisticsmarshall.tqs.ua.model.Company;
+import logisticsmarshall.tqs.ua.model.Delivery;
+import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.model.User;
+import logisticsmarshall.tqs.ua.repository.CompanyRepository;
+import logisticsmarshall.tqs.ua.repository.DeliveryRepository;
+import logisticsmarshall.tqs.ua.repository.DriverRepository;
 import logisticsmarshall.tqs.ua.repository.UserRepository;
 import lombok.SneakyThrows;
 
@@ -22,6 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +39,14 @@ class UserServiceTest {
     @Mock(lenient = true)
     private UserRepository userRepository;
 
+    @Mock(lenient = true)
+    private CompanyRepository companyRepository;
 
+    @Mock(lenient = true)
+    private DriverRepository driverRepository;
+
+    @Mock(lenient = true)
+    private DeliveryRepository deliveryRepository;
     @Spy
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -153,5 +168,56 @@ class UserServiceTest {
         Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
         SecurityContextHolder.setContext(securityContext);
         Assertions.assertThrows(AccessForbiddenException.class, ()->userService.getUserFromAuthAndCheckCredentials("ADMIN"));
+    }
+
+    @Test
+    void grantKeyNXCompanyTest(){
+        Mockito.when(companyRepository.findCompanyById(Mockito.anyLong())).thenReturn(null);
+        Assertions.assertThrows(AccountDataException.class, ()->userService.grantCompanyKey(1l));
+    }
+    @Test
+    void grantKeyNXDriverTest(){
+        Mockito.when(driverRepository.findDriverById(Mockito.anyLong())).thenReturn(null);
+        Assertions.assertThrows(AccountDataException.class, ()->userService.grantDriverKey(1l));
+    }
+    @Test
+    @SneakyThrows
+    void grantKeyCompSuccessTest(){
+        String key = "abcde";
+        Company company = new Company();
+        company.setApiKey(key);
+        Mockito.when(companyRepository.findCompanyById(Mockito.anyLong())).thenReturn(company);
+        userService.grantCompanyKey(1l);
+        Assertions.assertNotEquals(key,company.getApiKey());
+    }
+    @Test
+    @SneakyThrows
+    void grantKeyDriverSuccessTest(){
+        String key = "abcde";
+        Driver driver = new Driver();
+        driver.setApiKey(key);
+        Mockito.when(driverRepository.findDriverById(Mockito.anyLong())).thenReturn(driver);
+        userService.grantDriverKey(1l);
+        Assertions.assertNotEquals(key,driver.getApiKey());
+    }
+    @Test
+    @SneakyThrows
+    void banDriverSuccessTest(){
+        User user = new User();
+        Driver driver = new Driver();
+        user.setDriver(driver);
+        driver.setUser(user);
+        Delivery del = new Delivery();
+        del.setDriver(driver);
+        driver.setDelivery(new HashSet<>(Arrays.asList(new Delivery[]{del})));
+        Mockito.when(driverRepository.findDriverById(Mockito.anyLong())).thenReturn(driver);
+        userService.banDriver(1l);
+        Assertions.assertEquals(null,del.getDriver());
+        Assertions.assertEquals("BANNED DRIVER", user.getRole());
+    }
+    @Test
+    void banDriverNXTest(){
+        Mockito.when(driverRepository.findDriverById(Mockito.anyLong())).thenReturn(null);
+        Assertions.assertThrows(AccountDataException.class, ()->userService.banDriver(1l));
     }
 }
