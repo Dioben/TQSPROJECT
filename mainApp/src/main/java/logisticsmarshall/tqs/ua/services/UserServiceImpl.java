@@ -146,4 +146,21 @@ public class UserServiceImpl implements UserDetailsService {
         driver.setApiKey(null);
         driverRepository.save(driver);
     }
+
+    public void validatePassword(User user, String password) throws AccountDataException {
+        if(!passwordEncoder.matches(password,user.getPassword())){throw new AccountDataException("Invalid Password");}
+    }
+
+    public void editCompany(User user, String name, String newPassword, String phoneNumber, String deliveryType, String address) throws AccountDataException {
+        if (user.getCompany()==null){throw new AccountDataException();}
+        Company company= user.getCompany();
+        user.setName(name);
+        user.setPassword(newPassword);
+        company.setPhoneNumber(phoneNumber);
+        company.setDeliveryType(deliveryType);
+        company.setAddress(address);
+        companyRepository.save(company);
+        if(!User.validateNewUser(user,user.getDriver(),user.getCompany())){throw  new AccountDataException("Bad Account Data");}
+        this.encryptPasswordAndStoreUser(user);
+    }
 }

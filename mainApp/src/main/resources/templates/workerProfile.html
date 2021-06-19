@@ -30,25 +30,41 @@
 
 		<div style="width:700px; margin:0 auto; margin-top:100px" >
 				<h3>Worker Profile</h3>
-			<form>
+			<form method="post" action="/updateDriver">
+
 				<div class="col-12">
-					<input type="text" th:value="${profile_name}" name="name" id="name" placeholder="Name" />
+					<label for="name">Name:</label>
+					<input type="text" th:value="${profile.name}" name="name" id="name" placeholder="Name" />
 				</div>
-
-
 				<br>
 				<div class="col-12">
+					<label for="password">Current Password</label>
 					<input type="password" name="password" id="password" placeholder="Password" />
 				</div>
 
 				<br>
 				<div class="col-12">
+					<label for="password">New Password (can be the same)</label>
+					<input type="password" name="newPassword" id="newPassword" placeholder="Password" />
+				</div>
+				<br>
+				<div class="col-12">
+					<label for="phoneNumber">Phone Number</label>
 					<input th:value="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
 				</div>
 				<br>
-
-				<div class="col-12">
-					<input th:value="${vehicle}" type="text" name="deliveryType" id="deliveryType" placeholder="Vehicle Type" />
+				<div class="col-12 ">
+					<label for="vehicle">Vehicle</label>
+					<select name="vehicle" th:value="*{vehicle}" id="vehicle">
+						<option th:value="BICYCLE" th:text="Bicycle"></option>
+						<option th:value="CAR" th:text="Car"></option>
+						<option th:value="MOTORCYCLE" th:text="Motorcycle"></option>
+						<option th:value="ONFOOT" th:text="Onfoot"></option>
+					</select>
+				</div>
+				<br>
+				<div class="col-3 aln-right">
+					<input type="submit" class="button" value="Update Profile">
 				</div>
 			</form>
 				<br>

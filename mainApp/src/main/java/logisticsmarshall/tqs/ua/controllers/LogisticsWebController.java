@@ -28,6 +28,7 @@ public class LogisticsWebController {
     static final String MAINDASHFILE = "mainDash";
     static final String REDIRECTROOT = "redirect:/";
     static final String REDIRECTADMIN = "redirect:/adminDash";
+    private static final String REDIRECTLOGOUT = "redirect:/logout";
     @Autowired
     UserServiceImpl userServiceImpl;
     @Autowired
@@ -139,6 +140,13 @@ public class LogisticsWebController {
         return "businessOwnerProfile";
     }
 
+    @PostMapping("/updateCompany")
+    public String updateCompany(String name, String password, String newPassword, String phoneNumber, String deliveryType, String address) throws AccessForbiddenException, AccountDataException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
+        userServiceImpl.validatePassword(user,password);
+        userServiceImpl.editCompany(user,name,newPassword,phoneNumber,deliveryType,address);
+        return REDIRECTLOGOUT;
+    }
 
     @GetMapping(path="/driverProfile")
     public String driverProfile(Model model) throws AccessForbiddenException {
