@@ -30,6 +30,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -535,13 +536,12 @@ class LogisticsWebControllerTest {
     void requestKeyTest(){
         User user = new User();
         user.setRole("COMPANY");
-        Company company= new Company();
+        Company company = new Company();
+        company.setUser(user);
         user.setCompany(company);
-        company.setApiKey("12345");
         when(userService.getUserFromAuth()).thenReturn(user);
         mvc.perform(post("/requestReset")).
-                andExpect(status().is(302));
-        Assertions.assertEquals(null,company.getApiKey());
+                andExpect(status().is(302)).andExpect(redirectedUrl("/companyProfile"));
 
     }
 }
