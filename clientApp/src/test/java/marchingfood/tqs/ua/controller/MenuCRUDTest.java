@@ -5,6 +5,7 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.Ur
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
 import lombok.SneakyThrows;
+import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
 import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class MenuCRUDTest {
 
     @MockBean
     MenuService serviceMock;
+
+    @MockBean
+    DeliveryService deliveryService;
 
     @MockBean
     UserServiceImpl userService;
