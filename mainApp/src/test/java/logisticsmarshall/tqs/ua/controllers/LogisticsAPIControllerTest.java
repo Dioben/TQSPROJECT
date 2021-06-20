@@ -205,9 +205,9 @@ class LogisticsAPIControllerTest {
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
         Mockito.when(reputationServiceMock.getReputationByDelivery(del)).thenReturn(reputation);
         mvc.perform(get("/api/reputation/1050")
-                .param("APIKey", "invalid")
-
-
+                .param("APIKey", "invalid"))
+                .andExpect(status().is(400));
+    }
     @Test
     void whenGetDeliveriesState_validapiKey_returnListStates() throws Exception {
         ArrayList<Delivery> delLst = new ArrayList<>();
@@ -310,8 +310,9 @@ class LogisticsAPIControllerTest {
         Mockito.when(driverServiceMock.getDriverByApiKey(Mockito.anyString())).thenReturn(driver);
         Mockito.when(reputationServiceMock.getReputationsByDriver(driver)).thenReturn(null);
         mvc.perform(get("/api/average_reputation")
-                .param("APIKey", "invalid")
-
+                .param("APIKey", "invalid"))
+                .andExpect(status().is(400));
+    }
     @Test
     void whenGetDeliveryState_validApiKey_returnState() throws Exception {
         Delivery del = new Delivery();
