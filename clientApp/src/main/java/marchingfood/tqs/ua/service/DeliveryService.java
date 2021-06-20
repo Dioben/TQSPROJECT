@@ -13,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,24 @@ public class DeliveryService {
         delivery.setId(result.getBody().getId());
         return delivery;
     }
+
+    public List<ProviderDelivery> getClientDeliveriesFromLogistics(Client client){
+        ArrayList<ProviderDelivery> providerDeliveries = new ArrayList<>();
+        for(Delivery delivery: client.getOrderEntity()){
+            providerDeliveries.add(this.getDeliveryFromLogistics(delivery.getId()));
+        }
+        return providerDeliveries;
+    }
+
+    private ProviderDelivery getDeliveryFromLogistics(long id) {
+        final String uri = "http://backendmain:8080/api/delivery/"+id;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>("{\"apiKey\":\""+LOGISTICS_MARSHALL_APIKEY+"\"}", headers);
+        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
+        return  result.getBody();
+    }
+
 
     private String getPostMapFromDelivery(Delivery delivery) {
         Map<String,Object> map = new HashMap<>();
