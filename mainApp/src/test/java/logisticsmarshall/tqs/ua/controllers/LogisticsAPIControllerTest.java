@@ -470,63 +470,6 @@ class LogisticsAPIControllerTest {
                 .andExpect(status().is(403));
     }
 
-    @Test
-    void whenPostRating_invalidDeliveryIdParameter_returnError() throws Exception {
-        Reputation rep = new Reputation();
-        String description = "Really liked my driver";
-        String apiKey = "12312SADF213";
-        Company company = new Company();
-        company.setApiKey(apiKey);
-        Delivery delRequested = new Delivery();
-        Driver driverAssigned = new Driver();
-        rep.setDelivery(delRequested);
-        rep.setRating(5);
-        rep.setDriver(driverAssigned);
-        rep.setDescription(description);
-
-        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
-        Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(null);
-        Mockito.when(driverServiceMock.getDriverById(Mockito.anyInt())).thenReturn(driverAssigned);
-
-        mvc.perform(post("/api/reputation")
-                .param("apiKey", apiKey)
-                .param("rating", String.valueOf(5))
-                .param("delivery_id", String.valueOf(5000))
-                .param("driver_id", String.valueOf(1))
-                .param("description", description)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonParser.writeValueAsString(rep)))
-                .andExpect(status().is(403));
-    }
-
-    @Test
-    void whenPostRating_invalidDriverIdParameter_returnError() throws Exception {
-        Reputation rep = new Reputation();
-        String description = "Really liked my driver";
-        String apiKey = "12312SADF213";
-        Company company = new Company();
-        company.setApiKey(apiKey);
-        Delivery delRequested = new Delivery();
-        Driver driverAssigned = new Driver();
-        rep.setDelivery(delRequested);
-        rep.setRating(5);
-        rep.setDriver(driverAssigned);
-        rep.setDescription(description);
-
-        Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
-        Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(delRequested);
-        Mockito.when(driverServiceMock.getDriverById(Mockito.anyInt())).thenReturn(null);
-
-        mvc.perform(post("/api/reputation")
-                .param("apiKey", apiKey)
-                .param("rating", String.valueOf(5))
-                .param("delivery_id", String.valueOf(1))
-                .param("driver_id", String.valueOf(50000))
-                .param("description", description)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonParser.writeValueAsString(rep)))
-                .andExpect(status().is(403));
-    }
 
     @Test
     void whenAllAverageRatingByCompanyKey_noDrivers_returnError() throws Exception {
