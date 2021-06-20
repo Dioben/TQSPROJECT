@@ -3,16 +3,18 @@ package logisticsmarshall.tqs.ua.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import logisticsmarshall.tqs.ua.services.CompanyService;
 import logisticsmarshall.tqs.ua.exceptions.*;
 import logisticsmarshall.tqs.ua.model.*;
 import logisticsmarshall.tqs.ua.services.DeliveryService;
+import logisticsmarshall.tqs.ua.services.DriverService;
+import logisticsmarshall.tqs.ua.services.ReputationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static logisticsmarshall.tqs.ua.utils.Utils.getStateMapList;
 
@@ -21,8 +23,19 @@ import static logisticsmarshall.tqs.ua.utils.Utils.getStateMapList;
 public class LogisticsAPIController {
     @Autowired
     private DeliveryService deliveryService;
+
+    @Autowired
+    private DriverService driverService;
+
+    @Autowired
+    private ReputationService reputationService;
+
+    @Autowired
+    private CompanyService companyService;
+
     @Autowired
     ObjectMapper objectMapper;
+
 
     @PostMapping(path="/delivery",consumes = "application/json")
     public ResponseEntity<Delivery> postDelivery(@RequestBody NewDelivery newDelivery) {
@@ -88,7 +101,61 @@ public class LogisticsAPIController {
         if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
         return ResponseEntity.ok(del);
+    }
 
+
+
+    @GetMapping(path="/average_reputation/list")
+    public ResponseEntity<String> getAllAverageRatings(
+            @RequestParam(name="APIKey") String apikey) throws JsonProcessingException {
+
+        if (!companyService.apiKeyExits(apikey)) return ResponseEntity.status(400).build();
+
+        List<Driver> driverList= driverService.getAllDrivers();
+        if(driverList == null || driverList.isEmpty())return ResponseEntity.noContent().build();
+
+
+        List<Object> response = new ArrayList<>();
+        for(Driver dr : driverList){
+            Set<Reputation> repList = reputationService.getReputationsByDriver(dr);
+            double averageReputation = 0;
+            for(Reputation rep: repList)averageReputation+=rep.getRating();
+            averageReputation/=repList.size();
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",dr.getId());
+            map.put("average_reputation",averageReputation);
+            response.add(map);
+        }
+
+        String respJSON = objectMapper.writeValueAsString(response);
+
+        return ResponseEntity.ok(respJSON);
+    }
+
+
+    @GetMapping(path="/average_reputation")
+    public ResponseEntity<Double> getAverageRatingByDriverKey(
+            @RequestParam(name="APIKey") String apikey) {
+        if (!driverService.apiKeyExits(apikey)) return ResponseEntity.status(400).build();
+        Driver driver = driverService.getDriverByApiKey(apikey);
+        Set<Reputation> repList = reputationService.getReputationsByDriver(driver);
+        if(repList == null || repList.isEmpty())return ResponseEntity.status(400).build();
+        double averageReputation = 0;
+        for(Reputation rep: repList)averageReputation+=rep.getRating();
+        averageReputation/=repList.size();
+
+        return ResponseEntity.ok(averageReputation);
+    }
+
+    @GetMapping(path="/reputation/{delivery_id}")
+    public ResponseEntity<Reputation> getRatingByDeliveryId(
+            @PathVariable(name="delivery_id") long deliveryId,
+            @RequestParam(name="APIKey") String apikey) {
+        if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
+        Delivery del = deliveryService.getDeliveryById(deliveryId);
+        Reputation rep = reputationService.getReputationByDelivery(del);
+        if(rep == null)return ResponseEntity.status(400).build();
+        return ResponseEntity.ok(rep);
     }
 
     @PostMapping(path = "/delivery/{id}")
