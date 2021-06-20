@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Delivery;
+import marchingfood.tqs.ua.model.ProviderDelivery;
 import marchingfood.tqs.ua.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -42,16 +43,15 @@ public class DeliveryService {
     public Delivery postToLogisticsClient(Delivery delivery) throws BadParameterException {
         String deliveryJSON = getPostMapFromDelivery(delivery);
         final String uri = "http://backendmain:8080/api/delivery";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(deliveryJSON, headers);
-        ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
+        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
         if (result.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
             throw  new BadParameterException("Mal-formed delivery request");
         }
-
+        delivery.setId(result.getBody().getId());
         return delivery;
     }
 
