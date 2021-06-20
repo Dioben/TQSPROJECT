@@ -56,6 +56,7 @@ class LogisticsAPIControllerTest {
     @MockBean
     CompanyService companyServiceMock;
 
+    @MockBean
     UserServiceImpl userService;
 
     @Autowired
