@@ -1,8 +1,6 @@
 package logisticsmarshall.tqs.ua.services;
 
-import logisticsmarshall.tqs.ua.model.Delivery;
 import logisticsmarshall.tqs.ua.model.Driver;
-import logisticsmarshall.tqs.ua.repository.CompanyRepository;
 import logisticsmarshall.tqs.ua.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,8 @@ public class DriverService {
         return driver != null;
     }
 
-    public Driver getDriverById(long driver_id) {
-        return driverRepository.findDriverById(driver_id);
+    public Driver getDriverById(long driverId) {
+        return driverRepository.findDriverById(driverId);
     }
 
     public Driver getDriverByApiKey(String apikey) {

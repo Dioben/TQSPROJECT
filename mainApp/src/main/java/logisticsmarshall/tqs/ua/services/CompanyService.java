@@ -1,9 +1,7 @@
 package logisticsmarshall.tqs.ua.services;
 
 import logisticsmarshall.tqs.ua.model.Company;
-import logisticsmarshall.tqs.ua.model.Driver;
 import logisticsmarshall.tqs.ua.repository.CompanyRepository;
-import logisticsmarshall.tqs.ua.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

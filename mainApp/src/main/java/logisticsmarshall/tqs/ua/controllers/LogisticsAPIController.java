@@ -135,7 +135,7 @@ public class LogisticsAPIController {
 
     @GetMapping(path="/average_reputation")
     public ResponseEntity<Double> getAverageRatingByDriverKey(
-            @RequestParam(name="APIKey") String apikey) throws JsonProcessingException {
+            @RequestParam(name="APIKey") String apikey) {
         if (!driverService.apiKeyExits(apikey)) return ResponseEntity.status(400).build();
         Driver driver = driverService.getDriverByApiKey(apikey);
         Set<Reputation> repList = reputationService.getReputationsByDriver(driver);
