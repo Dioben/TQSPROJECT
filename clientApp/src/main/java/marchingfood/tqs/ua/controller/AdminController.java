@@ -2,8 +2,11 @@ package marchingfood.tqs.ua.controller;
 
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
+import marchingfood.tqs.ua.model.Client;
+import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.model.MenuDTO;
+import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
 import marchingfood.tqs.ua.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
+    @Autowired
+    DeliveryService deliveryService;
     @Autowired
     MenuService menuService;
     @Autowired
@@ -26,6 +33,9 @@ public class AdminController {
     public String adminDashboard(Model model) throws AccessForbiddenException {
         userService.getUserFromAuthIfAdmin();
         model.addAttribute("menus",menuService.getMenus());
+        List<Delivery> deliveries = deliveryService.getDeliveries();
+        model.addAttribute("deliveries",deliveries);
+
         return "adminDash";
     }
     @PostMapping(path="/menu", consumes = {"application/x-www-form-urlencoded"})
