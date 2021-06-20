@@ -14,7 +14,6 @@ public interface DriverRepository extends JpaRepository<Driver,Long> {
     Driver findDriverByApiKey(String apiKey);
     List<Driver> findAllByApiKey(String apiKey);
 
-    Driver findDriverByApiKey(String apiKey);
     Driver findDriverById(Long id);
 
 }
