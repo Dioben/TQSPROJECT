@@ -161,7 +161,7 @@ public class LogisticsAPIController {
     }
 
     @PostMapping(path="/reputation",consumes = "application/json")
-    public ResponseEntity<Reputation> postRating(@RequestParam(name = "rating") long rating,
+    public ResponseEntity<Reputation> postRating(@RequestParam(name = "rating") int rating,
                                                    @RequestParam(name = "delivery_id") long deliveryId,
                                                    @RequestParam(name = "driver_id") long driverId,
                                                    @RequestParam(name = "apiKey") String apikey,

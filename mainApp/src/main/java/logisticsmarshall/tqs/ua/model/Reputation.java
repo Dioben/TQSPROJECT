@@ -18,7 +18,7 @@ public class Reputation {
     private long id;
 
     @Column(name = "rating", nullable = false)
-    private long rating;
+    private int rating;
 
     @Column(name = "description", nullable = false)
     private String description;

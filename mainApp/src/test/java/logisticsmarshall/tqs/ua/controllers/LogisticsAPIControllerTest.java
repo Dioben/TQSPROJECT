@@ -426,8 +426,8 @@ class LogisticsAPIControllerTest {
         rep.setDescription(description);
 
         Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
-        Mockito.when(serviceMock.getDeliveryById(Mockito.anyInt())).thenReturn(delRequested);
-        Mockito.when(driverServiceMock.getDriverById(Mockito.anyInt())).thenReturn(driverAssigned);
+        Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(delRequested);
+        Mockito.when(driverServiceMock.getDriverById(Mockito.anyLong())).thenReturn(driverAssigned);
         mvc.perform(post("/api/reputation")
                 .param("apiKey", apiKey)
                 .param("rating", String.valueOf(5))
