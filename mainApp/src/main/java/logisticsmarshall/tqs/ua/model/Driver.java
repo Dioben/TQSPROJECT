@@ -5,6 +5,8 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,7 +19,25 @@ public class Driver {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Driver driver = (Driver) o;
+        return id == driver.id &&
+                Objects.equals(phoneNo, driver.phoneNo) &&
+                Objects.equals(busy, driver.busy) &&
+                vehicle == driver.vehicle &&
+                Objects.equals(apiKey, driver.apiKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, phoneNo, busy, vehicle, apiKey);
+    }
 
     @PrimaryKeyJoinColumn
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -28,8 +48,8 @@ public class Driver {
     @Column(name = "phoneNumber", nullable = false)
     private String phoneNo;
 
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Column(name = "busy", nullable = false)
+    private boolean busy = false;
 
     @Column(name = "vehicle", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,7 +58,7 @@ public class Driver {
     @Column(name = "apiKey", nullable = true, unique = true)
     private String apiKey;
 
-    @OneToMany(mappedBy = "driver")
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.REMOVE)
     private Set<Delivery> delivery;
 
 
@@ -53,7 +73,7 @@ public class Driver {
         Driver driver = new Driver();
         driver.setUser(driverDTO.getUser());
         driver.setPhoneNo(driverDTO.getPhoneNo());
-        driver.setStatus(driverDTO.getStatus());
+        driver.setBusy(driverDTO.getStatus());
         driver.setVehicle(driverDTO.getVehicle());
         driver.setDelivery(driverDTO.getDelivery());
         driver.setReputation(driverDTO.getReputation());

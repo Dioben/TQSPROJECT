@@ -2,10 +2,8 @@ package marchingfood.tqs.ua.controller;
 
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.exceptions.AccountDataException;
-import marchingfood.tqs.ua.model.Client;
-import marchingfood.tqs.ua.model.ClientDTO;
-import marchingfood.tqs.ua.model.Delivery;
-import marchingfood.tqs.ua.model.Menu;
+import marchingfood.tqs.ua.exceptions.BadParameterException;
+import marchingfood.tqs.ua.model.*;
 import marchingfood.tqs.ua.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -91,9 +89,9 @@ public class DeliveryController {
     }
 
     @PostMapping("/restaurant")
-    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menu_id) throws AccessForbiddenException {
+    public ResponseEntity<Object> restaurantMenuAddToCart(@RequestBody int menuId) throws AccessForbiddenException {
         //Add post to cart map
-        Menu gotten = menuService.getMenuById(menu_id);
+        Menu gotten = menuService.getMenuById(menuId);
         Client client = userService.getUserFromAuthOrException();
         if(client == null)return ResponseEntity.status(404).build();
         cartService.addMenu(gotten,client);
@@ -119,18 +117,25 @@ public class DeliveryController {
 
     @PostMapping("/cart")
     @ResponseStatus(HttpStatus.OK)
-    public void deliveryFromCartPost() throws AccessForbiddenException {
+    public void deliveryFromCartPost() throws AccessForbiddenException, BadParameterException {
         Client client = userService.getUserFromAuthOrException();
         List<Menu> menuCart = cartService.getClientCart(client);
         double total = 0;
         for(Menu menu : menuCart)total+=menu.getPrice();
         Delivery deliveryMade = new Delivery();
-        List<Menu> menusInDelivery = new ArrayList<Menu>(menuCart);
+        List<Menu> menusInDelivery = new ArrayList<>(menuCart);
         deliveryMade.setMenus(menusInDelivery);
         deliveryMade.setAddress(client.getAddress());
         deliveryMade.setClient(client);
         deliveryMade.setDelivered(false);
         deliveryMade.setPaid(false);
+
+
+        Payment payment = new Payment();
+        payment.setPrice(total);
+        deliveryMade.setPayment(payment);
+
+
         deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
         cartService.cleanClientCart(client);

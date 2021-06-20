@@ -1,10 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>AdminDashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css" />
+    <style>
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .styled-table thead tr {
+            background-color: #d65106;
+            color: #ffffff;
+            text-align: left;
+        }
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #d65106;
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #d65106;
+        }
+    </style>
 </head>
 <body>
-you just got beaned
+<header class="top-navbar">
+    <nav id="nav" class="navbar justify-content-between">
+        <ul>
+            <li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+            <li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+            <li class=" nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+            <li class="nav-item current" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+            <li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+            <li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+        </ul>
+        <ul style="float: right;">
+            <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+            <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+        </ul>
+    </nav>
+</header>
+<!-- Company Key requests -->
+
+<div class="container">
+    <h2>Company Key Requests </h2>
+    <div th:if="${#arrays.length(companies) != 0}">
+        <table style="margin-left:auto;margin-right:auto;" class="styled-table">
+
+            <thead>
+            <tr>
+                <th>Company ID</th>
+                <th>Address </th>
+                <th>Phone Number</th>
+                <th>Delivery Type</th>
+                <th></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="company : ${companies}">
+                <tr>
+                    <td th:text="${company.id}">12345</td>
+                    <td th:text="${company.address}">Rua do Chafariz, 3123-231 (...)</td>
+                    <td th:text="${company.phoneNumber}">99999999</td>
+                    <td th:text="${company.deliveryType}">Urgent</td>
+                    <td>
+                        <form method="post" action="/grantKey">
+                            <input type="hidden" name="type" value="COMPANY">
+                            <input type="hidden" name="id" th:value="${company.id}">
+                            <input type="submit" class="button" value="Grant Key">
+                        </form>
+                    </td>
+
+
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#arrays.length(companies) == 0}">
+        <h2> There are no company API key requests</h2>
+    </div>
+
+
+
+    <!--DRIVER Key requests -->
+
+    <div class="container">
+        <h2>Driver Key Requests </h2>
+        <div th:if="${#arrays.length(drivers) != 0}">
+            <table style="margin-left:auto;margin-right:auto;" class="styled-table">
+
+                <thead>
+                <tr>
+                    <th>Driver ID</th>
+                    <th>Phone Number</th>
+                    <th>Vehicle</th>
+                    <th></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="driver : ${drivers}">
+                    <tr>
+                        <td th:text="${driver.id}">12345</td>
+                        <td th:text="${driver.phoneNo}">99999999</td>
+                        <td th:text="${driver.vehicle}">Car</td>
+                        <td>
+                            <form method="post" action="/grantKey">
+                                <input type="hidden" name="type" value="DRIVER">
+                                <input type="hidden" name="id" th:value="${driver.id}">
+                                <input type="submit" class="button" value="Grant Key">
+                            </form>
+                        </td>
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${#arrays.length(drivers) == 0}">
+            <h2> There are no driver API key requests</h2>
+        </div>
+
+        <!--Problem drivers-->
+
+        <div class="container">
+            <h2>Underperformers</h2>
+            <div th:if="${#arrays.length(problemdrivers) != 0}">
+                <table style="margin-left:auto;margin-right:auto;" class="styled-table">
+
+                    <thead>
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>Phone Number</th>
+                        <th>Vehicle</th>
+                        <th>Review Count</th>
+                        <th>Rating</th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:each="baddriver : ${problemdrivers}">
+                        <tr>
+                            <td th:text="${baddriver.id}">12345</td>
+                            <td th:text="${baddriver.phoneNo}">99999999</td>
+                            <td th:text="${baddriver.vehicle}">Car</td>
+                            <td th:text="${baddriver.reviewcount}">0</td>
+                            <td th:text="${baddriver.rating}">0</td>
+                            <td>
+                                <form method="post" action="/banDriver">
+                                    <input type="hidden" name="id" th:value="${baddriver.id}">
+                                    <input type="submit" class="button" value="Ban">
+                                </form>
+                            </td>
+
+
+                        </tr>
+                    </div>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${#arrays.length(problemdrivers) == 0}">
+                <h2> There are no known underperformers</h2>
+            </div>
 </body>
 </html>

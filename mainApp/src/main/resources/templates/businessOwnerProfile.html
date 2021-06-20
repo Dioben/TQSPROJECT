@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymleaf.org">
+<html xmlns:th="http://www.thymleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 <html>
@@ -9,61 +9,77 @@
 		<link rel="stylesheet" href="/css/main.css" />
 	</head>
 	<body >
-
-        <!-- Header -->
-        <div style="margin-top: -40px;" id="header">
-            <!-- Nav -->
-                <nav id="nav">
-                    <ul>
-                        <li ><a href="logisticsMarshallPrototype/index.html">Home</a></li>
-
-                        <li class="current"><a href="">My Profile</a></li>
-                    </ul>
-                </nav>
-
-        </div>
+	<header class="top-navbar">
+		<nav id="nav" class="navbar justify-content-between">
+			<ul>
+				<li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+				<li class=" nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+				<li class="current nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+			</ul>
+			<ul style="float: right;">
+				<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+				<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+			</ul>
+		</nav>
+	</header>
 
 
 		<div style="width:700px; margin:0 auto; margin-top:100px" >
 				<h3>Business owner profile</h3>
-				<form>
-
+				<form method="post" action="/updateCompany">
 
 						<div class="col-12">
-							<input type="text" name="name" id="name" placeholder="Name" />
+							<label for="name">Name:</label>
+							<input type="text" th:value="${profile.name}" name="name" id="name" placeholder="Name" />
 						</div>
-						
-
 						<br>
 						<div class="col-12">
+							<label for="password">Current Password</label>
 							<input type="password" name="password" id="password" placeholder="Password" />
 						</div>
 						
 						<br>
+					<div class="col-12">
+						<label for="password">New Password (can be the same)</label>
+						<input type="password" name="newPassword" id="newPassword" placeholder="Password" />
+					</div>
+					<br>
 						<div class="col-12">
-							<input type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
+							<label for="phoneNumber">Phone Number</label>
+							<input th:value="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
 						</div>
 						<br>
 
-                        <br>
 						<div class="col-12">
-							<input type="text" name="vehicle" id="vehicle" placeholder="Vehicle" />
+							<label for="deliveryType">Delivery Type</label>
+							<input th:value="${delivery_type}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
 						</div>
-
-                        <br>
-
-						<div class="col-3">
-							<button style=" height: 40px;float:left; display: inline; " class="alt" >Edit</button>
-						</div>
-
-
+					<div class="col-12">
+						<label for="address">Address:</label>
+						<input type="text" id="address" name="address" th:value="${address}" placeholder="Address"/>
+					</div>
+					<br>
+					<div class="col-3 aln-right">
+						<input type="submit" class="button" value="Update Profile">
+					</div>
 				</form>
+						<br>
+						<div class="col-12" style="display: inline-block">
+							<div class="col-9">
+								<label for="apikey">API Key attributed:</label>
+								<p id="apikey" th:text="${apikey} ?: 'Awaiting Admin Approval'"></p>
+							</div>
+							<div class="col-3" th:if="${apikey != null}">
+								<form  method="post" action="/requestReset" ><input type="submit" class="button" value="Request Reset"></form>
+							</div>
+
+
+						</div>
+
 			
-
-		</div>
-
-		<div>
-			<img src="/images/foodDriver.png" alt="Smiley face" style=" float: right; width: 20%; height: 20%; margin-right:100px; " >
 
 		</div>
 
