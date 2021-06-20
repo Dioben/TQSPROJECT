@@ -98,6 +98,7 @@
                     <th>From</th>
                     <th>To</th>
                     <th>Status</th>
+                    <th>Average Rating</th>
 
                 </tr>
                 </thead>
@@ -140,6 +141,12 @@
                                 <button class="btn btn-primary" onclick="document.forms['cancelDeliveryForm'].submit()">Cancel</button>
                             </div>
                             </div>
+                        </td>
+                        <td>
+                           <div th:if="${delivery.stage.name() == 'DELIVERED'}">
+                               <div th:text="${delivery.reputation.rating}">Rating here</div>
+                           </div>
+                            <div th:unless="${delivery.stage.name() == 'DELIVERED'}">No Ratings yet</div>
                         </td>
 
 

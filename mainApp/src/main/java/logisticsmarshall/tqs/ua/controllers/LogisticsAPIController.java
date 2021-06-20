@@ -46,6 +46,8 @@ public class LogisticsAPIController {
         return ResponseEntity.ok(delivery);
     }
 
+
+
     @GetMapping(path="/delivery_state")
     public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="apiKey") String apikey) {
         Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(apikey);
@@ -155,6 +157,31 @@ public class LogisticsAPIController {
         Delivery del = deliveryService.getDeliveryById(deliveryId);
         Reputation rep = reputationService.getReputationByDelivery(del);
         if(rep == null)return ResponseEntity.status(400).build();
+        return ResponseEntity.ok(rep);
+    }
+
+    @PostMapping(path="/reputation",consumes = "application/json")
+    public ResponseEntity<Reputation> postRating(@RequestParam(name = "rating") int rating,
+                                                   @RequestParam(name = "delivery_id") int delivery_id,
+                                                   @RequestParam(name = "driver_id") int driver_id,
+                                                   @RequestParam(name = "apiKey") String apikey,
+                                                   @RequestParam(name = "description") String description) {
+        Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(apikey);
+        if (companyFromapiKey == null) return ResponseEntity.status(403).build();
+        Delivery delRequested = deliveryService.getDeliveryById(delivery_id);
+        Driver driverAssigned = driverService.getDriverById(driver_id);
+
+        Reputation rep = new Reputation();
+        rep.setDelivery(delRequested);
+        rep.setRating(delivery_id);
+        delRequested.setReputation(rep);
+        deliveryService.postDelivery(delRequested);
+
+        rep.setDriver(driverAssigned);
+        rep.setDescription(description);
+        rep.setRating(rating);
+
+        reputationService.postReputation(rep);
         return ResponseEntity.ok(rep);
     }
 
