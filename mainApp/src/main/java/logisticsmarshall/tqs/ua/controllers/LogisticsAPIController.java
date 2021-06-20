@@ -174,6 +174,9 @@ public class LogisticsAPIController {
         Reputation rep = new Reputation();
         rep.setDelivery(delRequested);
         rep.setRating(delivery_id);
+        delRequested.setReputation(rep);
+        deliveryService.postDelivery(delRequested);
+
         rep.setDriver(driverAssigned);
         rep.setDescription(description);
         rep.setRating(rating);
