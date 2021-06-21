@@ -98,7 +98,7 @@
                     <th>From</th>
                     <th>To</th>
                     <th>Status</th>
-                    <th>Average Rating</th>
+                    <th>Rating</th>
 
                 </tr>
                 </thead>
@@ -143,10 +143,9 @@
                             </div>
                         </td>
                         <td>
-                           <div th:if="${delivery.stage.name() == 'DELIVERED'}">
+                           <div>
                                <div th:text="${delivery.reputation?.rating} ?: 'No rating given'">Rating here</div>
                            </div>
-                            <div th:unless="${delivery.stage.name() == 'DELIVERED'}">No Ratings yet</div>
                         </td>
 
 

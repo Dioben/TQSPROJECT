@@ -75,7 +75,7 @@
             <div class="container">
                 <h2><strong>Cart</strong> </h2>
                 <div th:if="${empty_cart == true}">
-                    <h1>Sorry but it seems you haven't added nothing to your cart yet, go to the Menus page and start ordering now!</h1>
+                    <h1>It seems you haven't added nothing to your cart yet, go to the Menus page and start ordering now!</h1>
                 </div>
                 <div th:if="${empty_cart == false}">
                     <div id='cart_row' class="row" th:each="menu : ${menus}">
@@ -91,7 +91,7 @@
 
                         </div>
                         <div class="col-md-1">
-                            <div th:text="${menu.price}">5€</div>
+                            <div th:text="${menu.price}+'€'">5€</div>
                         </div>
                         <div class="col-md-2">
                             <div>
@@ -107,7 +107,7 @@
                     <div>
                         <div class="cart-item">
                             <label>Total:</label>
-                            <div class="totals-value" id="cart-total" th:text="${total_price}">90.57€</div>
+                            <div class="totals-value" id="cart-total" th:text="${total_price}+'€'">90.57€</div>
                         </div>
                     </div>
 
