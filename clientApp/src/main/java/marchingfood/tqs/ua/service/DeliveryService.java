@@ -53,7 +53,7 @@ public class DeliveryService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(deliveryJSON, headers);
         ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
-        if (result.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
+        if (result.getStatusCode().equals(HttpStatus.BAD_REQUEST) || result.getBody()==null){
             throw  new BadParameterException("Mal-formed delivery request");
         }
         delivery.setId(result.getBody().getId());
