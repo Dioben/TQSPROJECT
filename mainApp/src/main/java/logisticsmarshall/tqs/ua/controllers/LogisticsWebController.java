@@ -157,7 +157,7 @@ public class LogisticsWebController {
     @PostMapping("/updateCompany")
     public String updateCompany(String name, String password, String newPassword, String phoneNumber, String deliveryType, String address) throws AccessForbiddenException, AccountDataException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
-        if(password == null || password.isEmpty()) return "redirect:/adminProfile";
+        if(password == null || password.isEmpty()) return "redirect:/companyProfile";
         userServiceImpl.validatePassword(user,password);
         userServiceImpl.editCompany(user,name,newPassword,phoneNumber,deliveryType,address);
         return REDIRECTLOGOUT;
