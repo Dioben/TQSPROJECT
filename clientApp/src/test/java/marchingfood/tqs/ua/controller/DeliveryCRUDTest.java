@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Menu;
+import marchingfood.tqs.ua.model.ProviderDelivery;
+import marchingfood.tqs.ua.model.Review;
 import marchingfood.tqs.ua.service.CartService;
 import marchingfood.tqs.ua.service.DeliveryService;
 import marchingfood.tqs.ua.service.MenuService;
@@ -15,8 +17,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -192,6 +196,29 @@ class DeliveryCRUDTest {
 
         mvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @SneakyThrows
+    void whenPostReviewGetOk(){
+        Client user = new Client();
+        Review review = new Review();
+        review.setDeliveryId(1);
+        review.setDescription("test");
+        review.setRating(4);
+        ProviderDelivery providerDelivery = new ProviderDelivery();
+        providerDelivery.setAddress("a");
+        providerDelivery.setPriority("HIGH");
+        providerDelivery.setPickupAddress("a");
+        providerDelivery.setStage("DONE");
+        providerDelivery.setId(1);
+        Mockito.when(userService.getUserFromAuthOrException()).thenReturn(user);
+        Mockito.when(deliveryService.getClientDeliveriesFromLogistics(Mockito.any()))
+                .thenReturn(new ArrayList<>(Arrays.asList(new ProviderDelivery[]{providerDelivery})));
+        mvc.perform(post("/review")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonParser.writeValueAsString(1)))
                 .andExpect(status().isOk());
     }
 
