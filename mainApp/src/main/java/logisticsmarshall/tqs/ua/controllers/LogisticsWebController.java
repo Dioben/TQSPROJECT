@@ -237,7 +237,7 @@ public class LogisticsWebController {
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully finished");
                     break;
                 case "cancel":
-                    deliveryService.cancelDelivery(user, deliveryId);
+                    deliveryService.resetDelivery(user, deliveryId);
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully canceled");
                     break;
                 default:

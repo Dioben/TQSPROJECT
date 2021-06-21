@@ -206,7 +206,7 @@ public class LogisticsAPIController {
                     deliveryService.finishDelivery(user, deliveryId);
                     break;
                 case "cancel":
-                    deliveryService.cancelDelivery(user, deliveryId);
+                    deliveryService.resetDelivery(user, deliveryId);
                     break;
                 default:
                     throw new InvalidDeliveryActionException();
