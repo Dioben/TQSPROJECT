@@ -155,7 +155,7 @@ public class DeliveryController {
 
         deliveryService.savePayment(payment);
 
-        deliveryService.postToLogisticsClient(deliveryMade);
+        deliveryMade = deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
         cartService.cleanClientCart(client);
     }

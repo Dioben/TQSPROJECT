@@ -57,7 +57,6 @@ public class DeliveryService {
             throw  new BadParameterException("Mal-formed delivery request");
         }
         delivery.setId(result.getBody().getId());
-        delivery.setId(9990);
         return delivery;
     }
 
@@ -70,11 +69,8 @@ public class DeliveryService {
     }
 
     private ProviderDelivery getDeliveryFromLogistics(long id) {
-        final String uri = "http://localhost:8080/api/delivery/"+id;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<>("{\"apiKey\":\""+LOGISTICS_MARSHALL_APIKEY+"\"}", headers);
-        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
+        final String uri = "http://localhost:8080/api/delivery/"+id+"?apiKey="+LOGISTICS_MARSHALL_APIKEY;
+        ResponseEntity<ProviderDelivery> result = restTemplate.getForEntity(uri,ProviderDelivery.class);
         return  result.getBody();
     }
 
