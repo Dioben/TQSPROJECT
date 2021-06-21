@@ -28,6 +28,8 @@ public class DeliveryService {
     DeliveryRepository deliveryRepository;
 
     private static final String LOGISTICS_MARSHALL_APIKEY = "12345678-1111-2222-3333-123456789000";
+    private static final String DELIVERYPOSTURL = "http://localhost:8080/api/delivery";
+    private static final String REVIEWPOSTINGURL = "http://localhost:8080/api/reputation";
 
     @Autowired
     ObjectMapper objectMapper;
@@ -48,11 +50,10 @@ public class DeliveryService {
 
 
         String deliveryJSON = getPostMapFromDelivery(delivery);
-        final String uri = "http://localhost:8080/api/delivery";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(deliveryJSON, headers);
-        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
+        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(DELIVERYPOSTURL,entity,ProviderDelivery.class);
         if (result.getStatusCode().equals(HttpStatus.BAD_REQUEST) || result.getBody()==null){
             throw  new BadParameterException("Mal-formed delivery request");
         }
@@ -95,12 +96,11 @@ public class DeliveryService {
     }
 
     public void postReview(Review review) throws BadParameterException {
-        final String uri = "http://localhost:8080/api/reputation";
         review.setApiKey(LOGISTICS_MARSHALL_APIKEY);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(review.toJson(), headers);
-        ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
+        ResponseEntity<String> result = restTemplate.postForEntity(REVIEWPOSTINGURL,entity,String.class);
         if (result.getStatusCode()!=HttpStatus.OK){throw new BadParameterException("Review Post Failed");}
     }
 
