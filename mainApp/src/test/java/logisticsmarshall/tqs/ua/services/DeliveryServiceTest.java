@@ -261,4 +261,23 @@ class DeliveryServiceTest {
         assertThrows(DeliveryCantSkipStagesException.class, ()->deliveryService.finishDelivery(user, delivery.getId()));
     }
 
+    @Test
+    void driverlessCancelTest(){
+        Delivery delivery = new Delivery();
+        delivery.setDriver(new Driver());
+        Mockito.when(deliveryRepository.findDeliveryById(Mockito.any())).thenReturn(delivery);
+        deliveryService.cancelDelivery(1);
+        assertNull(delivery.getDriver());
+        assertEquals(delivery.getStage(), Delivery.Stage.CANCELED);
+    }
+
+    @Test
+    void driverCancelTest(){
+        Delivery delivery = new Delivery();
+        Mockito.when(deliveryRepository.findDeliveryById(Mockito.any())).thenReturn(delivery);
+        deliveryService.cancelDelivery(1);
+        assertNull(delivery.getDriver());
+        assertEquals(delivery.getStage(), Delivery.Stage.CANCELED);
+    }
+
 }
