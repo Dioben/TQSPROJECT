@@ -10,6 +10,7 @@ import logisticsmarshall.tqs.ua.services.DeliveryService;
 import logisticsmarshall.tqs.ua.services.DriverService;
 import logisticsmarshall.tqs.ua.services.ReputationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,7 +47,12 @@ public class LogisticsAPIController {
         return ResponseEntity.ok(delivery);
     }
 
-
+    @PostMapping(path="/delivery/{id}/cancel",consumes = "application/json")
+    public ResponseEntity cancelDelivery(@PathVariable(name="id") long deliveryId,@RequestParam(name="apiKey") String apikey) {
+        if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
+        deliveryService.cancelDelivery(deliveryId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @GetMapping(path="/delivery_state")
     public ResponseEntity<String> getDeliveriesStates(@RequestParam(name="apiKey") String apikey) {

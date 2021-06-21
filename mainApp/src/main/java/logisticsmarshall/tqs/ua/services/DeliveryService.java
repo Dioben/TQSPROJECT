@@ -65,15 +65,6 @@ public class DeliveryService {
     }
 
     @Transactional
-    public void cancelDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException {
-        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
-        validateDeliveryChange(user, delivery, true);
-        delivery.setDriver(null);
-        delivery.setStage(Delivery.Stage.CANCELED);
-        deliveryRepository.save(delivery);
-    }
-
-    @Transactional
     public void pickUpDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryAlreadyHasDriverException, DeliveryHasNoDriverException, DeliveryCantSkipStagesException {
         Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
         validateDeliveryChange(user, delivery, true);
@@ -122,6 +113,13 @@ public class DeliveryService {
         validateDeliveryChange(user, delivery, true);
         delivery.setDriver(null);
         delivery.setStage(Delivery.Stage.REQUESTED);
+        deliveryRepository.save(delivery);
+    }
+
+    public void cancelDelivery(long deliveryId) {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        delivery.setStage(Delivery.Stage.CANCELED);
+        delivery.setDriver(null);
         deliveryRepository.save(delivery);
     }
 }

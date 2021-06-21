@@ -114,53 +114,6 @@ class DeliveryServiceTest {
     }
 
     @Test
-    void whenValidInCancelDeliveryThenSuccess() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(user.getDriver());
-        assertDoesNotThrow(()->deliveryService.cancelDelivery(user, delivery.getId()));
-        Mockito.verify(deliveryRepository, VerificationModeFactory.times(1)).save(Mockito.any());
-        assertNull(delivery.getDriver());
-        assertEquals(Delivery.Stage.CANCELED, delivery.getStage());
-    }
-
-    @Test
-    void whenInvalidDeliveryIdInCancelDeliveryThenThrowException() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(user.getDriver());
-        assertThrows(NullPointerException.class, ()->deliveryService.cancelDelivery(user, -1L));
-    }
-
-    @Test
-    void whenDeliveryHasDifferentDriverInCancelDeliveryThenThrowException() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(new Driver());
-        assertThrows(DeliveryDoesntHaveSameDriverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
-    }
-
-    @Test
-    void whenDriverIsNullInCancelDeliveryThenThrowException() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        user.setDriver(null);
-        assertThrows(DeliveryHasNoDriverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
-    }
-
-    @Test
-    void whenDriverHasEmptyPhoneNumberInCancelDeliveryThenThrowException() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(user.getDriver());
-        user.getDriver().setPhoneNo("");
-        assertThrows(AccountCantDeliverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
-    }
-
-    @Test
-    void whenDriverHasFalseStatusInCancelDeliveryThenThrowException() {
-        delivery.setStage(Delivery.Stage.ACCEPTED);
-        delivery.setDriver(user.getDriver());
-        user.getDriver().setBusy(true);
-        assertThrows(AccountCantDeliverException.class, ()->deliveryService.cancelDelivery(user, delivery.getId()));
-    }
-
-    @Test
     void whenValidInPickUpDeliveryThenSuccess() {
         delivery.setStage(Delivery.Stage.ACCEPTED);
         delivery.setDriver(user.getDriver());
