@@ -7,4 +7,14 @@ public class Review {
     long deliveryId;
     String apiKey;
     String description;
+
+    public String toJson() {
+        return "{"+
+                "\"rating\":"+"\""+rating+"\","+
+                "\"deliveryId\":"+"\""+deliveryId+"\","+
+                "\"apiKey\":"+"\""+apiKey+"\","+
+                "\"description\":"+"\""+description+"\""
+                +"}";
+
+    }
 }
