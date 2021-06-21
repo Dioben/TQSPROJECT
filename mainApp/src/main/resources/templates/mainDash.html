@@ -104,7 +104,7 @@
                 </thead>
                 <tbody>
                 <div th:each="delivery : ${deliveries}">
-                    <tr>
+                    <tr th:if="${delivery.stage.name() != 'CANCELED'}">
                         <td th:text="${delivery.id}">12345</td>
                         <td th:text="${delivery.orderTimestamp}">20-10-2021 15:30</td>
                         <td th:text="${delivery.company.address}">MacDonalds Aveiro</td>
@@ -140,6 +140,12 @@
                                 </form>
                                 <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'cancelDeliveryForm'+${delivery.id}+'\'].submit()'">Cancel</button>
                             </div>
+                            </div>
+                            <div sec:authorize="hasAuthority('COMPANY')">
+                                <form th:id="companyCancelDeliveryForm+${delivery.id}" method="POST" th:action="@{/cancelDelivery}">
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'companyCancelDeliveryForm'+${delivery.id}+'\'].submit()'">Cancel</button>
                             </div>
                         </td>
                         <td>

@@ -116,6 +116,20 @@ public class LogisticsWebController {
         return MAINDASHFILE;
     }
 
+    @PostMapping(path="/cancelDelivery")
+    public String cancelDelivery(long deliveryId) throws AccessForbiddenException {
+        User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
+        Company company = user.getCompany();
+        if(company == null) throw new AccessForbiddenException();
+        Delivery delivery = deliveryService.getDeliveryById(deliveryId);
+        if (company==delivery.getCompany()){deliveryService.cancelDelivery(deliveryId);}
+        else{throw new AccessForbiddenException();}
+
+        return "redirect:/companyDash";
+    }
+
+
+
 
     @GetMapping(path="/driverDash")
     public String workerDash(Model model) throws AccessForbiddenException {
