@@ -1,7 +1,7 @@
 package logisticsmarshall.tqs.ua.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -73,6 +73,21 @@ public class Delivery {
     @JsonIgnore
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
+
+    @JsonIgnore
+    public Driver getDriver(){
+        return driver;
+    }
+
+    @JsonIgnore
+    public Company getCompany() {
+        return company;
+    }
+
+    @JsonIgnore
+    public Reputation getReputation(){
+        return  reputation;
+    }
 
     @Override
     public String toString() {

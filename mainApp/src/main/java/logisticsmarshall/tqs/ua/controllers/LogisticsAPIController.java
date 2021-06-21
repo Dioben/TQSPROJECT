@@ -41,7 +41,6 @@ public class LogisticsAPIController {
     public ResponseEntity<Delivery> postDelivery(@RequestBody NewDelivery newDelivery) {
         Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(newDelivery.getApiKey());
         if (companyFromapiKey == null) return ResponseEntity.status(403).build();
-        System.out.println("got " +newDelivery);
         Delivery delivery = Delivery.fromNewPost(newDelivery,companyFromapiKey);
         deliveryService.postDelivery(delivery);
         return ResponseEntity.ok(delivery);
