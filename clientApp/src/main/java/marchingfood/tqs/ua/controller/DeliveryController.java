@@ -70,7 +70,10 @@ public class DeliveryController {
         return "restaurant";
 
     }
-
+    @GetMapping("/review")
+    public String reviewReload(){
+        return "redirect:/profile";
+    }
     @PostMapping("/review")
     public String postReview(Model model, Review review) throws AccessForbiddenException, BadParameterException {
         Client user = userService.getUserFromAuthOrException();
