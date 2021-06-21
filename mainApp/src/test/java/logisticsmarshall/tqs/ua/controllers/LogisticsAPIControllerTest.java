@@ -140,7 +140,6 @@ class LogisticsAPIControllerTest {
                 "\"address\": "+ address + ","+
                 "\"apiKey\":\""+ apiKey +
                 "\"}";
-        System.out.println(requestcontent);
         Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
 
         mvc.perform(post("/api/delivery").contentType(MediaType.APPLICATION_JSON)

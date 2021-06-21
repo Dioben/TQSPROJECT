@@ -164,7 +164,6 @@ public class LogisticsAPIController {
     public ResponseEntity<Reputation> postRating(@RequestBody NewRating rating) {
         Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(rating.getApiKey());
         if (companyFromapiKey == null) return ResponseEntity.status(403).build();
-        System.out.println(rating);
         Delivery delRequested = deliveryService.getDeliveryById(rating.getDeliveryId());
         Driver driverAssigned = delRequested.getDriver();
 
