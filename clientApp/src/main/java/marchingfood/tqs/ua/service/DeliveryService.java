@@ -4,10 +4,9 @@ package marchingfood.tqs.ua.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
-import marchingfood.tqs.ua.model.Client;
-import marchingfood.tqs.ua.model.Delivery;
-import marchingfood.tqs.ua.model.ProviderDelivery;
+import marchingfood.tqs.ua.model.*;
 import marchingfood.tqs.ua.repository.DeliveryRepository;
+import marchingfood.tqs.ua.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -33,6 +32,9 @@ public class DeliveryService {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     public List<Delivery> getDeliveries(){return deliveryRepository.findAll();}
 
     public List<Delivery> getDeliveriesByClient(Client client){return deliveryRepository.findByClient(client);}
@@ -42,17 +44,21 @@ public class DeliveryService {
     }
 
     public Delivery postToLogisticsClient(Delivery delivery) throws BadParameterException {
+
+
+
         String deliveryJSON = getPostMapFromDelivery(delivery);
-        final String uri = "http://backendmain:8080/api/delivery";
+        final String uri = "http://localhost:8080/api/delivery";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<String> entity = new HttpEntity<>(deliveryJSON, headers);
-        ResponseEntity<ProviderDelivery> result = restTemplate.postForEntity(uri,entity,ProviderDelivery.class);
+        ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
+        System.out.println(result.getBody());
         if (result.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
             throw  new BadParameterException("Mal-formed delivery request");
         }
-        delivery.setId(result.getBody().getId());
+        //delivery.setId(result.getBody().getId());
+        delivery.setId(9990);
         return delivery;
     }
 
@@ -65,7 +71,7 @@ public class DeliveryService {
     }
 
     private ProviderDelivery getDeliveryFromLogistics(long id) {
-        final String uri = "http://backendmain:8080/api/delivery/"+id;
+        final String uri = "http://localhost:8080/api/delivery/"+id;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>("{\"apiKey\":\""+LOGISTICS_MARSHALL_APIKEY+"\"}", headers);
@@ -91,5 +97,19 @@ public class DeliveryService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public void postReview(Review review) throws BadParameterException {
+        final String uri = "http://localhost:8080/api/reputation";
+        review.setApiKey(LOGISTICS_MARSHALL_APIKEY);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Review> entity = new HttpEntity<>(review, headers);
+        ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
+        if (result.getStatusCode()!=HttpStatus.OK){throw new BadParameterException("Review Post Failed");}
+    }
+
+    public void savePayment(Payment payment) {
+        paymentRepository.save(payment);
     }
 }

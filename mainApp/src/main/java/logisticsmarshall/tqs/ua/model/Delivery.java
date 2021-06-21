@@ -1,6 +1,7 @@
 package logisticsmarshall.tqs.ua.model;
 
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -57,16 +58,19 @@ public class Delivery {
     private Priority priority;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "reputation_id", nullable = true)
     private Reputation reputation;
 
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 

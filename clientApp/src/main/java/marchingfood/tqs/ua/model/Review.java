@@ -5,7 +5,6 @@ import lombok.Data;
 public class Review {
     private int rating;
     long deliveryId;
-    long driverId;
-    String apikey;
+    String apiKey;
     String description;
 }

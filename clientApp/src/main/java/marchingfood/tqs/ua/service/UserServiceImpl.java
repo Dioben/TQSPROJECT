@@ -2,6 +2,7 @@ package marchingfood.tqs.ua.service;
 
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.model.Client;
+import marchingfood.tqs.ua.model.Review;
 import marchingfood.tqs.ua.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -83,4 +84,5 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
 }

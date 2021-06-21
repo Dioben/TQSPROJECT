@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.model.ProviderDelivery;
+import marchingfood.tqs.ua.repository.PaymentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,9 @@ class DeliveryServiceTest {
 
     @Mock(lenient = true)
     RestTemplate restTemplate;
+
+    @Mock(lenient = true)
+    private PaymentRepository paymentRepository;
 
     @Mock(lenient = true) //I have no clue why but @Spy does not work
     ObjectMapper objectMapper ;
