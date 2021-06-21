@@ -19,6 +19,11 @@ public class CartService {
         cart.get(client).add(menuAdded);
     }
 
+    public void removeMenu(Menu menuRemoved, Client client) {
+        cart.computeIfAbsent(client,k ->new ArrayList<>());
+        cart.get(client).remove(menuRemoved);
+    }
+
     public List<Menu> getClientCart(Client client){
         if(!cart.containsKey(client)){ return new ArrayList<>();}
         return cart.get(client);

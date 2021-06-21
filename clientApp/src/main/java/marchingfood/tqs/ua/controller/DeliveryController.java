@@ -120,7 +120,6 @@ public class DeliveryController {
         return null;
     }
 
-
     @GetMapping("/cart")
     public String deliveryFromCartGet(Model model) throws AccessForbiddenException {
         Client client = userService.getUserFromAuthOrException();
@@ -161,6 +160,15 @@ public class DeliveryController {
         deliveryMade = deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
         cartService.cleanClientCart(client);
+    }
+
+    @PostMapping("/cart/remove")
+    public ResponseEntity<Object> restaurantMenuRemoveFromCart(@RequestBody int menuId) throws AccessForbiddenException {
+        Menu gotten = menuService.getMenuById(menuId);
+        Client client = userService.getUserFromAuthOrException();
+        if (client == null) return ResponseEntity.status(404).build();
+        cartService.removeMenu(gotten, client);
+        return null;
     }
 
 

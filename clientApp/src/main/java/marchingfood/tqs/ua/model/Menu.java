@@ -6,6 +6,7 @@ import marchingfood.tqs.ua.exceptions.BadParameterException;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -65,5 +66,18 @@ public class Menu {
         if(imageurl!=null && imageurl.length()>255){
             throw new BadParameterException("Menu Image URL must be shorter than 255 chars");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Menu menu = (Menu) o;
+        return id == menu.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
