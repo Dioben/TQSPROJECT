@@ -71,6 +71,25 @@ public class DeliveryController {
 
     }
 
+    @PostMapping("/review")
+    public String postReview(Model model, Review review) throws AccessForbiddenException, BadParameterException {
+        Client user = userService.getUserFromAuthOrException();
+        deliveryService.postReview(review);
+        model.addAttribute("user",user);
+        model.addAttribute("deliveries",deliveryService.getClientDeliveriesFromLogistics(user));
+        model.addAttribute("message","Your Review has been posted successfully");
+        return "profile";
+    }
+
+
+    @GetMapping("/profile")
+    public String userProfile(Model model) throws AccessForbiddenException {
+        Client user = userService.getUserFromAuthOrException();
+        model.addAttribute("user",user);
+        model.addAttribute("deliveries",deliveryService.getClientDeliveriesFromLogistics(user));
+        return "profile";
+    }
+
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
         if (userService.isAuthenticated()) {
@@ -130,13 +149,13 @@ public class DeliveryController {
         deliveryMade.setDelivered(false);
         deliveryMade.setPaid(false);
 
-
         Payment payment = new Payment();
         payment.setPrice(total);
         deliveryMade.setPayment(payment);
 
+        deliveryService.savePayment(payment);
 
-        deliveryService.postToLogisticsClient(deliveryMade);
+        deliveryMade = deliveryService.postToLogisticsClient(deliveryMade);
         deliveryService.saveDelivery(deliveryMade);
         cartService.cleanClientCart(client);
     }

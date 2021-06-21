@@ -1,9 +1,8 @@
 package logisticsmarshall.tqs.ua.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -59,18 +58,36 @@ public class Delivery {
     private Priority priority;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "reputation_id", nullable = true)
     private Reputation reputation;
 
 
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "driver_id", nullable = true)
     private Driver driver;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "company_id", nullable = true)
     private Company company;
+
+    @JsonIgnore
+    public Driver getDriver(){
+        return driver;
+    }
+
+    @JsonIgnore
+    public Company getCompany() {
+        return company;
+    }
+
+    @JsonIgnore
+    public Reputation getReputation(){
+        return  reputation;
+    }
 
     @Override
     public String toString() {
