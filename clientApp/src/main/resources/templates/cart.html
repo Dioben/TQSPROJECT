@@ -52,7 +52,7 @@
                         <li class="nav-item active"><a class="nav-link" href="/cart">Cart</a></li>
                     </div>
                     <div sec:authorize="isAuthenticated()">
-                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Deliveries</a></li>
                     </div>
                     <div sec:authorize="isAuthenticated()">
                         <li  class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -73,6 +73,7 @@
 	<!--From with item in cart -->
         <div class="menu-box">
             <div class="container">
+                <br>
                 <h2><strong>Cart</strong> </h2>
                 <div th:if="${empty_cart == true}">
                     <h1>It seems you haven't added nothing to your cart yet, go to the Menus page and start ordering now!</h1>
