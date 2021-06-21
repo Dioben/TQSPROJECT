@@ -268,7 +268,7 @@ class DeliveryServiceTest {
         Mockito.when(deliveryRepository.findDeliveryById(Mockito.any())).thenReturn(delivery);
         deliveryService.cancelDelivery(1);
         assertNull(delivery.getDriver());
-        assertEquals(delivery.getStage(), Delivery.Stage.CANCELED);
+        assertEquals(Delivery.Stage.CANCELED,delivery.getStage());
     }
 
     @Test
@@ -277,7 +277,7 @@ class DeliveryServiceTest {
         Mockito.when(deliveryRepository.findDeliveryById(Mockito.any())).thenReturn(delivery);
         deliveryService.cancelDelivery(1);
         assertNull(delivery.getDriver());
-        assertEquals(delivery.getStage(), Delivery.Stage.CANCELED);
+        assertEquals(Delivery.Stage.CANCELED,delivery.getStage());
     }
 
 }

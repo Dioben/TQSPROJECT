@@ -48,10 +48,10 @@ public class LogisticsAPIController {
     }
 
     @PostMapping(path="/delivery/{id}/cancel",consumes = "application/json")
-    public ResponseEntity cancelDelivery(@PathVariable(name="id") long deliveryId,@RequestParam(name="apiKey") String apikey) {
+    public ResponseEntity<String> cancelDelivery(@PathVariable(name="id") long deliveryId,@RequestParam(name="apiKey") String apikey) {
         if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
         deliveryService.cancelDelivery(deliveryId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(path="/delivery_state")
