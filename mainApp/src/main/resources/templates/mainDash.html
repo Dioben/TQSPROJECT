@@ -144,7 +144,7 @@
                         </td>
                         <td>
                            <div th:if="${delivery.stage.name() == 'DELIVERED'}">
-                               <div th:text="${delivery.reputation.rating}">Rating here</div>
+                               <div th:text="${delivery.reputation?.rating} ?: 'No rating given'">Rating here</div>
                            </div>
                             <div th:unless="${delivery.stage.name() == 'DELIVERED'}">No Ratings yet</div>
                         </td>

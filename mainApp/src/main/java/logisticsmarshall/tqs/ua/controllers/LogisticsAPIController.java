@@ -161,11 +161,11 @@ public class LogisticsAPIController {
     }
 
     @PostMapping(path="/reputation",consumes = "application/json")
-    public ResponseEntity<Reputation> postRating(@RequestParam(name = "rating") int rating,
-                                                   @RequestParam(name = "delivery_id") long deliveryId,
-                                                   @RequestParam(name = "apiKey") String apikey,
-                                                   @RequestParam(name = "description") String description) {
-        Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(apikey);
+    public ResponseEntity<Reputation> postRating(Integer rating,
+                                                 Long deliveryId,
+                                                 String apiKey,
+                                                 String description) {
+        Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(apiKey);
         if (companyFromapiKey == null) return ResponseEntity.status(403).build();
         Delivery delRequested = deliveryService.getDeliveryById(deliveryId);
         Driver driverAssigned = delRequested.getDriver();

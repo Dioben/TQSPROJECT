@@ -210,8 +210,7 @@ public class LogisticsWebController {
     }
 
     @PostMapping(path="/driverDash")
-    public String changeDelivery(Model model, @ModelAttribute("action") String action, @ModelAttribute("deliveryId") String deliveryId) throws AccessForbiddenException {
-        long deliveryIdValue = Long.parseLong(deliveryId);
+    public String changeDelivery(Model model, @ModelAttribute("action") String action, @ModelAttribute("deliveryId") Long deliveryId) throws AccessForbiddenException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
         Driver driver = user.getDriver();
         if(driver == null) throw new AccessForbiddenException();
@@ -222,19 +221,19 @@ public class LogisticsWebController {
         try {
             switch (action) {
                 case "accept":
-                    deliveryService.acceptDelivery(user, deliveryIdValue);
+                    deliveryService.acceptDelivery(user, deliveryId);
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully accepted");
                     break;
                 case "pickup":
-                    deliveryService.pickUpDelivery(user, deliveryIdValue);
+                    deliveryService.pickUpDelivery(user, deliveryId);
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully picked up");
                     break;
                 case "finish":
-                    deliveryService.finishDelivery(user, deliveryIdValue);
+                    deliveryService.finishDelivery(user, deliveryId);
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully finished");
                     break;
                 case "cancel":
-                    deliveryService.cancelDelivery(user, deliveryIdValue);
+                    deliveryService.cancelDelivery(user, deliveryId);
                     model.addAttribute(EMBEDMESSAGE, "Delivery was successfully canceled");
                     break;
                 default:

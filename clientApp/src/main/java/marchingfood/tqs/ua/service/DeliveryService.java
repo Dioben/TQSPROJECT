@@ -100,6 +100,7 @@ public class DeliveryService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Review> entity = new HttpEntity<>(review, headers);
+        System.out.println(entity.getBody());
         ResponseEntity<String> result = restTemplate.postForEntity(uri,entity,String.class);
         if (result.getStatusCode()!=HttpStatus.OK){throw new BadParameterException("Review Post Failed");}
     }
