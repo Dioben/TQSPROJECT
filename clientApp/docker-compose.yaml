@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   backend:
-    build: .
-    #image: dioben/tqs-client-server:dev
+    # build: .
+    image: dioben/tqs-client-server:dev
     ports:
       - 8000:8000
     depends_on:
