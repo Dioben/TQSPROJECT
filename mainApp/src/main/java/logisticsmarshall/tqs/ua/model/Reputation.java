@@ -30,7 +30,7 @@ public class Reputation {
     private Delivery delivery;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id", nullable = false)
+    @JoinColumn(name = "driver_id", nullable = true)//maybe we take really long to assign a driver
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Driver driver;
 

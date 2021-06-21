@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import marchingfood.tqs.ua.exceptions.AccessForbiddenException;
 import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.repository.ClientRepository;
+import marchingfood.tqs.ua.repository.PaymentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

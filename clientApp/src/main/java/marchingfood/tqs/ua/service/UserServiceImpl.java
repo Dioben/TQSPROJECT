@@ -83,4 +83,5 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
 }

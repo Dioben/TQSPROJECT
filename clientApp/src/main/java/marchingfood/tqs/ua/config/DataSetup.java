@@ -26,7 +26,6 @@ public class DataSetup {
             user1.setName("user1");
             user1.setAddress("Userhouse");
             user1.setPassword("12345");
-            user1.setAddress("somewhere");
             userService.encryptPasswordAndStoreUser(user1);
 
             Menu menu1 = new Menu();

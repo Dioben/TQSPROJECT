@@ -86,9 +86,9 @@
 
     <!-- Delivery Orders Available/InProgress/Done -->
 
-    <div class="container">
+    <div class="container" th:if="${#arrays.length(deliveries) != 0}">
         <h2>Delivery orders </h2>
-        <div th:if="${#arrays.length(deliveries) != 0}">
+        <div >
             <table style="margin-left:auto;margin-right:auto;" class="styled-table">
 
                 <thead>
@@ -113,38 +113,38 @@
                             <div th:text="${delivery.stage}">Requested</div>
                             <div sec:authorize="hasAuthority('DRIVER')">
                             <div th:if="${delivery.stage.name() == 'REQUESTED'}">
-                                <form id="acceptDeliveryForm" method="POST" th:action="@{/driverDash}">
+                                <form th:id="acceptDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
                                     <input type="hidden" name="action" value="accept"/>
                                     <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
                                 </form>
-                                <button class="btn btn-primary" onclick="document.forms['acceptDeliveryForm'].submit()">Accept</button>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'acceptDeliveryForm'+${delivery.id}+'\'].submit()'">Accept</button>
                             </div>
                             <div th:if="${delivery.stage.name() == 'ACCEPTED'}">
-                                <form id="pickupDeliveryForm" method="POST" th:action="@{/driverDash}">
+                                <form th:id="pickupDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
                                     <input type="hidden" name="action" value="pickup"/>
                                     <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
                                 </form>
-                                <button class="btn btn-primary" onclick="document.forms['pickupDeliveryForm'].submit()">Pickup</button>
+                                <button class="btn btn-primary"  th:onclick="'javascript:document.forms[\'pickupDeliveryForm'+${delivery.id}+'\'].submit()'">Pickup</button>
                             </div>
                             <div th:if="${delivery.stage.name() == 'PICKEDUP'}">
-                                <form id="finishDeliveryForm" method="POST" th:action="@{/driverDash}">
+                                <form th:id="finishDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
                                     <input type="hidden" name="action" value="finish"/>
                                     <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
                                 </form>
-                                <button class="btn btn-primary" onclick="document.forms['finishDeliveryForm'].submit()">Finish</button>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'finishDeliveryForm'+${delivery.id}+'\'].submit()'">Finish</button>
                             </div>
                             <div th:if="${delivery.stage.name() == 'ACCEPTED'}">
-                                <form id="cancelDeliveryForm" method="POST" th:action="@{/driverDash}">
+                                <form th:id="cancelDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
                                     <input type="hidden" name="action" value="cancel"/>
                                     <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
                                 </form>
-                                <button class="btn btn-primary" onclick="document.forms['cancelDeliveryForm'].submit()">Cancel</button>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'cancelDeliveryForm'+${delivery.id}+'\'].submit()'">Cancel</button>
                             </div>
                             </div>
                         </td>
                         <td>
                            <div th:if="${delivery.stage.name() == 'DELIVERED'}">
-                               <div th:text="${delivery.reputation.rating}">Rating here</div>
+                               <div th:text="${delivery.reputation?.rating} ?: 'No rating given'">Rating here</div>
                            </div>
                             <div th:unless="${delivery.stage.name() == 'DELIVERED'}">No Ratings yet</div>
                         </td>
