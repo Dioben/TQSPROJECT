@@ -10,171 +10,83 @@
 		<link rel="stylesheet" href="css/main.css" />
 	</head>
 	<body class="is-preload">
-		<div id="page-wrapper">
+	<div id="page-wrapper">
 
-			<!-- Header -->
-			<header class="top-navbar">
-				<nav id="nav" class="navbar justify-content-between">
-					<ul>
-						<li class="nav-item current"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
-						<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
-						<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
-						<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
-						<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
-						<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
-					</ul>
-					<ul style="float: right;">
-						<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
-						<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
-					</ul>
-				</nav>
-			</header>
+		<!-- Nav -->
+		<header class="top-navbar">
+			<nav id="nav" class="navbar justify-content-between">
+				<ul>
+					<li class="current nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+				</ul>
+				<ul style="float: right;">
+					<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+					<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+				</ul>
+			</nav>
+		</header>
 
 
 
-			<!-- Highlights -->
-				<section class="wrapper style1">
-					<div class="container">
-						<div class="row gtr-200">
-							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
-									<i class="icon solid major fa-paper-plane"></i>
-									<h3>This Is Important</h3>
-									<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-								</div>
-							</section>
-							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
-									<i class="icon solid major fa-pencil-alt"></i>
-									<h3>Also Important</h3>
-									<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-								</div>
-							</section>
-							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
-									<i class="icon solid major fa-wrench"></i>
-									<h3>Probably Important</h3>
-									<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-								</div>
-							</section>
+		<!-- Highlights -->
+
+
+		<!-- Gigantic Heading -->
+		<section class="wrapper style2">
+			<div class="container">
+				<header class="major">
+					<h2>Welcome to Logistics Marshall</h2>
+					<p>An On-Demand Driver Logistics Management Service</p>
+				</header>
+			</div>
+		</section>
+
+		<!-- Posts -->
+		<section class="wrapper style1">
+			<div class="container">
+				<div class="row">
+					<section class="col-6 col-12-narrower">
+						<div class="box post">
+							<a href="#" class="image left"><img src="images/company.jpg" alt=""></a>
+							<div class="inner">
+								<h3>Do you need a easy way to deliver your products?</h3>
+								<p>Here in Logistics Marshall we can help a company like yours by providing you access to a network of experienced drivers, all you need is to register in order to get access to it!</p>
+							</div>
 						</div>
-					</div>
-				</section>
-
-			<!-- Gigantic Heading -->
-				<section class="wrapper style2">
-					<div class="container">
-						<header class="major">
-							<h2>A gigantic heading you can use for whatever</h2>
-							<p>With a much smaller subtitle hanging out just below it</p>
-						</header>
-					</div>
-				</section>
-
-			<!-- Posts -->
-				<section class="wrapper style1">
-					<div class="container">
-						<div class="row">
-							<section class="col-6 col-12-narrower">
-								<div class="box post">
-									<a href="#" class="image left"><img src="images/pic01.jpg" alt="" /></a>
-									<div class="inner">
-										<h3>The First Thing</h3>
-										<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-									</div>
-								</div>
-							</section>
-							<section class="col-6 col-12-narrower">
-								<div class="box post">
-									<a href="#" class="image left"><img src="images/pic02.jpg" alt="" /></a>
-									<div class="inner">
-										<h3>The Second Thing</h3>
-										<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-									</div>
-								</div>
-							</section>
+					</section>
+					<section class="col-6 col-12-narrower">
+						<div class="box post">
+							<a href="#" class="image left"><img src="images/driver.jpg" alt=""></a>
+							<div class="inner">
+								<h3>Are you looking to be one of our drivers?</h3>
+								<p>If you looking to be part of an enormous community of drivers all around the country, you just need to register and get immediate access to our delivery network!</p>
+							</div>
 						</div>
-						<div class="row">
-							<section class="col-6 col-12-narrower">
-								<div class="box post">
-									<a href="#" class="image left"><img src="images/pic03.jpg" alt="" /></a>
-									<div class="inner">
-										<h3>The Third Thing</h3>
-										<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-									</div>
-								</div>
-							</section>
-							<section class="col-6 col-12-narrower">
-								<div class="box post">
-									<a href="#" class="image left"><img src="images/pic04.jpg" alt="" /></a>
-									<div class="inner">
-										<h3>The Fourth Thing</h3>
-										<p>Duis neque nisi, dapibus sed mattis et quis, nibh. Sed et dapibus nisl amet mattis, sed a rutrum accumsan sed. Suspendisse eu.</p>
-									</div>
-								</div>
-							</section>
-						</div>
-					</div>
-				</section>
-
-
-
-			<!-- Footer -->
-				<div id="footer">
-					<div class="container">
-						<div class="row">
-		
-							
-
-
-
-
-
-
-
-							<section class="col-6 col-12-narrower">
-								<h3>Get In Touch</h3>
-								<form>
-									<div class="row gtr-50">
-										<div class="col-6 col-12-mobilep">
-											<input type="text" name="name" id="name" placeholder="Name" />
-										</div>
-										<div class="col-6 col-12-mobilep">
-											<input type="email" name="email" id="email" placeholder="Email" />
-										</div>
-										<div class="col-12">
-											<textarea name="message" id="message" placeholder="Message" rows="5"></textarea>
-										</div>
-										<div class="col-12">
-											<ul class="actions">
-												<li><input type="submit" class="button alt" value="Send Message" /></li>
-											</ul>
-										</div>
-									</div>
-								</form>
-							</section>
-						</div>
-					</div>
-
-
-
-
-
-
-
-
-
-
-					<!-- Copyright -->
-						<div class="copyright">
-							<ul class="menu">
-								<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-
+					</section>
 				</div>
 
+			</div>
+		</section>
+
+
+
+		<!-- Footer -->
+		<div id="footer">
+
+			<!-- Copyright -->
+			<div class="copyright">
+				<ul class="menu">
+					<li>© Logistics Marshall. All rights reserved</li>
+				</ul>
+			</div>
+
 		</div>
+
+	</div>
 
 		<!-- Scripts -->
 			<script src="/js/jquery.min.js"></script>
