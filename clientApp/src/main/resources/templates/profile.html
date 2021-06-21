@@ -42,7 +42,7 @@
 								<li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
 							</div>
 							<div sec:authorize="isAuthenticated()">
-								<li class="nav-item active"><a class="nav-link" href="/profile">Profile</a></li>
+								<li class="nav-item active"><a class="nav-link" href="/profile">Deliveries</a></li>
 							</div>
 							<div sec:authorize="isAuthenticated()">
 								<li  class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -66,13 +66,12 @@
 	<div class="blog-box">
 		<div class="container">
             <br>
-			<h2 th:text="${message}" style="color: dodgerblue"></h2>
-			<br>
-                            <h2>Address</h2>
+                            <!--<h2>Address</h2>
                                         <div class="form-group">
 											<p th:text="${user.getAddress()}"></p>
-										</div>
-			<h2>Deliveries</h2>
+										</div>-->
+			<h2><strong>Deliveries</strong></h2>
+			<h2 th:text="${message}" style="color: dodgerblue"></h2>
 
 			<table style="margin-left:auto;margin-right:auto;" class="styled-table">
 
