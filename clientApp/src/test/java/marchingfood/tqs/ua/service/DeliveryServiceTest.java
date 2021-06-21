@@ -3,10 +3,12 @@ package marchingfood.tqs.ua.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
+import marchingfood.tqs.ua.model.Client;
 import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.model.ProviderDelivery;
 import marchingfood.tqs.ua.model.Review;
 import marchingfood.tqs.ua.repository.PaymentRepository;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,5 +93,22 @@ class DeliveryServiceTest {
                 restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
         Assertions.assertDoesNotThrow(()->service.postReview(review));
+    }
+
+    @Test
+    void getDeliveriesTest(){
+        Client client = new Client();
+        Delivery delivery = new Delivery();
+        Delivery delivery1 = new Delivery();
+        delivery1.setAddress("no");
+        Delivery delivery2 = new Delivery();
+        delivery2.setAddress("yes");
+        client.setOrderEntity(new HashSet<Delivery>(Arrays.asList(new Delivery[]{delivery, delivery, delivery,delivery1,delivery2})));
+        ProviderDelivery providerDelivery = new ProviderDelivery();
+        Mockito.when(
+                restTemplate.getForEntity(Mockito.anyString(),Mockito.any()))
+                .thenReturn(new ResponseEntity<>(providerDelivery,HttpStatus.OK));
+        Assertions.assertEquals(new ArrayList<>(Arrays.asList(new ProviderDelivery[]{providerDelivery, providerDelivery, providerDelivery}))
+                ,service.getClientDeliveriesFromLogistics(client));
     }
 }
