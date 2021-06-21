@@ -239,9 +239,15 @@ class UserServiceTest {
     @Test
     void editCompanyGoodDataTest(){
         User user = new User();
+        user.setName("guy");
         user.setEmail("man@ua.pt");
         user.setRole("COMPANY");
-        user.setCompany(new Company());
+        user.setPassword("test");
+        Company company = new Company();
+        company.setAddress("aaaaaaaaaaaaaaaa");
+        company.setDeliveryType("urg");
+        company.setPhoneNumber("111111111");
+        user.setCompany(company);
         Assertions.assertDoesNotThrow(()->userService.editCompany(user,"user","test","123456789","test","test"));
     }
     @Test
@@ -254,8 +260,13 @@ class UserServiceTest {
     @Test
     void editDriverGoodDataTest(){
         User user = new User();
+        user.setName("guy");
         user.setEmail("man@ua.pt");
         user.setRole("DRIVER");
+        user.setPassword("test");
+        Driver driver = new Driver();
+        driver.setVehicle(Driver.Vehicle.MOTORCYCLE);
+        driver.setPhoneNo("123456789");
         user.setDriver(new Driver());
         Assertions.assertDoesNotThrow(()->userService.editDriver(user,"user","test","123456789","MOTORCYCLE"));
     }

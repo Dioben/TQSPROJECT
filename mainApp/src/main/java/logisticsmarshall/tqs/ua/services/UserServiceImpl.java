@@ -155,24 +155,33 @@ public class UserServiceImpl implements UserDetailsService {
         if (user.getCompany()==null){throw new AccountDataException();}
         Company company= user.getCompany();
         user.setName(name);
-        user.setPassword(newPassword);
         company.setPhoneNumber(phoneNumber);
         company.setDeliveryType(deliveryType);
         company.setAddress(address);
         companyRepository.save(company);
         if(!User.validateNewUser(user,user.getDriver(),user.getCompany())){throw  new AccountDataException("Bad Account Data");}
-        this.encryptPasswordAndStoreUser(user);
+        if(!(newPassword == null || newPassword.isEmpty())){
+            user.setPassword(newPassword);
+            this.encryptPasswordAndStoreUser(user);
+        }
+        else{
+            userRepository.save(user);
+        }
+
     }
 
     public void editDriver(User user, String name, String newPassword, String phoneNumber, String vehicle) throws AccountDataException {
         if (user.getDriver()==null){throw new AccountDataException();}
         Driver driver = user.getDriver();
         user.setName(name);
-        user.setPassword(newPassword);
         driver.setPhoneNo(phoneNumber);
         driver.setVehicle(Driver.Vehicle.valueOf(vehicle));
         driverRepository.save(driver);
         if(!User.validateNewUser(user,user.getDriver(),user.getCompany())){throw  new AccountDataException("Bad Account Data");}
+        if(!(newPassword == null || newPassword.isEmpty())){
+            user.setPassword(newPassword);
         this.encryptPasswordAndStoreUser(user);
+        }
+        else{userRepository.save(user);}
     }
 }

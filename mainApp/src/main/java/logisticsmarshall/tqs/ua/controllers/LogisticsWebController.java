@@ -157,8 +157,7 @@ public class LogisticsWebController {
     @PostMapping("/updateCompany")
     public String updateCompany(String name, String password, String newPassword, String phoneNumber, String deliveryType, String address) throws AccessForbiddenException, AccountDataException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(COMPANYROLE);
-        if(newPassword == null || newPassword.isEmpty()) return REDIRECTLOGOUT;
-        if(password == null || password.isEmpty()) return REDIRECTLOGOUT;
+        if(password == null || password.isEmpty()) return "redirect:/companyProfile";
         userServiceImpl.validatePassword(user,password);
         userServiceImpl.editCompany(user,name,newPassword,phoneNumber,deliveryType,address);
         return REDIRECTLOGOUT;
@@ -186,8 +185,7 @@ public class LogisticsWebController {
     @PostMapping("/updateDriver")
     public String updateDriver(String name, String password, String newPassword, String phoneNumber, String vehicle) throws AccessForbiddenException, AccountDataException {
         User user = userServiceImpl.getUserFromAuthAndCheckCredentials(DRIVERROLE);
-        if(newPassword == null || newPassword.isEmpty()) return REDIRECTLOGOUT;
-        if(password == null || password.isEmpty()) return REDIRECTLOGOUT;
+        if(password == null || password.isEmpty()) return "redirect:/driverProfile";
         userServiceImpl.validatePassword(user,password);
         userServiceImpl.editDriver(user,name,newPassword,phoneNumber,vehicle);
         return REDIRECTLOGOUT;
