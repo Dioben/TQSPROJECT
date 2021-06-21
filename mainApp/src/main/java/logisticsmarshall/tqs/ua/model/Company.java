@@ -19,7 +19,8 @@ public class Company {
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @PrimaryKeyJoinColumn
-    private  User user;
+    @JsonIgnore
+    private User user;
 
     @Column(name = "address", nullable = false)
     private String address;
