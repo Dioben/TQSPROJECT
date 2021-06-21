@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import marchingfood.tqs.ua.exceptions.BadParameterException;
 import marchingfood.tqs.ua.model.Delivery;
 import marchingfood.tqs.ua.model.ProviderDelivery;
+import marchingfood.tqs.ua.model.Review;
 import marchingfood.tqs.ua.repository.PaymentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -71,5 +72,21 @@ class DeliveryServiceTest {
                 restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
         assertThrows(BadParameterException.class,()->service.postToLogisticsClient(delivery));
+    }
+    @Test
+    void postReviewBadResultTest(){
+        Review review = new Review();
+        Mockito.when(
+                restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        Assertions.assertThrows(BadParameterException.class,()->service.postReview(review));
+    }
+    @Test
+    void postReviewOKTest(){
+        Review review = new Review();
+        Mockito.when(
+                restTemplate.postForEntity(Mockito.anyString(),Mockito.any(),Mockito.any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        Assertions.assertDoesNotThrow(()->service.postReview(review));
     }
 }
