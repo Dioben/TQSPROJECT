@@ -116,4 +116,12 @@ public class DeliveryService {
     public List<Delivery> getDeliveriesByStage(Delivery.Stage requested) {
         return deliveryRepository.findAllDeliveriesByStage(requested);
     }
+
+    public void resetDelivery(User user, long deliveryId) throws DeliveryDoesntHaveSameDriverException, AccountCantDeliverException, DeliveryHasNoDriverException, DeliveryAlreadyHasDriverException {
+        Delivery delivery = deliveryRepository.findDeliveryById(deliveryId);
+        validateDeliveryChange(user, delivery, true);
+        delivery.setDriver(null);
+        delivery.setStage(Delivery.Stage.REQUESTED);
+        deliveryRepository.save(delivery);
+    }
 }
