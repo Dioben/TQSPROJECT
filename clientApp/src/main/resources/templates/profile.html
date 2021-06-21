@@ -93,7 +93,7 @@
 						<td th:text="${delivery.address}">MacDonalds Aveiro</td>
 						<td th:text="${delivery.stage}">Rua do Chafariz, 3123-231 (...)</td>
 						<td>
-							<button class="baguetteBox-button" th:id="button +${delivery.id}" th:onclick="'javascript:tryReview(' + ${delivery.id} + ');'">Review</button>
+							<button class="baguetteBox-button" th:id="button+${delivery.id}" th:onclick="'javascript:tryReview(' + ${delivery.id} + ');'">Review</button>
 						</td>
 
 					</tr>
@@ -103,7 +103,7 @@
 		</div>
 		<div  id="review" class="container">
 			<form method="post" action="/review" class="form-control" >
-				<input type="hidden" id="id" name="id" >
+				<input type="hidden" id="id" name="deliveryId" value="-1">
 				<div class="form-group">
 					<input type="number" max="5" min="1" name="rating" class="form-control" placeholder="Rating">
 				</div>
@@ -131,7 +131,7 @@
 	<!-- End details -->
 	<script>
 		function tryReview(id){
-			if (document.getElementById("id").value) {
+			if (document.getElementById("id").value!=-1) {
 				document.getElementById("button"+document.getElementById("id").value).style.color = "black";
 			}
 			document.getElementById("button"+id).style.color = "red";
