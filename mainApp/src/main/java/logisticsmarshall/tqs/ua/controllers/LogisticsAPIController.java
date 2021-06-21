@@ -162,9 +162,9 @@ public class LogisticsAPIController {
 
     @PostMapping(path="/reputation",consumes = "application/json")
     public ResponseEntity<Reputation> postRating(Integer rating,
-                                                 Long deliveryId,
                                                  String apiKey,
-                                                 String description) {
+                                                 String description,
+                                                 Long deliveryId) {
         Company companyFromapiKey = deliveryService.getApiKeyHolderCompany(apiKey);
         if (companyFromapiKey == null) return ResponseEntity.status(403).build();
         Delivery delRequested = deliveryService.getDeliveryById(deliveryId);
