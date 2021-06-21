@@ -424,19 +424,19 @@ class LogisticsAPIControllerTest {
         rep.setRating(5);
         rep.setDriver(driverAssigned);
         rep.setDescription(description);
-
+        NewRating rating = new NewRating();
+        rating.setRating(1);
+        rating.setApiKey(apiKey);
+        rating.setDescription("test");
+        rating.setDeliveryId(1);
         Mockito.when(serviceMock.getApiKeyHolderCompany(Mockito.anyString())).thenReturn(company);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(delRequested);
         Mockito.when(driverServiceMock.getDriverById(Mockito.anyLong())).thenReturn(driverAssigned);
         mvc.perform(post("/api/reputation")
-                .param("apiKey", apiKey)
-                .param("rating", String.valueOf(5))
-                .param("deliveryId", String.valueOf(1))
-                .param("description", description)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonParser.writeValueAsString(rep)))
+                .content(jsonParser.writeValueAsString(rating)))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("rating", Matchers.equalTo(rep.getRating())));
+                .andExpect(jsonPath("rating", Matchers.equalTo(rating.getRating())));
     }
 
     @Test
