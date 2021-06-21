@@ -41,6 +41,7 @@ public class Driver {
 
     @PrimaryKeyJoinColumn
     @OneToOne(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private  User user;
 
 
@@ -59,6 +60,7 @@ public class Driver {
     private String apiKey;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<Delivery> delivery;
 
 

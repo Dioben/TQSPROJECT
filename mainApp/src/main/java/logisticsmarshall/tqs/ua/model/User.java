@@ -2,6 +2,7 @@ package logisticsmarshall.tqs.ua.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import logisticsmarshall.tqs.ua.exceptions.AccessForbiddenException;
 import lombok.Data;
 
@@ -47,10 +48,12 @@ public class User {
 
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "driver_id", nullable = true)
+    @JsonIgnore
     private Driver driver;
 
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "company_id", nullable = true)
+    @JsonIgnore
     private Company company;
 
     public User(String name, String email, String password, String role){
