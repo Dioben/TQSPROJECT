@@ -15,6 +15,11 @@ Pedro Silva [93011] : QA Engineer
 - [3. Quality Assurance Manual](#3-quality-assurance-manual)
 - [4. Product Specification Report](#4-product-specification-report)
 - [5. Final Presentation](#5-final-presentation)
+- [6. Continuous Deployment](#6-continuous-deployment)
+- [7. Accounts Created](#7-accounts-created)
+  - [7.1. MainApp Accounts](#71-mainApp-accounts)
+  - [7.2. ClientApp Accounts](#72-clientApp-accounts)
+
 
 
  ## 1. Pivotal Tracker
@@ -36,5 +41,30 @@ Pedro Silva [93011] : QA Engineer
 Updates are continuously deployed to our virtual machine via Watchtower at deti-tqs-11.ua.pt\
 [Logistics](http://deti-tqs-11.ua.pt:8080)\
 [Restaurant](http://deti-tqs-11.ua.pt:8000)
+
+
+## 7. Sonarqube
+### 7.1. MainApp Accounts
+## Admin
+user: admin
+password: admin
+
+
+
+
+### 7.2. ClientApp Accounts
+## MarchingFood
+user: marchingfood
+password: marchingFood
+
+## Admin
+user: admin
+password: admin
+
+## Rider
+user: rider
+password: rider
+
+
 
 If you fail to connect make sure you are using the correct VPN
