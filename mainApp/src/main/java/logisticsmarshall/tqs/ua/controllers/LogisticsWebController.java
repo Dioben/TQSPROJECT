@@ -173,7 +173,7 @@ public class LogisticsWebController {
         model.addAttribute("vehicle",driver.getVehicle().name());
         model.addAttribute("apikey",driver.getApiKey());
         Set<Reputation> repLst = driver.getReputation();
-        int avgRep = 0;
+        double avgRep = 0;
         if(!repLst.isEmpty()){
             for(Reputation rep : repLst)avgRep+=rep.getRating();
             avgRep/=repLst.size();
