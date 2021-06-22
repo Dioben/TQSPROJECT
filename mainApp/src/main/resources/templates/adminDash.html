@@ -70,6 +70,8 @@
             <thead>
             <tr>
                 <th>Company ID</th>
+                <th>Name</th>
+                <th>Email</th>
                 <th>Address </th>
                 <th>Phone Number</th>
                 <th>Delivery Type</th>
@@ -81,6 +83,8 @@
             <div th:each="company : ${companies}">
                 <tr>
                     <td th:text="${company.id}">12345</td>
+                    <td th:text="${company.user.name}"></td>
+                    <td th:text="${company.user.email}"></td>
                     <td th:text="${company.address}">Rua do Chafariz, 3123-231 (...)</td>
                     <td th:text="${company.phoneNumber}">99999999</td>
                     <td th:text="${company.deliveryType}">Urgent</td>
@@ -115,6 +119,8 @@
                 <thead>
                 <tr>
                     <th>Driver ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
                     <th>Phone Number</th>
                     <th>Vehicle</th>
                     <th></th>
@@ -125,6 +131,8 @@
                 <div th:each="driver : ${drivers}">
                     <tr>
                         <td th:text="${driver.id}">12345</td>
+                        <td th:text="${driver.user.name}"></td>
+                        <td th:text="${driver.user.email}"></td>
                         <td th:text="${driver.phoneNo}">99999999</td>
                         <td th:text="${driver.vehicle}">Car</td>
                         <td>
@@ -156,6 +164,8 @@
                     <thead>
                     <tr>
                         <th>Driver ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
                         <th>Phone Number</th>
                         <th>Vehicle</th>
                         <th>Review Count</th>
@@ -168,6 +178,8 @@
                     <div th:each="baddriver : ${problemdrivers}">
                         <tr>
                             <td th:text="${baddriver.id}">12345</td>
+                            <td th:text="${baddriver.name}"></td>
+                            <td th:text="${baddriver.email}"></td>
                             <td th:text="${baddriver.phoneNo}">99999999</td>
                             <td th:text="${baddriver.vehicle}">Car</td>
                             <td th:text="${baddriver.reviewcount}">0</td>
