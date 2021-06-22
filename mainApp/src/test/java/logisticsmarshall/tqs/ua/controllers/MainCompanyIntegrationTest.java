@@ -57,13 +57,13 @@ public class MainCompanyIntegrationTest {
   @AfterEach
   public void tearDown() {
 
-    User user = userRepository.findByName("marchingfood");
-    user.setPassword("marchingfood");
-    userRepository.save(user);
+    // User user = userRepository.findByName("marchingfood");
+    // user.setPassword("marchingfood");
+    // userRepository.save(user);
 
-    Delivery del = deliveryRepository.findDeliveryById(11L);
-    del.setStage(Delivery.Stage.REQUESTED);
-    deliveryRepository.save(del);
+    // Delivery del = deliveryRepository.findDeliveryById(11L);
+    // del.setStage(Delivery.Stage.REQUESTED);
+    // deliveryRepository.save(del);
 
     //driver.quit();
   }

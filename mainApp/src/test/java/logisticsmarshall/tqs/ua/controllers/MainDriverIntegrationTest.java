@@ -52,11 +52,11 @@ public class MainDriverIntegrationTest {
   }
   @AfterEach
   public void tearDown() {
-    User user = userRepository.findByName("rider");
-    user.setPassword("rider");
-    userRepository.save(user);
+    // User user = userRepository.findByName("rider");
+    // user.setPassword("rider");
+    // userRepository.save(user);
 
-    Delivery delivery = deliveryRepository.findDeliveryById(1L);
+    // Delivery delivery = deliveryRepository.findDeliveryById(1L);
     //Finish here
     //driver.quit();
   }
