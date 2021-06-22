@@ -29,6 +29,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.*;
 import java.net.MalformedURLException;
@@ -43,6 +44,9 @@ public class MainDriverIntegrationTest {
 
   @Autowired
   DeliveryRepository deliveryRepository;
+
+  @Autowired
+  BCryptPasswordEncoder passwordEncoder;
 
   private Map<String, Object> vars;
   JavascriptExecutor js;
