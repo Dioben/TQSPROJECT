@@ -98,7 +98,7 @@
 													numquam blanditiis</div>
 
 
-												<button th:id="${menu.id}" class="navbar-toggler"  onclick="addToCart(this)" style="float:right; margin-right: 10px; ">Add to <i class="fas fa-cart-plus"></i></button>
+												<button sec:authorize="isAuthenticated()" th:id="${menu.id}" class="navbar-toggler"  onclick="addToCart(this)" style="float:right; margin-right: 10px; ">Add to <i class="fas fa-cart-plus"></i></button>
 											</div>
 									</div>
 								</div>
