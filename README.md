@@ -14,7 +14,7 @@ Pedro Silva [93011] : QA Engineer
   - [2.2. ClientApp](#22-clientApp)
 - [3. Quality Assurance Manual](#3-quality-assurance-manual)
 - [4. Product Specification Report](#4-product-specification-report)
-- [5. Final Apresentation](#5-final-apresentation)
+- [5. Final Presentation](#5-final-presentation)
 
 
  ## 1. Pivotal Tracker
@@ -29,8 +29,8 @@ Pedro Silva [93011] : QA Engineer
 
 ## 4. Product Specification Report
 
-## 5. Final Apresentation
-[final apresentation](https://drive.google.com/file/d/15P4AhhRrBMvCzAPtatxokMu5ji7zNPNn/view?usp=sharing)
+## 5. Final Presentation
+[Final apresentation](https://drive.google.com/file/d/15P4AhhRrBMvCzAPtatxokMu5ji7zNPNn/view?usp=sharing)
 
 
 Updates are continuously deployed to our virtual machine via Watchtower at deti-tqs-11.ua.pt
