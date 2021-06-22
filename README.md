@@ -46,23 +46,23 @@ Updates are continuously deployed to our virtual machine via Watchtower at deti-
 ## 7. Sonarqube
 ### 7.1. MainApp Accounts
 ## Admin
-user: admin
+user: admin<br/>
 password: admin
 
 
 
 
 ### 7.2. ClientApp Accounts
-## MarchingFood
-user: marchingfood
+#### MarchingFood
+user: marchingfood<br/>
 password: marchingFood
 
-## Admin
-user: admin
+#### Admin
+user: admin<br/>
 password: admin
 
-## Rider
-user: rider
+#### Rider
+user: rider<br/>
 password: rider
 
 
