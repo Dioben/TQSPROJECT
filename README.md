@@ -33,8 +33,8 @@ Pedro Silva [93011] : QA Engineer
 [Final Presentation](https://drive.google.com/file/d/15P4AhhRrBMvCzAPtatxokMu5ji7zNPNn/view?usp=sharing)
 
 ## 6. Continuous Deployment
-Updates are continuously deployed to our virtual machine via Watchtower at deti-tqs-11.ua.pt
-[Logistics](deti-tqs-11.ua.pt:8080)
-[Restaurant](deti-tqs-11.ua.pt:8000)
+Updates are continuously deployed to our virtual machine via Watchtower at deti-tqs-11.ua.pt\
+[Logistics](http://deti-tqs-11.ua.pt:8080)\
+[Restaurant](http://deti-tqs-11.ua.pt:8000)
 
 If you fail to connect make sure you are using the correct VPN
