@@ -30,7 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(SeleniumJupiter.class)
 public class MainRegisterCompanyIntegrationTest {
   private Map<String, Object> vars;
@@ -44,7 +44,7 @@ public class MainRegisterCompanyIntegrationTest {
     //driver.quit();
   }
   @Test
-  public void mainRegisterCompanyIntegration(HtmlUnitDriver driver) {
+  public void mainRegisterCompanyIntegration(ChromeDriver driver) {
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
     driver.get("http://localhost:8080/login");
