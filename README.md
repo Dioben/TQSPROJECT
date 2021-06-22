@@ -1,7 +1,7 @@
 # TQSPROJECT
 TQS project for school year 2020/2021 \
 P3_G302 \
-##Autores:
+## Autores:
 Alexandre Rodrigues [92951] : Product Owner\
 Diogo Bento [93391] : DevOps \
 Pedro Laranjinha [93179] : Team Lead\
