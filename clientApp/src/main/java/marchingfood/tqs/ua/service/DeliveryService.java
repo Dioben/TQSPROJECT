@@ -28,8 +28,8 @@ public class DeliveryService {
     DeliveryRepository deliveryRepository;
 
     private static final String LOGISTICS_MARSHALL_APIKEY = "12345678-1111-2222-3333-123456789000";
-    private static final String DELIVERYPOSTURL = "http://backendmain:8080/api/delivery";
-    private static final String REVIEWPOSTINGURL = "http://backendmain:8080/api/reputation";
+    private static final String DELIVERYPOSTURL = "http://localhost:8080/api/delivery";
+    private static final String REVIEWPOSTINGURL = "http://localhost:8080/api/reputation";
 
     @Autowired
     ObjectMapper objectMapper;
@@ -70,7 +70,7 @@ public class DeliveryService {
     }
 
     private ProviderDelivery getDeliveryFromLogistics(long id) {
-        final String uri = "http://backendmain:8080/api/delivery/"+id+"?apiKey="+LOGISTICS_MARSHALL_APIKEY;
+        final String uri = "http://localhost:8080/api/delivery/"+id+"?apiKey="+LOGISTICS_MARSHALL_APIKEY;
         ResponseEntity<ProviderDelivery> result = restTemplate.getForEntity(uri,ProviderDelivery.class);
         return  result.getBody();
     }
