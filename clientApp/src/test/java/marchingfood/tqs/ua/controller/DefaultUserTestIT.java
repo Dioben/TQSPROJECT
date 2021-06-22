@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class DefaultUserTestIT {
+class DefaultUserTestIT {
 
     @Autowired
     UserServiceImpl userService;
@@ -38,7 +38,7 @@ public class DefaultUserTestIT {
     }
 
     @Test
-    public void defaultUserTest(ChromeDriver driver) {
+    void defaultUserTest(ChromeDriver driver) {//needs to assert something
         driver.get("http://backend:8000/");
         driver.manage().window().setSize(new Dimension(1000, 700));
         driver.findElement(By.cssSelector("div > .nav-item > .nav-link")).click();
