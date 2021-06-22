@@ -64,7 +64,7 @@ public class DeliveryService {
     public List<ProviderDelivery> getClientDeliveriesFromLogistics(Client client){
         ArrayList<ProviderDelivery> providerDeliveries = new ArrayList<>();
         for(Delivery delivery: client.getOrderEntity()){
-            ProviderDelivery providerDelivery = this.getDeliveryFromLogistics(delivery.getId())
+            ProviderDelivery providerDelivery = this.getDeliveryFromLogistics(delivery.getId());
             providerDeliveries.add(providerDelivery);
             if (providerDelivery.getStage().equals("DELIVERED")){
                 delivery.setDelivered(true);
