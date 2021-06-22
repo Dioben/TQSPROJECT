@@ -5,7 +5,7 @@ P3_G302
 Alexandre Rodrigues [92951] : Product Owner\
 Diogo Bento [93391] : DevOps \
 Pedro Laranjinha [93179] : Team Lead\
-Pedro Silva [93011] : QA Engineer\
+Pedro Silva [93011] : QA Engineer
 
 ## Index
 - [1. Pivotal Tracker](#1-pivotal-tracker)
