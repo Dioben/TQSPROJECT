@@ -6,7 +6,7 @@ Autores:
 Alexandre Rodrigues [92951] : Product Owner\
 Diogo Bento [93391] : DevOps \
 Pedro Laranjinha [93179] : Team Lead\
-Pedro Silva [93011] : QA Engineer \
+Pedro Silva [93011] : QA Engineer 
 
 - [1. Pivotal Tracker](#1-pivotal-tracker)
 - [2. Sonarqube](#2-sonarqube)
@@ -18,13 +18,13 @@ Pedro Silva [93011] : QA Engineer \
 
 
  ## 1. Pivotal Tracker
-[Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2499427)\
+[Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2499427)
 
 ## 2. Sonarqube
 ### 2.1. mainApp
-[mainApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=buckaroo69_TQSPROJECT)\
+[mainApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=buckaroo69_TQSPROJECT)
 ### 2.2. clientApp
-[clientApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=tqs-side-client)\
+[clientApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=tqs-side-client)
 ## 3. Quality Assurance Manual
 
 ## 4. Product Specification Report
