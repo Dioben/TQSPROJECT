@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">    
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="css/style.css">    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+
+</head>
+
+<body>
+<header class="top-navbar">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container">
+			<a class="navbar-brand" href="index.html">
+				<img src="" alt="">
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbars-rs-food">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item "><a class="nav-link" href="/">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="/restaurant">Menus</a></li>
+					<div sec:authorize="isAuthenticated()">
+						<li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+					</div>
+					<div sec:authorize="isAuthenticated()">
+						<li class="nav-item"><a class="nav-link" href="/profile">Deliveries</a></li>
+					</div>
+					<div sec:authorize="isAuthenticated()">
+						<li  class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+					</div>
+					<div sec:authorize="isAnonymous()">
+						<li  class="nav-item active"><a class="nav-link" href="/login">Log In</a></li>
+					</div>
+					<div sec:authorize="hasAuthority('ADMIN')">
+						<li  class="nav-item"><a class="nav-link" href="/admin/dashboard">ADMIN</a></li>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>
+<!-- End header -->
+
+	
+	<!-- Start login -->
+	<div class="blog-box">
+		<div class="container">
+
+                            <h2>Fast Delivery </h2>
+                            <br><br>
+							<h3>Login </h3>
+							<div class="comment-respond-form">
+								<form id="commentrespondform" class="comment-form-respond row" th:action="@{/login}" method="post">
+
+
+									<div class=" col-md-6 col-md-offset-5 ">
+										<div th:if="${param.error}">
+											<div class="alert alert-danger"><p>Bad Credentials</p></div>
+										</div>
+										<div th:if="${param.logout}">
+											<div class="alert alert-info">You have been logged out.</div>
+										</div>
+										<div class="form-group">
+											<input type="text"
+												   id="username" name="username" class="form-control"
+												   autofocus="autofocus" placeholder="Username" />
+										</div>
+										<div class="form-group">
+											<input type="password"
+												   id="password" name="password" class="form-control"
+												   placeholder="Password" />
+										</div>
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="submit" name="login-submit" id="login-submit"
+												   class="form-control btn btn-primary" value="Log In" />
+										</div>
+									</div>
+                                    <br>
+									<div class="form-group">
+									<span>New user? <a href="/" th:href="@{/register}">Register here</a></span>
+									</div>
+								</form>
+							</div>
+					</div>
+				</div>
+			
+				
+			
+			</div>
+		</div>
+	</div>
+	<!-- End details -->
+	
+
+	
+
+	
+
+
+</body>
+</html>

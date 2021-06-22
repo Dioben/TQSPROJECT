@@ -25,11 +25,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
@@ -42,13 +37,22 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.3.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.3.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
@@ -91,6 +95,26 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -121,7 +145,26 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/model/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/exceptions/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/repository/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/configs/*
+                        </exclude>
+                        <exclude>
+                            logisticsmarshall/tqs/ua/MainAppApplication.class
+                        </exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -133,19 +176,6 @@
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>

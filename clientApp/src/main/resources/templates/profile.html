@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">    
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="css/style.css">    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+
+</head>
+
+<body>
+
+        	<!-- Start header -->
+		<header class="top-navbar">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container">
+					<a class="navbar-brand" href="index.html">
+						<img src="" alt="" />
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbars-rs-food">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="/restaurant">Menus</a></li>
+							<div sec:authorize="isAuthenticated()">
+								<li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+							</div>
+							<div sec:authorize="isAuthenticated()">
+								<li class="nav-item active"><a class="nav-link" href="/profile">Deliveries</a></li>
+							</div>
+							<div sec:authorize="isAuthenticated()">
+								<li  class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+							</div>
+							<div sec:authorize="isAnonymous()">
+								<li  class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+							</div>
+							<div sec:authorize="hasAuthority('ADMIN')">
+								<li  class="nav-item"><a class="nav-link" href="/admin/dashboard">ADMIN</a></li>
+							</div>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<!-- End header -->
+
+
+	
+	<!-- Start login -->
+	<div class="blog-box">
+		<div class="container">
+            <br>
+                            <!--<h2>Address</h2>
+                                        <div class="form-group">
+											<p th:text="${user.getAddress()}"></p>
+										</div>-->
+			<h2><strong>Deliveries</strong></h2>
+			<h2 th:text="${message}" style="color: dodgerblue"></h2>
+
+
+			<div th:if="${#arrays.length(deliveries) == 0}">
+				<h2> You have not requested any deliveries</h2>
+			</div>
+
+			<table th:if="${#arrays.length(deliveries) != 0}" style="margin-left:auto;margin-right:auto;width: 100%" class="styled-table">
+
+				<thead>
+				<tr>
+					<th>Time of Delivery</th>
+					<th>From</th>
+					<th>To</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<div th:each="delivery : ${deliveries}">
+					<tr>
+						<td th:text="${delivery.orderTimestamp}">12345</td>
+						<td th:text="${delivery.pickupAddress}">20-10-2021 15:30</td>
+						<td th:text="${delivery.address}">MacDonalds Aveiro</td>
+						<td th:text="${delivery.stage}">Rua do Chafariz, 3123-231 (...)</td>
+						<td>
+							<button class="btn btn-secondary" th:id="button+${delivery.id}" th:attr="onclick=|tryReview('${delivery.id}','${delivery.rating}','${delivery.description}')|">Review</button>
+
+						</td>
+
+					</tr>
+				</div>
+				</tbody>
+			</table>
+		</div>
+		<div hidden id="review" class="container">
+			<form method="post" action="/review" class="form-control" >
+				<input type="hidden" id="id" name="deliveryId" value="-1">
+				<div class="form-group">
+					<input type="number" max="5" min="1" name="rating" class="form-control" id="rating" placeholder="Rating">
+				</div>
+				<div class="form-group">
+					<textarea name="description" placeholder="What do you want to say?" id="description" class="form-control"></textarea>
+				</div>
+				<div class="form-group">
+				<input type="submit" class="form-group" id=submit value="Submit" disabled>
+				</div>
+			</form>
+		</div>
+		<br>
+							</div>
+					</div>
+				</div>
+			
+				
+			
+			</div>
+		</div>
+	</div>
+	<!-- End details -->
+	<script>
+		function tryReview(id,rating,description){
+			if (document.getElementById("id").value!=-1) {
+				document.getElementById("button"+document.getElementById("id").value).style.color = "black";
+			}
+			document.getElementById("button"+id).style.color = "red";
+			document.getElementById("submit").disabled = false;
+			document.getElementById("id").value=id;
+			if (rating>-1) {
+				document.getElementById('rating').value = rating;
+				document.getElementById('description').value=description
+			} else {
+				document.getElementById('rating').value = "";
+				document.getElementById('description').value = "";
+			}
+			document.getElementById("review").removeAttribute("hidden");
+		}
+	</script>
+
+	
+
+	<!-- ALL JS FILES -->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <!-- ALL PLUGINS -->
+	
+	<script src="js/jquery.superslides.min.js"></script>
+	<script src="js/images-loded.min.js"></script>
+	<script src="js/isotope.min.js"></script>
+	<script src="js/baguetteBox.min.js"></script>
+	<script src="js/form-validator.min.js"></script>
+    <script src="js/contact-form-script.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+        $("input:checkbox").on('click', function() {
+            var $box = $(this);
+            if ($box.is(":checked")) {
+              var group = "input:checkbox[name='" + $box.attr("name") + "']";
+              $(group).prop("checked", false);
+              $box.prop("checked", true);
+            } else {
+              $box.prop("checked", false);
+            }
+          });
+    </script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+</body>
+</html>

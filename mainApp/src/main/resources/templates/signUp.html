@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/main.css" />
+
+		<style>
+			.center {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			input[type="radio"]{
+				-webkit-appearance: radio;
+			}
+		</style>
+
+	</head>
+	<link rel="stylesheet"
+		  href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<body >
+	<header class="top-navbar">
+		<nav id="nav" class="navbar justify-content-between">
+			<ul>
+				<li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+			</ul>
+			<ul style="float: right;">
+				<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+				<li class="current nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+			</ul>
+		</nav>
+	</header>
+		<div class="container aln-center" style="width: 400px" >
+			<h3>SignUp</h3>
+					<form  th:action="@{/register}" th:object="${user}" method="post">
+						<div class="col-12">
+							<input type="text"  placeholder="Name" name="name" th:value="*{name}" />
+						</div>
+						<br>
+						<div class="col-12">
+							<input type="text" placeholder="Email" name="email" th:value="*{email}" />
+						</div>
+						<br>
+						<div class="col-12">
+							<input type="password"  placeholder="Password" name="password" th:value="*{password}" />
+						</div>
+						<br>
+						<div class="col-12 ">
+							<input type="radio" name="role" value="COMPANY" onclick="showCompanyForm();" />
+							Company
+							<input type="radio" name="role" value="DRIVER" onclick="showDriverForm();" />
+							Driver
+						</div>
+						<br>						
+
+
+				<!--COMPANY-->
+				<div id="div1"   style="display: none;" >
+					<h3> Company Form</h3>
+					<div class="col-12">
+						<input type="text"  id="deliveryType" name="deliveryType" placeholder="Delivery type" th:value="*{company.deliveryType}" />
+					</div>
+					<br>
+
+					<div class="col-12">
+							<input type="text"  id="address" name="address" placeholder="Address" th:value="*{company.address}" />
+						</div>
+						<br>
+						<div class="col-12">
+							<input type="text"  id="phoneNumber" name="phoneNumber" placeholder="Phone number" th:value="*{company.phoneNumber}" />
+						</div>
+
+				</div>
+
+
+
+				<!--DRIVER-->
+				<div id="div2"  style="display: none;">
+					<h3> Driver Form</h3>
+						<div class="col-12">
+							<input type="text"  name="phoneNo"  placeholder="Phone number"  th:value="*{driver.phoneNo}" />
+						</div>
+						<br>
+					<label>Vehicle</label>
+						<div class="col-12 ">
+							<select name="vehicle" th:value="*{driver.vehicle}" style=" border-radius: 5px; width: 200px">
+								<option th:value="BICYCLE" th:text="Bicycle"></option>
+								<option th:value="CAR" th:text="Car"></option>
+								<option th:value="MOTORCYCLE" th:text="Motorcycle"></option>
+								<option th:value="ONFOOT" th:text="Onfoot"></option>
+							</select>
+						</div>
+				</div>
+				<br>
+				<div class="col-3">
+					<button style=" height: 40px;float:right; display: inline; " class="alt" type="submit">SignUp</button>
+				</div>
+		</form>
+		</div>
+
+
+
+
+
+
+
+
+	</body>
+	<script>
+		function showCompanyForm(){
+			document.getElementById('div2').style.display ='none';
+			document.getElementById('div1').style.display ='block';
+
+		}
+		function showDriverForm(){
+			document.getElementById('div2').style.display = 'block';
+			document.getElementById('div1').style.display = 'none';
+		}
+	</script>
+</html>

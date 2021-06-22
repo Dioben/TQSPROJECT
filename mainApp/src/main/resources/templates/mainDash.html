@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css" />
+
+    <style>
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .styled-table thead tr {
+            background-color: #d65106;
+            color: #ffffff;
+            text-align: left;
+        }
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+        
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #d65106;
+        }
+        
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #d65106;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Nav -->
+<header class="top-navbar">
+                    <nav id="nav" class="navbar justify-content-between">
+                        <ul>
+                            <li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+                            <li class="current nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+                            <li class="current nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+                            <li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+                            <li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+                            <li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+                        </ul>
+                        <ul style="float: right;">
+                            <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+                            <li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+                        </ul>
+                    </nav>
+                </header>
+
+	<!-- RECENT UPDATES-->
+	<div class="blog-box">
+		<div class="container" >
+            <br>
+            <h2 th:text="'Welcome '+${profile.name}"> </h2>
+            <div sec:authorize="hasAuthority('DRIVER')">
+
+                <h2 th:text="'My Average Reputation:'+${driver_avg_reputation}">4 </h2>
+            </div>
+
+            <br><br><br>
+							
+        </div>
+    </div>
+
+
+
+    <!-- Delivery Orders Available/InProgress/Done -->
+
+    <div class="container" th:if="${#arrays.length(deliveries) != 0}">
+        <h2>Delivery orders </h2>
+        <div >
+            <table style="margin-left:auto;margin-right:auto;" class="styled-table">
+
+                <thead>
+                <tr>
+                    <th>Tracking id </th>
+                    <th>Delivery order </th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="delivery : ${deliveries}">
+                    <tr th:if="${delivery.stage.name() != 'CANCELED'}">
+                        <td th:text="${delivery.id}">12345</td>
+                        <td th:text="${delivery.orderTimestamp}">20-10-2021 15:30</td>
+                        <td th:text="${delivery.company.address}">MacDonalds Aveiro</td>
+                        <td th:text="${delivery.address}">Rua do Chafariz, 3123-231 (...)</td>
+                        <td>
+                            <div th:text="${delivery.stage}">Requested</div>
+                            <div sec:authorize="hasAuthority('DRIVER')">
+                            <div th:if="${delivery.stage.name() == 'REQUESTED'}">
+                                <form th:id="acceptDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
+                                    <input type="hidden" name="action" value="accept"/>
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'acceptDeliveryForm'+${delivery.id}+'\'].submit()'">Accept</button>
+                            </div>
+                            <div th:if="${delivery.stage.name() == 'ACCEPTED'}">
+                                <form th:id="pickupDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
+                                    <input type="hidden" name="action" value="pickup"/>
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary"  th:onclick="'javascript:document.forms[\'pickupDeliveryForm'+${delivery.id}+'\'].submit()'">Pickup</button>
+                            </div>
+                            <div th:if="${delivery.stage.name() == 'PICKEDUP'}">
+                                <form th:id="finishDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
+                                    <input type="hidden" name="action" value="finish"/>
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'finishDeliveryForm'+${delivery.id}+'\'].submit()'">Finish</button>
+                            </div>
+                            <div th:if="${delivery.stage.name() == 'ACCEPTED'}">
+                                <form th:id="cancelDeliveryForm+${delivery.id}" method="POST" th:action="@{/driverDash}">
+                                    <input type="hidden" name="action" value="cancel"/>
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'cancelDeliveryForm'+${delivery.id}+'\'].submit()'">Cancel</button>
+                            </div>
+                            </div>
+                            <div sec:authorize="hasAuthority('COMPANY')">
+                                <form th:id="companyCancelDeliveryForm+${delivery.id}" method="POST" th:action="@{/cancelDelivery}">
+                                    <input type="hidden" name="deliveryId" th:value="${delivery.id}"/>
+                                </form>
+                                <button class="btn btn-primary" th:onclick="'javascript:document.forms[\'companyCancelDeliveryForm'+${delivery.id}+'\'].submit()'">Cancel</button>
+                            </div>
+                        </td>
+                        <td>
+                           <div>
+                               <div th:text="${delivery.reputation?.rating} ?: 'No rating given'">Rating here</div>
+                           </div>
+                        </td>
+
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${#arrays.length(deliveries) == 0}">
+            <h2> There are no deliveries available</h2>
+        </div>
+        <div th:if="${message != null}">
+            <p th:text="${message}">Message</p>
+        </div>
+        <div th:if="${error != null}">
+            <p th:text="${error}">Error message</p>
+        </div>
+    </div>
+    <!-- End details -->
+
+
+
+
+</body>
+</html>

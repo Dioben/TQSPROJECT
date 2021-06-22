@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/main.css" />
+	</head>
+	<body >
+	<header class="top-navbar">
+		<nav id="nav" class="navbar justify-content-between">
+			<ul>
+				<li class="nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+				<li class=" nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+				<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+				<li class="current nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+			</ul>
+			<ul style="float: right;">
+				<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+				<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+		<div style="width:700px; margin:0 auto; margin-top:100px" >
+				<h3>Business owner profile</h3>
+				<form method="post" action="/updateCompany">
+
+						<div class="col-12">
+							<label for="name">Name:</label>
+							<input type="text" th:value="${profile.name}" name="name" id="name" placeholder="Name" />
+						</div>
+						<br>
+						<div class="col-12">
+							<label for="password">Current Password</label>
+							<input type="password" name="password" id="password" placeholder="Password" required/>
+						</div>
+						
+						<br>
+					<div class="col-12">
+						<label for="password">New Password (can be the same)</label>
+						<input type="password" name="newPassword" id="newPassword" placeholder="Password" />
+					</div>
+					<br>
+						<div class="col-12">
+							<label for="phoneNumber">Phone Number</label>
+							<input th:value="${phone_number}" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone Number" />
+						</div>
+						<br>
+
+						<div class="col-12">
+							<label for="deliveryType">Delivery Type</label>
+							<input th:value="${delivery_type}" type="text" name="deliveryType" id="deliveryType" placeholder="Delivery Type" />
+						</div>
+					<div class="col-12">
+						<label for="address">Address:</label>
+						<input type="text" id="address" name="address" th:value="${address}" placeholder="Address"/>
+					</div>
+					<br>
+					<div class="col-3 aln-right">
+						<input type="submit" class="button" value="Update Profile">
+					</div>
+				</form>
+						<br>
+						<div class="col-12" style="display: inline-block">
+							<div class="col-9">
+								<label for="apikey">API Key attributed:</label>
+								<p id="apikey" th:text="${apikey} ?: 'Awaiting Admin Approval'"></p>
+							</div>
+							<div class="col-3" th:if="${apikey != null}">
+								<form  method="post" action="/requestReset" ><input type="submit" class="button" value="Request Reset"></form>
+							</div>
+
+
+						</div>
+
+			
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="/js/jquery.min.js"></script>
+			<script src="/js/jquery.dropotron.min.js"></script>
+			<script src="/js/browser.min.js"></script>
+			<script src="/js/breakpoints.min.js"></script>
+			<script src="/js/util.js"></script>
+			<script src="/js/main.js"></script>
+
+	</body>
+</html>

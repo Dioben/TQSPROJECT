@@ -3,7 +3,13 @@ TQS project for school year 2020/2021
 
 Autores:
 
-Alexandre Rodrigues [92951]
-Diogo Bento [93391]
-Pedro Laranjinha [93179]
-Pedro Silva [93011]
+Alexandre Rodrigues [92951] : Product Owner\
+Diogo Bento [93391] : DevOps \
+Pedro Laranjinha [93179] : Team Lead\
+Pedro Silva [93011] : QA Engineer \
+
+[Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2499427)\
+[mainApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=buckaroo69_TQSPROJECT)\
+[clientApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=tqs-side-client)
+
+Updates are continuously deployed to our virtual machine via Watchtower at deti-tqs-11.ua.pt

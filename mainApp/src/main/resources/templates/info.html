@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
+	<head>
+		<title>LogisticsMarshall</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="css/main.css" />
+	</head>
+	<body class="is-preload">
+	<div id="page-wrapper">
+
+		<!-- Nav -->
+		<header class="top-navbar">
+			<nav id="nav" class="navbar justify-content-between">
+				<ul>
+					<li class="current nav-item"><a class="nav-link" href="/info">LogisticsMarshall</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('ADMIN')"><a class="nav-link" href="/adminDash">Dashboard</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('DRIVER')"><a class="nav-link" href="/driverProfile">Profile</a></li>
+					<li class="nav-item" sec:authorize="hasAuthority('COMPANY')"><a class="nav-link" href="/companyProfile">Profile</a></li>
+				</ul>
+				<ul style="float: right;">
+					<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="/logout">Log Out</a></li>
+					<li class="nav-item" sec:authorize="isAnonymous()"><a class="nav-link" href="/login">Log In</a></li>
+				</ul>
+			</nav>
+		</header>
+
+
+
+		<!-- Highlights -->
+
+
+		<!-- Gigantic Heading -->
+		<section class="wrapper style2">
+			<div class="container">
+				<header class="major">
+					<h2>Welcome to Logistics Marshall</h2>
+					<p>An On-Demand Driver Logistics Management Service</p>
+				</header>
+			</div>
+		</section>
+
+		<!-- Posts -->
+		<section class="wrapper style1">
+			<div class="container">
+				<div class="row">
+					<section class="col-6 col-12-narrower">
+						<div class="box post">
+							<a href="#" class="image left"><img src="images/company.jpg" alt=""></a>
+							<div class="inner">
+								<h3>Do you need a easy way to deliver your products?</h3>
+								<p>Here in Logistics Marshall we can help a company like yours by providing you access to a network of experienced drivers, all you need is to register in order to get access to it!</p>
+							</div>
+						</div>
+					</section>
+					<section class="col-6 col-12-narrower">
+						<div class="box post">
+							<a href="#" class="image left"><img src="images/driver.jpg" alt=""></a>
+							<div class="inner">
+								<h3>Are you looking to be one of our drivers?</h3>
+								<p>If you looking to be part of an enormous community of drivers all around the country, you just need to register and get immediate access to our delivery network!</p>
+							</div>
+						</div>
+					</section>
+				</div>
+
+			</div>
+		</section>
+
+
+
+		<!-- Footer -->
+		<div id="footer">
+
+			<!-- Copyright -->
+			<div class="copyright">
+				<ul class="menu">
+					<li>© Logistics Marshall. All rights reserved</li>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+
+		<!-- Scripts -->
+			<script src="/js/jquery.min.js"></script>
+			<script src="/js/jquery.dropotron.min.js"></script>
+			<script src="/js/browser.min.js"></script>
+			<script src="/js/breakpoints.min.js"></script>
+			<script src="/js/util.js"></script>
+			<script src="/js/main.js"></script>
+
+	</body>
+</html>
