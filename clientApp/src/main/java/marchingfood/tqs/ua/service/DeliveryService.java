@@ -66,7 +66,7 @@ public class DeliveryService {
         for(Delivery delivery: client.getOrderEntity()){
             ProviderDelivery providerDelivery = this.getDeliveryFromLogistics(delivery.getId());
             providerDeliveries.add(providerDelivery);
-            if (providerDelivery.getStage().equals("DELIVERED")){
+            if (providerDelivery!=null && providerDelivery.getStage().equals("DELIVERED")){
                 delivery.setDelivered(true);
                 deliveryRepository.save(delivery);
             }
