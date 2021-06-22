@@ -73,7 +73,12 @@
 			<h2><strong>Deliveries</strong></h2>
 			<h2 th:text="${message}" style="color: dodgerblue"></h2>
 
-			<table style="margin-left:auto;margin-right:auto;" class="styled-table">
+
+			<div th:if="${#arrays.length(deliveries) == 0}">
+				<h2> You have not requested any deliveries</h2>
+			</div>
+
+			<table th:if="${#arrays.length(deliveries) != 0}" style="margin-left:auto;margin-right:auto;width: 100%" class="styled-table">
 
 				<thead>
 				<tr>
@@ -116,9 +121,6 @@
 			</form>
 		</div>
 		<br>
-		<div th:if="${#arrays.length(deliveries) == 0}">
-			<h2> You have not requested any deliveries</h2>
-		</div>
 							</div>
 					</div>
 				</div>
@@ -135,13 +137,16 @@
 				document.getElementById("button"+document.getElementById("id").value).style.color = "black";
 			}
 			document.getElementById("button"+id).style.color = "red";
-		document.getElementById("submit").disabled = false;
-		document.getElementById("id").value=id;
-		if (rating>-1){
-			document.getElementById('rating').value = rating;
-			document.getElementById('description').value=description
-		}
-		document.getElementById("submit").removeAttribute("hidden"); 
+			document.getElementById("submit").disabled = false;
+			document.getElementById("id").value=id;
+			if (rating>-1) {
+				document.getElementById('rating').value = rating;
+				document.getElementById('description').value=description
+			} else {
+				document.getElementById('rating').value = "";
+				document.getElementById('description').value = "";
+			}
+			document.getElementById("review").removeAttribute("hidden");
 		}
 	</script>
 
