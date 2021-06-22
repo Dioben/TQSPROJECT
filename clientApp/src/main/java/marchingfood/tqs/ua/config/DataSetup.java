@@ -30,7 +30,7 @@ public class DataSetup {
                 user1.setPassword("12345");
                 userService.encryptPasswordAndStoreUser(user1);
             }
-            if(menuRepository.findAll().size()>0){
+            if(menuRepository.findAll().size()==0){
             Menu menu1 = new Menu();
             menu1.setPrice(7.55);
             menu1.setName("Big MEC");
