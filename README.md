@@ -15,11 +15,6 @@ Pedro Silva [93011] : QA Engineer
 - [3. Quality Assurance Manual](#3-quality-assurance-manual)
 - [4. Product Specification Report](#4-product-specification-report)
 - [5. Final Presentation](#5-final-presentation)
-- [6. Continuous Deployment](#6-continuous-deployment)
-- [7. Accounts Created](#7-accounts-created)
-  - [7.1. MainApp Accounts](#71-mainApp-accounts)
-  - [7.2. ClientApp Accounts](#72-clientApp-accounts)
-
 
 
  ## 1. Pivotal Tracker
@@ -42,29 +37,26 @@ Updates are continuously deployed to our virtual machine via Watchtower at deti-
 [Logistics](http://deti-tqs-11.ua.pt:8080)\
 [Restaurant](http://deti-tqs-11.ua.pt:8000)
 
-
-## 7. Sonarqube
-### 7.1. MainApp Accounts
-#### MarchingFood
-user: marchingfood<br/>
-password: marchingFood
-
-#### Admin
-user: admin<br/>
-password: admin
-
-#### Rider
-user: rider<br/>
-password: rider
-
-
-### 7.2. ClientApp Accounts
-#### Admin
-user: admin<br/>
-password: admin
-
-
-
-
-
 If you fail to connect make sure you are using the correct VPN
+
+## 7. Accounts
+There are premade accounts on both services, they are listed below:
+=======
+## 7. Sonarqube
+#### Logistics
+
+| Name         | Password     | Role    | Info                      |
+|--------------|--------------|---------|---------------------------|
+| admin        | admin        | ADMIN   | admin                     |
+| marchingfood | marchingfood | COMPANY | used in other app         |
+| rider        | rider        | DRIVER  | normal rider              |
+| stoppedFood  | stoppedFood  | COMPANY | does not have API key     |
+| keylessRider | keylessRider | DRIVER  | does not have API key     |
+| badRider     | badRider     | DRIVER  | has bad rating (bannable) |
+
+#### Restaurant
+
+| Name  | Password | admin |
+|-------|----------|-------|
+| admin | admin    | YES   |
+| user1 | 12345    | NO    |
