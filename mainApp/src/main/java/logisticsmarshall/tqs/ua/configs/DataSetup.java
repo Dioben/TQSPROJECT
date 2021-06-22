@@ -20,24 +20,30 @@ public class DataSetup {
         return args -> {
 
             final String DRIVERROLE  = "DRIVER";
+            final String ADMINNAME = "admin";
+            final String packagedCompany = "marchingfood";
+            final String altCompany = "stoppedFood";
+            final String mainRider = "rider";
+            final String badRiderName = "badRider";
+            final String noKeyRider = "keylessRider";
 
             boolean createMarchingFoodDel=false;
             boolean createStoppedFoodDel=false;
-            if(userService.getUserByName("admin")==null){
+            if(userService.getUserByName(ADMINNAME)==null){
             User admin = new User();
             admin.setRole("ADMIN");
             admin.setEmail("admin@ua.pt");
-            admin.setName("admin");
-            admin.setPassword("admin");
+            admin.setName(ADMINNAME);
+            admin.setPassword(ADMINNAME);
             userService.encryptPasswordAndStoreUser(admin);
             }
-            if(userService.getUserByName("marchingfood")==null) {
+            if(userService.getUserByName(packagedCompany)==null) {
                 createMarchingFoodDel = true;
                 User marchingFood = new User();
                 marchingFood.setRole("COMPANY");
                 marchingFood.setEmail("marchingfood@ua.pt");
-                marchingFood.setName("marchingfood");
-                marchingFood.setPassword("marchingfood");
+                marchingFood.setName(packagedCompany);
+                marchingFood.setPassword(packagedCompany);
 
                 Company marchingFoodAsCompany = new Company();
                 marchingFoodAsCompany.setAddress("In my heart");
@@ -48,13 +54,13 @@ public class DataSetup {
                 userService.encryptPasswordAndStoreUser(marchingFood);
             }
 
-            if(userService.getUserByName("stoppedFood")==null) {
+            if(userService.getUserByName(altCompany)==null) {
                 createStoppedFoodDel = true;
                 User stoppedFood = new User();
                 stoppedFood.setRole("COMPANY");
                 stoppedFood.setEmail("stoppedfood@ua.pt");
-                stoppedFood.setName("stoppedFood");
-                stoppedFood.setPassword("stoppedFood");
+                stoppedFood.setName(altCompany);
+                stoppedFood.setPassword(altCompany);
 
                 Company stoppedFoodAsCompany = new Company();
                 stoppedFoodAsCompany.setAddress("We do not actually exist");
@@ -63,13 +69,13 @@ public class DataSetup {
                 stoppedFood.setCompany(stoppedFoodAsCompany);
                 userService.encryptPasswordAndStoreUser(stoppedFood);
             }
-            if(userService.getUserByName("rider")==null) {
+            if(userService.getUserByName(mainRider)==null) {
                 createMarchingFoodDel = true;
                 User rider = new User();
                 rider.setRole(DRIVERROLE);
                 rider.setEmail("rider@ua.pt");
-                rider.setName("rider");
-                rider.setPassword("rider");
+                rider.setName(mainRider);
+                rider.setPassword(mainRider);
                 Driver riderAsDriver = new Driver();
                 riderAsDriver.setPhoneNo("987654321");
                 riderAsDriver.setApiKey("12345678-1111-2222-3333-123456789999");
@@ -78,12 +84,12 @@ public class DataSetup {
                 userService.encryptPasswordAndStoreUser(rider);
             }
 
-            if(userService.getUserByName("keylessRider")==null) {
+            if(userService.getUserByName(noKeyRider)==null) {
                 User keylessRider = new User();
                 keylessRider.setRole(DRIVERROLE);
                 keylessRider.setEmail("keylessRider@ua.pt");
-                keylessRider.setName("keylessRider");
-                keylessRider.setPassword("keylessRider");
+                keylessRider.setName(noKeyRider);
+                keylessRider.setPassword(noKeyRider);
                 Driver keylessRiderAsDriver = new Driver();
                 keylessRiderAsDriver.setPhoneNo("987654321");
                 keylessRiderAsDriver.setVehicle(Driver.Vehicle.MOTORCYCLE);
@@ -94,8 +100,8 @@ public class DataSetup {
 
 
             if (createMarchingFoodDel){
-            Driver riderAsDriver = userService.getUserByName("rider").getDriver();
-            Company marchingFoodAsCompany = userService.getUserByName("marchingfood").getCompany();
+            Driver riderAsDriver = userService.getUserByName(mainRider).getDriver();
+            Company marchingFoodAsCompany = userService.getUserByName(packagedCompany).getCompany();
 
 
             //Delivery Setup
@@ -133,13 +139,13 @@ public class DataSetup {
             deliveryService.postDelivery(del2);
             }
 
-            if (userService.getUserByName("badRider") == null) {
+            if (userService.getUserByName(badRiderName) == null) {
                 createStoppedFoodDel = true;
                 User badRider = new User();
                 badRider.setRole(DRIVERROLE);
                 badRider.setEmail("badRider@ua.pt");
-                badRider.setName("badRider");
-                badRider.setPassword("badRider");
+                badRider.setName(badRiderName);
+                badRider.setPassword(badRiderName);
                 Driver badRiderAsDriver = new Driver();
                 badRiderAsDriver.setPhoneNo("999999999");
                 badRiderAsDriver.setApiKey("12345678-1111-2222-3333-000000000000");
@@ -150,8 +156,8 @@ public class DataSetup {
 
             if (createStoppedFoodDel) {
                 //bad driver setup
-                Company stoppedFoodAsCompany = userService.getUserByName("stoppedFood").getCompany();
-                Driver badRiderAsDriver = userService.getUserByName("badRider").getDriver();
+                Company stoppedFoodAsCompany = userService.getUserByName(altCompany).getCompany();
+                Driver badRiderAsDriver = userService.getUserByName(badRiderName).getDriver();
 
 
 
