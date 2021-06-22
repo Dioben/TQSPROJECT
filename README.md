@@ -15,6 +15,8 @@ Pedro Silva [93011] : QA Engineer
 - [3. Quality Assurance Manual](#3-quality-assurance-manual)
 - [4. Product Specification Report](#4-product-specification-report)
 - [5. Final Presentation](#5-final-presentation)
+- [6. Continuous Deployment](#5-continuous-deployment)
+- [7. Accounts](#7-accounts)
 
 
  ## 1. Pivotal Tracker
