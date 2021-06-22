@@ -10,5 +10,7 @@ public class ProviderDelivery {
     private String pickupAddress;
     private String address;
     private String priority;
+    private String description;
+    private int rating;
 
 }

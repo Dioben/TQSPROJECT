@@ -70,6 +70,7 @@ class LogisticsAPIControllerTest {
         del.setId(1050L);
         del.setAddress("somewhere");
         del.setPickupAddress("somewhere else");
+        del.setPriority(Delivery.Priority.LOWPRIORITY);
         Mockito.when(serviceMock.apiKeyCanQuery(Mockito.anyString(),Mockito.anyLong())).thenReturn(true);
         Mockito.when(serviceMock.getDeliveryById(Mockito.anyLong())).thenReturn(del);
         mvc.perform(get("/api/delivery/1050")
