@@ -13,12 +13,13 @@ public class DataSetup {
     @Bean
     CommandLineRunner setUpData(UserServiceImpl userService, MenuRepository menuRepository){
         return args -> {
-            if (userService.getUserByName("admin")==null) {
+            String adminName = "admin";
+            if (userService.getUserByName(adminName)==null) {
                 Client admin = new Client();
                 admin.setAdmin(true);
                 admin.setEmail("admin@ua.pt");
-                admin.setName("admin");
-                admin.setPassword("admin");
+                admin.setName(adminName);
+                admin.setPassword(adminName);
                 admin.setAddress("ADMIN");
                 userService.encryptPasswordAndStoreUser(admin);
             }
@@ -30,7 +31,7 @@ public class DataSetup {
                 user1.setPassword("12345");
                 userService.encryptPasswordAndStoreUser(user1);
             }
-            if(menuRepository.findAll().size()==0){
+            if(menuRepository.findAll().isEmpty()){
             Menu menu1 = new Menu();
             menu1.setPrice(7.55);
             menu1.setName("Big MEC");
