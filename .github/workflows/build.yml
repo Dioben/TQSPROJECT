@@ -40,10 +40,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: cd mainApp; mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: cd mainApp;mvn clean;mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
       - name: Build and analyze part 2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_2 }}
-        run: cd clientApp; mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: cd clientApp;mvn clean; mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
     
