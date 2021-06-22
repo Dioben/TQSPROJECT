@@ -27,6 +27,7 @@ public class DeliveryWithReview {
             self.description = delivery.getReputation().getDescription();
             self.rating = delivery.getReputation().getRating();
         }
-
+        else{ self.rating=-1;}
+        return self;
     }
 }
