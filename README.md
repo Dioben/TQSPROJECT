@@ -1,5 +1,5 @@
 # TQSPROJECT
-TQS project for school year 2020/2021 \
+2020/2021 \
 P3_G302 
 ## Autores:
 Alexandre Rodrigues [92951] : Product Owner\
