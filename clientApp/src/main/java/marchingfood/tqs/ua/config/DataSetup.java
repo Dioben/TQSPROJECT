@@ -13,21 +13,24 @@ public class DataSetup {
     @Bean
     CommandLineRunner setUpData(UserServiceImpl userService, MenuRepository menuRepository){
         return args -> {
-            Client admin = new Client();
-            admin.setAdmin(true);
-            admin.setEmail("admin@ua.pt");
-            admin.setName("admin");
-            admin.setPassword("admin");
-            admin.setAddress("ADMIN");
-            userService.encryptPasswordAndStoreUser(admin);
-
-            Client user1 = new Client();
-            user1.setEmail("user1@ua.pt");
-            user1.setName("user1");
-            user1.setAddress("Userhouse");
-            user1.setPassword("12345");
-            userService.encryptPasswordAndStoreUser(user1);
-
+            if (userService.getUserByName("admin")==null) {
+                Client admin = new Client();
+                admin.setAdmin(true);
+                admin.setEmail("admin@ua.pt");
+                admin.setName("admin");
+                admin.setPassword("admin");
+                admin.setAddress("ADMIN");
+                userService.encryptPasswordAndStoreUser(admin);
+            }
+            if (userService.getUserByName("user1")==null) {
+                Client user1 = new Client();
+                user1.setEmail("user1@ua.pt");
+                user1.setName("user1");
+                user1.setAddress("Userhouse");
+                user1.setPassword("12345");
+                userService.encryptPasswordAndStoreUser(user1);
+            }
+            if(menuRepository.findAll().size()>0){
             Menu menu1 = new Menu();
             menu1.setPrice(7.55);
             menu1.setName("Big MEC");
@@ -65,6 +68,7 @@ public class DataSetup {
             menuRepository.save(menu4);
             menuRepository.save(menu5);
             menuRepository.save(menu6);
+            }
         };
     }
 }
