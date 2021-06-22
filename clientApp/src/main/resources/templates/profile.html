@@ -92,7 +92,7 @@
 						<td th:text="${delivery.address}">MacDonalds Aveiro</td>
 						<td th:text="${delivery.stage}">Rua do Chafariz, 3123-231 (...)</td>
 						<td>
-							<button class="baguetteBox-button" th:id="button+${delivery.id}" th:onclick="'javascript:tryReview(' + ${delivery.id} + ');'">Review</button>
+							<button class="btn btn-secondary" th:id="button+${delivery.id}" th:onclick="'javascript:tryReview(' + ${delivery.id} + ');'">Review</button>
 						</td>
 
 					</tr>
@@ -100,7 +100,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div  id="review" class="container">
+		<div hidden id="review" class="container">
 			<form method="post" action="/review" class="form-control" >
 				<input type="hidden" id="id" name="deliveryId" value="-1">
 				<div class="form-group">
@@ -110,7 +110,7 @@
 					<textarea name="description" placeholder="What do you want to say?" class="form-control"></textarea>
 				</div>
 				<div class="form-group">
-				<input type="submit" class="baguetteBox-button form-group" id=submit value="Submit" disabled>
+				<input type="submit" class="form-group" id=submit value="Submit" disabled>
 				</div>
 			</form>
 		</div>
@@ -136,6 +136,7 @@
 			document.getElementById("button"+id).style.color = "red";
 		document.getElementById("submit").disabled = false;
 		document.getElementById("id").value=id;
+		document.getElementById("submit").removeAttribute("hidden"); 
 		}
 	</script>
 
