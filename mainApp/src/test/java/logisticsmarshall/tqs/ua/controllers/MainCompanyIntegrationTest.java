@@ -71,7 +71,7 @@ public class MainCompanyIntegrationTest {
   public void mainCompanyIntegration(ChromeDriver driver) {
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
-    driver.get("http://db_main:8080/login");
+    driver.get("http://backendmain:8080/login");
     driver.manage().window().setSize(new Dimension(1456, 876));
     driver.findElement(By.id("password")).click();
     driver.findElement(By.id("password")).sendKeys("marchingfood");
