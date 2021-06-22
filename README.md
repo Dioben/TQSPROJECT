@@ -1,12 +1,13 @@
 # TQSPROJECT
 TQS project for school year 2020/2021 \
-P3_G302 \
+P3_G302 
 ## Autores:
 Alexandre Rodrigues [92951] : Product Owner\
 Diogo Bento [93391] : DevOps \
 Pedro Laranjinha [93179] : Team Lead\
-Pedro Silva [93011] : QA Engineer 
+Pedro Silva [93011] : QA Engineer\
 
+## Index
 - [1. Pivotal Tracker](#1-pivotal-tracker)
 - [2. Sonarqube](#2-sonarqube)
   - [2.1. MainApp](#21-mainApp)
