@@ -39,7 +39,7 @@ public class DefaultUserTestIT {
 
     @Test
     public void defaultUserTest(ChromeDriver driver) {
-        driver.get("http://backendmain:8000/");
+        driver.get("http://backend:8000/");
         driver.manage().window().setSize(new Dimension(1000, 700));
         driver.findElement(By.cssSelector("div > .nav-item > .nav-link")).click();
 //        driver.findElement(By.linkText("Register here")).click();
