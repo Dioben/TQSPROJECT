@@ -28,7 +28,7 @@ Pedro Silva [93011] : QA Engineer
 ### 2.2. clientApp
 [clientApp Sonarqube](https://sonarcloud.io/dashboard?branch=dev&id=tqs-side-client)
 ## 3. Quality Assurance Manual
-[Quality Assurance Manual](https://drive.google.com/file/d/12jFk8szVuGfCYiRAILaeVrHQ-5xhbpTN/view?usp=sharing)
+[Quality Assurance Manual](https://drive.google.com/file/d/1qn3v_jnJrhj1sDVbiYKKdi654eMiXJIu/view?usp=sharing)
 
 ## 4. Product Specification Report
 [Product Specification Report](https://drive.google.com/file/d/1mCa_Vn9Cjj906eXiIGCmfjluL3PKtuIP/view?usp=sharing)
