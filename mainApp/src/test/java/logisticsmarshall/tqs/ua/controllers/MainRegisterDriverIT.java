@@ -33,7 +33,7 @@ import java.net.URL;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainRegisterDriverIntegrationTest {
+public class MainRegisterDriverIT {
   private Map<String, Object> vars;
   JavascriptExecutor js;
   @BeforeEach

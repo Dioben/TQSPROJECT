@@ -40,7 +40,7 @@ import java.net.URL;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainCompanyIntegrationTest {
+public class MainCompanyIT {
 
 
   @Autowired

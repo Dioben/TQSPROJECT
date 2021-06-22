@@ -37,7 +37,7 @@ import java.net.URL;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainDriverIntegrationTest {
+public class MainDriverIT {
 
   @Autowired
   UserRepository userRepository;
