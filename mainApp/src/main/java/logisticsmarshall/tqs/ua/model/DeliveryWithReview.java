@@ -15,7 +15,7 @@ public class DeliveryWithReview {
     private String description;
     private int rating;
 
-    static DeliveryWithReview fromDelivery(Delivery delivery){
+    public static DeliveryWithReview fromDelivery(Delivery delivery){
         DeliveryWithReview self = new DeliveryWithReview();
         self.id = delivery.getId();
         self.orderTimestamp = delivery.getOrderTimestamp();

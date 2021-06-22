@@ -103,12 +103,12 @@ public class LogisticsAPIController {
     }
 
     @GetMapping(path="/delivery/{id}")
-    public ResponseEntity<Delivery> getDelivery(
+    public ResponseEntity<DeliveryWithReview> getDelivery(
             @PathVariable(name="id") long deliveryId,
             @RequestParam(name="apiKey") String apikey) {
         if (!deliveryService.apiKeyCanQuery(apikey,deliveryId)) return ResponseEntity.status(400).build();
         Delivery del = deliveryService.getDeliveryById(deliveryId);
-        return ResponseEntity.ok(del);
+        return ResponseEntity.ok(DeliveryWithReview.fromDelivery(del));
     }
 
 
