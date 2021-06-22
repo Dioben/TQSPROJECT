@@ -47,7 +47,7 @@ public class MainRegisterCompanyIntegrationTest {
   public void mainRegisterCompanyIntegration(ChromeDriver driver) {
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
-    driver.get("http://localhost:8080/login");
+    driver.get("http://db_main:8080/login");
     driver.manage().window().setSize(new Dimension(1456, 876));
     {
       List<WebElement> elements = driver.findElements(By.linkText("Log In"));

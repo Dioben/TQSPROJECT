@@ -47,7 +47,7 @@ public class MainRegisterDriverIntegrationTest {
   public void mainRegisterDriverIntegration(ChromeDriver driver) {
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
-    driver.get("http://localhost:8080/login");
+    driver.get("http://db_main:8080/login");
     driver.manage().window().setSize(new Dimension(1456, 876));
     driver.findElement(By.cssSelector("span > a")).click();
     driver.findElement(By.name("name")).click();
