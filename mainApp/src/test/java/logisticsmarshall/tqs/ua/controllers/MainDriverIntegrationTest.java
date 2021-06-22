@@ -57,6 +57,7 @@ public class MainDriverIntegrationTest {
     userRepository.save(user);
 
     Delivery delivery = deliveryRepository.findDeliveryById(1L);
+    //Finish here
     //driver.quit();
   }
   @Test
