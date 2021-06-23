@@ -11,11 +11,13 @@ import org.openqa.selenium.WebElement;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import java.util.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainRegisterDriverIT {
+class MainRegisterDriverIT {
 
   @LocalServerPort
   int serverPort;
@@ -28,7 +30,7 @@ public class MainRegisterDriverIT {
   }
 
   @Test
-  public void mainRegisterDriverIntegration(ChromeDriver driver) {
+  void mainRegisterDriverIntegration(ChromeDriver driver) {
     String clientName = UUID.randomUUID().toString();
     String clientEmail = clientName+"@email.com";
     String clientPass = "randompass";
@@ -60,6 +62,6 @@ public class MainRegisterDriverIT {
     driver.findElement(By.id("username")).sendKeys(clientName);
     driver.findElement(By.id("password")).sendKeys(clientPass);
     driver.findElement(By.id("login-submit")).click();
-    driver.findElement(By.linkText("Log Out")).click();
+    assertDoesNotThrow(() -> driver.findElement(By.linkText("Log Out")).click());
   }
 }

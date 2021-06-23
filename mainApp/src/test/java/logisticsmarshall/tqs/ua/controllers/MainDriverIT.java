@@ -25,7 +25,7 @@ import java.util.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainDriverIT {
+class MainDriverIT {
 
     @LocalServerPort
     int serverPort;
@@ -55,7 +55,7 @@ public class MainDriverIT {
     }
 
     @Test
-    public void mainDriverIntegration(ChromeDriver driver) {
+    void mainDriverIntegration(ChromeDriver driver) {
         driver.get(url + "login");
         driver.manage().window().setSize(new Dimension(1456, 876));
         driver.findElement(By.cssSelector("body")).click();

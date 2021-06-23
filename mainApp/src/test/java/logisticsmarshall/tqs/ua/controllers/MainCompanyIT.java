@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class MainCompanyIT {
+class MainCompanyIT {
 
     @LocalServerPort
     int serverPort;
@@ -59,7 +59,7 @@ public class MainCompanyIT {
     }
 
     @Test
-    public void mainCompanyIntegration(ChromeDriver driver) {
+    void mainCompanyIntegration(ChromeDriver driver) {
         driver.get(url + "login");
         driver.manage().window().setSize(new Dimension(1456, 876));
         driver.findElement(By.id("password")).sendKeys("marchingfood");
