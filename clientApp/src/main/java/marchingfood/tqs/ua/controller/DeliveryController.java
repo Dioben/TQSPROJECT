@@ -149,7 +149,7 @@ public class DeliveryController {
         deliveryMade.setAddress(client.getAddress());
         deliveryMade.setClient(client);
         deliveryMade.setDelivered(false);
-        deliveryMade.setPaid(false);
+        deliveryMade.setPaid(true);
 
         Payment payment = new Payment();
         payment.setPrice(total);

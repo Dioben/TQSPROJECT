@@ -105,6 +105,7 @@ class DeliveryServiceTest {
         delivery2.setAddress("yes");
         client.setOrderEntity(new HashSet<Delivery>(Arrays.asList(new Delivery[]{delivery, delivery, delivery,delivery1,delivery2})));
         ProviderDelivery providerDelivery = new ProviderDelivery();
+        providerDelivery.setStage("ACCEPTED");
         Mockito.when(
                 restTemplate.getForEntity(Mockito.anyString(),Mockito.any()))
                 .thenReturn(new ResponseEntity<>(providerDelivery,HttpStatus.OK));
