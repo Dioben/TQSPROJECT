@@ -5,13 +5,11 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.bonigarcia.seljup.SeleniumJupiter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -21,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class DefaultUserTestIT {
+class SeleniumTestsIT {
 
     @LocalServerPort
     int serverPort;
@@ -30,10 +28,11 @@ class DefaultUserTestIT {
 
     @BeforeEach
     public void setUp() {
-        url = String.format("http://localhost:%d/", serverPort);
+        url = String.format("http://backend:%d/", serverPort);
     }
 
     @Test
+    @Order(0)
     void registerUser(ChromeDriver driver){
         String clientName = "client";
         String clientEmail = "client@email.com";
@@ -65,6 +64,7 @@ class DefaultUserTestIT {
     }
 
     @Test
+    @Order(1)
     void defaultUserTest(ChromeDriver driver) throws InterruptedException {
         driver.get(url);
         driver.manage().window().setSize(new Dimension(1000, 700));
@@ -103,4 +103,33 @@ class DefaultUserTestIT {
         driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")).click();
     }
 
+    @Test
+    @Order(2)
+    void adminUserTest(ChromeDriver driver) throws InterruptedException {
+        driver.get(url);
+        driver.manage().window().setSize(new Dimension(1000, 700));
+        driver.findElement(By.cssSelector("div > .nav-item > .nav-link")).click();
+        driver.findElement(By.id("username")).sendKeys("admin");
+        driver.findElement(By.id("password")).sendKeys("admin");
+        driver.findElement(By.id("login-submit")).click();
+        driver.findElement(By.linkText("ADMIN")).click();
+        assertDoesNotThrow(() -> driver.findElement(By.xpath("//td[contains(.,'user1')]")));
+        driver.findElement(By.cssSelector(".fa-plus-square")).click();
+        driver.findElement(By.name("name")).sendKeys("New");
+        driver.findElement(By.name("price")).sendKeys("10");
+        driver.findElement(By.name("description")).sendKeys("New menu");
+        driver.findElement(By.cssSelector("#adder_div input:nth-child(7)")).click();
+        TimeUnit.MILLISECONDS.sleep(1000); // Page needs to load for some buttons to work and alerts to show
+        assertDoesNotThrow(() -> driver.findElement(By.xpath("//span[contains(.,\'New menu\')]")));
+        driver.findElement(By.cssSelector("tr:nth-child(3) .fas")).click();
+        driver.findElement(By.id("edit-price")).sendKeys(Keys.CONTROL + "a");
+        driver.findElement(By.id("edit-price")).sendKeys(Keys.DELETE);
+        driver.findElement(By.id("edit-price")).sendKeys("6.0");
+        driver.findElement(By.cssSelector("#edit_form > input:nth-child(7)")).click();
+        assertThat(driver.findElement(By.id("menuPrice3")).getText(), is("6.0"));
+        driver.findElement(By.cssSelector("tr:nth-child(6) form > .btn")).click();
+        assertThrows(Exception.class, () -> driver.findElement(By.xpath("//span[contains(.,\'New menu\')]")));
+        TimeUnit.MILLISECONDS.sleep(1000); // Page needs to load for some buttons to work and alerts to show
+        driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")).click();
+    }
 }
