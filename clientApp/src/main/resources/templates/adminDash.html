@@ -90,7 +90,7 @@
             <input type="submit" value="Submit">
         </form>
     </div>
-    <table th:if="${not #lists.isEmpty(menus)}" style=" margin-left:auto;margin-right:auto;margin-top:0;" class="styled-table">
+    <table th:if="${not #lists.isEmpty(menus)}" id="menusTable" style=" margin-left:auto;margin-right:auto;margin-top:0;" class="styled-table">
         <thead>
         <tr>
             <th> Name </th>

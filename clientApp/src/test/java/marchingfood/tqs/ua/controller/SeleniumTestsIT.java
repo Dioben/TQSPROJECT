@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.bonigarcia.seljup.SeleniumJupiter;
-import marchingfood.tqs.ua.model.Delivery;
-import marchingfood.tqs.ua.model.Menu;
 import marchingfood.tqs.ua.repository.ClientRepository;
 import marchingfood.tqs.ua.repository.DeliveryRepository;
 import marchingfood.tqs.ua.repository.MenuRepository;
@@ -17,11 +15,9 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +40,7 @@ class SeleniumTestsIT {
 
     @BeforeEach
     public void setUp() {
-        url = String.format("http://backend:%d/", serverPort);
+        url = String.format("http://localhost:%d/", serverPort);
     }
 
     @Test
@@ -78,7 +74,6 @@ class SeleniumTestsIT {
         assertDoesNotThrow(() -> driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")));
         driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")).click();
         clientRepository.delete(clientRepository.findByName(clientName));
-
     }
 
     @Test
@@ -92,13 +87,13 @@ class SeleniumTestsIT {
         driver.findElement(By.id("login-submit")).click();
         driver.findElement(By.cssSelector(".nav-item:nth-child(2) > .nav-link")).click();
         TimeUnit.MILLISECONDS.sleep(4000); // Page needs to load for some buttons to work and alerts to show
-        driver.findElement(By.id("1")).click();
+        driver.findElement(By.xpath("//div[1]/div/div/button")).click();
         assertThat(driver.switchTo().alert().getText(), is("Item added to cart"));
         driver.switchTo().alert().accept();
-        driver.findElement(By.id("2")).click();
+        driver.findElement(By.xpath("//div[2]/div/div/button")).click();
         assertThat(driver.switchTo().alert().getText(), is("Item added to cart"));
         driver.switchTo().alert().accept();
-        driver.findElement(By.id("1")).click();
+        driver.findElement(By.xpath("//div[1]/div/div/button")).click();
         assertThat(driver.switchTo().alert().getText(), is("Item added to cart"));
         driver.switchTo().alert().accept();
         driver.findElement(By.cssSelector("div:nth-child(3) > .nav-item > .nav-link")).click();
@@ -119,17 +114,11 @@ class SeleniumTestsIT {
         TimeUnit.MILLISECONDS.sleep(1000); // Page needs to load for some buttons to work and alerts to show
         assertThat(driver.findElement(By.cssSelector("h2:nth-child(3)")).getText(), is("Your Review has been posted successfully"));
         driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")).click();
-
-        Iterator<Delivery> it = clientRepository.findByName("user1").getOrderEntity().iterator();
-        Delivery delivery = it.next();
-        while (it.hasNext()){delivery=it.next();}
-        deliveryRepository.delete(delivery);
     }
 
     @Test
     @Order(2)
     void adminUserTest(ChromeDriver driver) throws InterruptedException {
-        Menu menu = menuRepository.findAllByNameContains("Sbubby Bread").get(0);
         driver.get(url);
         driver.manage().window().setSize(new Dimension(1000, 700));
         driver.findElement(By.cssSelector("div > .nav-item > .nav-link")).click();
@@ -144,23 +133,17 @@ class SeleniumTestsIT {
         driver.findElement(By.name("description")).sendKeys("New menu");
         driver.findElement(By.cssSelector("#adder_div input:nth-child(7)")).click();
         TimeUnit.MILLISECONDS.sleep(1000); // Page needs to load for some buttons to work and alerts to show
-        assertDoesNotThrow(() -> driver.findElement(By.xpath("//span[contains(.,\'New menu\')]")));
-        driver.findElement(By.cssSelector("tr:nth-child(3) .fas")).click();
+        assertDoesNotThrow(() -> driver.findElement(By.xpath("//span[contains(.,\'IT MENU FOR TESTING\')]")));
+        assertThat(driver.findElement(By.xpath("(//table[@id='menusTable']/tbody/tr/td[2]/span)[last()]")).getText(), is("10.0"));
+        driver.findElement(By.xpath("(//table[@id='menusTable']/tbody/tr/td/button)[last()]")).click();
         driver.findElement(By.id("edit-price")).sendKeys(Keys.CONTROL + "a");
         driver.findElement(By.id("edit-price")).sendKeys(Keys.DELETE);
-        driver.findElement(By.id("edit-price")).sendKeys("6.0");
+        driver.findElement(By.id("edit-price")).sendKeys("6");
         driver.findElement(By.cssSelector("#edit_form > input:nth-child(7)")).click();
-        assertThat(driver.findElement(By.id("menuPrice3")).getText(), is("6.0"));
-        driver.findElement(By.cssSelector("tr:nth-child(6) form > .btn")).click();
-        assertThrows(Exception.class, () -> driver.findElement(By.xpath("//span[contains(.,\'New menu\')]")));
+        assertThat(driver.findElement(By.xpath("(//table[@id='menusTable']/tbody/tr/td[2]/span)[last()]")).getText(), is("6.0"));
+        driver.findElement(By.xpath("(//table[@id='menusTable']/tbody/tr/td/form/button)[last()]")).click();
+        assertThrows(Exception.class, () -> driver.findElement(By.xpath("//span[contains(.,\'IT MENU FOR TESTING\')]")));
         TimeUnit.MILLISECONDS.sleep(1000); // Page needs to load for some buttons to work and alerts to show
         driver.findElement(By.xpath("//a[contains(text(),'Log Out')]")).click();
-
-        Menu menu2 = menuRepository.findAllByNameContains("IT MENU FOR TESTING").get(0);
-        menu2.setDescription(menu.getDescription());
-        menu2.setName(menu.getName());
-        menu2.setPrice(menu.getPrice());
-        menu2.setImageurl(menu.getImageurl());
-        menuRepository.save(menu2);
     }
 }
